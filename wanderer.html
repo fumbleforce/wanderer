@@ -1,14 +1,40 @@
 <head>
   <title>wanderer</title>
+
+  <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
+    {{> screen}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="screen">
+    <div class="screen">
+        <div class="biome-bg forest-bg"></div>
+        <div class="player"></div>
+        <div class="ground"></div>
+        <div class="ground-on"></div>
+    </div>
+
+    <script type="text/javascript">
+        $(function(){
+
+          $('.ground').css({"background-position": '0px 0px'});
+          $('.ground-on').css({"background-position": '0px 0px'});
+          $('#background').css({"background-position": '0px 0px'});
+
+            $('.ground').animate({
+                "background-position-x":"-5000px",
+            }, 200000, 'linear');
+
+            $('.ground-on').animate({
+                "background-position-x":"-5000px",
+            }, 240000, 'linear');
+
+            $('.biome-bg').animate({
+                "background-position-x":"-5000px",
+            }, 880000, 'linear');
+
+        });
+    </script>
 </template>
