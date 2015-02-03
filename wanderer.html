@@ -5,15 +5,25 @@
 </head>
 
 <body>
-    {{> screen}}
+    {{#if currentUser }}
+        {{> screen}}
+    {{else}}
+        {{> user}}
+    {{/if}}
 </body>
 
 <template name="screen">
     <div class="screen">
+        <!--
         <div class="biome-bg forest-bg"></div>
         <div class="player"></div>
         <div class="ground"></div>
         <div class="ground-on"></div>
+        -->
+        {{ currentUser.name }}
+        <div class="gui">
+            {{> ui}}
+        </div>
     </div>
 
     <script type="text/javascript">
@@ -37,4 +47,96 @@
 
         });
     </script>
+</template>
+
+<template name="user">
+    <h4>Log in</h4>
+    <div>
+        <input id="email" placeholder="email">
+        <input id="password" placeholder="Password">
+        <button id="log-in">Log in</button>
+    </div>
+
+    <h4>Create user</h4>
+    <div>
+        <input type="text" id="new-email" placeholder="email">
+        <input type="text" id="new-password" placeholder="Password">
+        <input type="text" id="new-character" placeholder="Character name">
+        <button id="create-user">Create</button>
+    </div>
+</template>
+
+<template name="ui">
+    {{#if camping}}
+        {{> uiCamping}}
+    {{/if}}
+
+    {{#if walking}}
+        {{> uiWalking}}
+    {{/if}}
+
+    {{#if town}}
+        {{> uiTown}}
+    {{/if}}
+
+    {{#if battle}}
+        {{> uiBattle}}
+    {{/if}}
+
+    {{> uiCharacter}}
+</template>
+
+<template name="uiWalking">
+    <h4>Walking</h4>
+</template>
+
+<template name="uiCamping">
+    <h4>Camping</h4>
+</template>
+
+<template name="uiCharacter">
+    <h4>Character</h4>
+
+    <div class="float">
+        <div class="left">
+            <b>Weapon Skills</b>
+            <ul>
+                {{#each weaponSkills}}
+                    <li>{{label}}: {{value}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="left">
+            <b>Spell Skills</b>
+            <ul>
+                {{#each weaponSkills}}
+                    <li>{{label}}: {{value}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="left">
+            <b>Crafting Skills</b>
+            <ul>
+                {{#each craftingSkills}}
+                    <li>{{label}}: {{value}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</template>
+
+<template name="uiInventory">
+    <h4>Inventory</h4>
+</template>
+
+<template name="uiBattle">
+    <h4>Battle</h4>
+</template>
+
+<template name="uiTown">
+    <h4>Town</h4>
+</template>
+
+<template name="uiDialog">
+    <h4>Dialog</h4>
 </template>

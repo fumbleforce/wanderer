@@ -8,3 +8,4 @@ meteor-platform
 autopublish
 insecure
 cryptoquick:stylus-multi
+accounts-password
