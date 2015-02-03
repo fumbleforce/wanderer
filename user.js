@@ -1,5 +1,13 @@
 
+User = {};
 
+User.update = function (opts) {
+    Meteor.users.update({ _id: Meteor.userId() }, opts);
+};
+
+User.exists = function () {
+    return Meteor.user() != undefined && Meteor.user() != null  && Meteor.user().name != undefined;
+};
 
 
 defaultUser = {
@@ -9,15 +17,31 @@ defaultUser = {
 
 
     health: {
+        mind: 100,
         head: 100,
         torso: 100,
         leftArm: 100,
         rightArm: 100,
         leftLeg: 100,
         rightArm: 100,
+        feet: 100,
+        hands: 100,
+
+        hunger: 0,
+        thirst: 0,
     },
 
     effects: [],
+
+    physicalSkills: {
+        toughness: 0,
+        endurance: 0,
+        strenght: 0,
+        quickness: 0,
+        acumen: 0,
+
+
+    },
 
     weaponSkills: {
         unarmed: 0,
@@ -54,5 +78,7 @@ defaultUser = {
 
     armor: {},
     weapons: {},
+
+    storage: [],
 
 };

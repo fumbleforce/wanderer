@@ -29,13 +29,28 @@ Template.user.events({
             password = t.find('#new-password').value,
             character = t.find('#new-character').value;
 
-        Accounts.createUser({
+        Accounts.createUser(_.extend(defaultUser, {
             email: email,
             password: password,
             name: character,
-            createdDate: new Date(),
-        });
+            createdDate: new Date()
+        }));
     },
+});
+
+Template.uiCamping.helpers({
+    campingAction: function () { return Session.get("campingAction"); },
+});
+
+Template.uiCamping.events({
+    "click .action": function (e, t) {
+        var action = e.currentTarget.getAttribute("action");
+        console.log(action)
+        if (action === "dirt") {
+            Meteor.call("StorageAdd", { id: "dirt", qty: 1 });
+        }
+        Session.set("campingAction", action);
+    }
 });
 
 Template.uiCharacter.helpers({

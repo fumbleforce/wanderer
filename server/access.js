@@ -12,7 +12,7 @@ Meteor.publish(null, function() {
         craftingSkills:1,
         armor:1,
         weapons:1,
-
+        storage: 1,
     }});
 });
 

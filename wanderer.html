@@ -66,6 +66,16 @@
     </div>
 </template>
 
+<template name="storage">
+    <h4>Storage</h4>
+    {{#each storageList}}
+        <div class="storage-item" data-context="item" quantity="{{qty}}" itemId="{{id}}">
+            <span>{{el}}</span>
+            <span>x{{qty}}</span>
+        </div>
+    {{/each}}
+</template>
+
 <template name="ui">
     {{#if camping}}
         {{> uiCamping}}
@@ -84,20 +94,60 @@
     {{/if}}
 
     {{> uiCharacter}}
+    {{> storage}}
 </template>
 
 <template name="uiWalking">
     <h4>Walking</h4>
+    <p>Location: {{currentUser.location}}</p>
 </template>
 
 <template name="uiCamping">
     <h4>Camping</h4>
+    <button class="action" action="eat">Eat</button>
+    <button class="action" action="drink">Drink</button>
+    <button class="action" action="read">Read a book</button>
+    <button class="action" action="fire">Create fire</button>
+    <button class="action" action="dirt">Dig up some dirt</button>
+    <button class="action" action="break">Break camp</button>
+    <p>{{ campingAction }}</p>
 </template>
 
 <template name="uiCharacter">
     <h4>Character</h4>
 
+    <b>Health</b>
+    <ul>
+        <li>Hunger: {{currentUser.health.hunger}}</li>
+        <li>Thirst: {{currentUser.health.thirst}}</li>
+    </ul>
+    <ul>
+        <li>Mind: {{currentUser.health.mind}}</li>
+        <li>Head: {{currentUser.health.head}}</li>
+        <li>Torso: {{currentUser.health.torso}}</li>
+        <li>Left arm: {{currentUser.health.leftArm}}</li>
+        <li>Right arm: {{currentUser.health.rightArm}}</li>
+        <li>Left leg: {{currentUser.health.leftLeg}}</li>
+        <li>Right leg: {{currentUser.health.rightLeg}}</li>
+    </ul>
+
+    <b>Equipment</b>
+    <ul>
+        <li>Head: {{currentUser.equipment.head}}</li>
+        <li>Body: {{currentUser.equipment.body}}</li>
+        <li>Hands: {{currentUser.equipment.hands}}</li>
+        <li>Feet: {{currentUser.equipment.feet}}</li>
+    </ul>
+
     <div class="float">
+        <div class="left">
+            <b>Physical Skills</b>
+            <ul>
+                {{#each physicalSkills}}
+                    <li>{{label}}: {{value}}</li>
+                {{/each}}
+            </ul>
+        </div>
         <div class="left">
             <b>Weapon Skills</b>
             <ul>
@@ -109,7 +159,7 @@
         <div class="left">
             <b>Spell Skills</b>
             <ul>
-                {{#each weaponSkills}}
+                {{#each spellSkills}}
                     <li>{{label}}: {{value}}</li>
                 {{/each}}
             </ul>
