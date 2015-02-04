@@ -8,11 +8,15 @@ Meteor.publish(null, function() {
         effects:1,
         weaponSkills:1,
         spellSkills:1,
+        physicalSkills:1,
+        mentalSkills:1,
         spells:1,
         craftingSkills:1,
         armor:1,
         weapons:1,
         storage: 1,
+        books: 1,
+        activity: 1,
     }});
 });
 

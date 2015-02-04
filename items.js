@@ -204,6 +204,22 @@ Item.items = [
         }
     },
 
+
+    //Books
+    {
+        id: "bookWaves",
+        category:"book",
+        quality: 6,
+        buyPrice: 1350,
+        sellPrice: 2850,
+        name: "Waves of fortune",
+        props: {
+
+        },
+        skill: "guile",
+        skillIncrease: 3,
+    },
+
 ];
 
 Item.items = _.map(Item.items, function (i) {

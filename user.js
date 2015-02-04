@@ -11,10 +11,11 @@ User.exists = function () {
 
 
 defaultUser = {
-    location: 0,
+    location: "0|0",
 
     coins: 10,
 
+    activity: {},
 
     health: {
         mind: 100,
@@ -23,7 +24,7 @@ defaultUser = {
         leftArm: 100,
         rightArm: 100,
         leftLeg: 100,
-        rightArm: 100,
+        rightLeg: 100,
         feet: 100,
         hands: 100,
 
@@ -38,9 +39,20 @@ defaultUser = {
         endurance: 0,
         strenght: 0,
         quickness: 0,
+
+
+
+    },
+
+    mentalSkills: {
         acumen: 0,
-
-
+        wit: 0,
+        wisdom: 0,
+        calmness: 0,
+        rationality: 0,
+        spirituality: 0,
+        perception: 0,
+        guile: 0,
     },
 
     weaponSkills: {
@@ -78,6 +90,10 @@ defaultUser = {
 
     armor: {},
     weapons: {},
+
+    books: {
+        read: []
+    },
 
     storage: [],
 

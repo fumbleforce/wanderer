@@ -26,6 +26,7 @@
         </div>
     </div>
 
+    <!--
     <script type="text/javascript">
         $(function(){
 
@@ -47,6 +48,7 @@
 
         });
     </script>
+    -->
 </template>
 
 <template name="user">
@@ -67,39 +69,63 @@
 </template>
 
 <template name="storage">
-    <h4>Storage</h4>
+    <h4>Inventory</h4>
     {{#each storageList}}
         <div class="storage-item" data-context="item" quantity="{{qty}}" itemId="{{id}}">
-            <span>{{el}}</span>
+            <span>{{{el}}}</span>
             <span>x{{qty}}</span>
         </div>
     {{/each}}
 </template>
 
 <template name="ui">
-    {{#if camping}}
-        {{> uiCamping}}
-    {{/if}}
+    <div class="float">
+        <div class="left">
+            {{#if camping}}
+                {{> uiCamping}}
+            {{/if}}
 
-    {{#if walking}}
-        {{> uiWalking}}
-    {{/if}}
+            {{#if walking}}
+                {{> uiWalking}}
+            {{/if}}
 
-    {{#if town}}
-        {{> uiTown}}
-    {{/if}}
+            {{#if town}}
+                {{> uiTown}}
+            {{/if}}
 
-    {{#if battle}}
-        {{> uiBattle}}
-    {{/if}}
+            {{#if battle}}
+                {{> uiBattle}}
+            {{/if}}
 
-    {{> uiCharacter}}
-    {{> storage}}
+            {{#if inCombat}}
+                {{> combat}}
+            {{/if}}
+        </div>
+        <div class="left">
+            {{> uiCharacter}}
+        </div>
+        <div class="left">
+            {{> storage}}
+        </div>
+        <div class="left">
+            {{> uiBooks}}
+        </div>
+        <div class="left">
+            {{> map}}
+        </div>
+    </div>
 </template>
 
 <template name="uiWalking">
     <h4>Walking</h4>
     <p>Location: {{currentUser.location}}</p>
+    <p>{{encounter}}</p>
+    <button class="action" action="west">{{west}}</button>
+    <button class="action" action="east">{{east}}</button>
+    <button class="action" action="north">{{north}}</button>
+    <button class="action" action="south">{{south}}</button>
+    <button class="action" action="read">Read a book</button>
+    <button class="action" action="camp">Make camp</button>
 </template>
 
 <template name="uiCamping">
@@ -116,31 +142,34 @@
 <template name="uiCharacter">
     <h4>Character</h4>
 
-    <b>Health</b>
-    <ul>
-        <li>Hunger: {{currentUser.health.hunger}}</li>
-        <li>Thirst: {{currentUser.health.thirst}}</li>
-    </ul>
-    <ul>
-        <li>Mind: {{currentUser.health.mind}}</li>
-        <li>Head: {{currentUser.health.head}}</li>
-        <li>Torso: {{currentUser.health.torso}}</li>
-        <li>Left arm: {{currentUser.health.leftArm}}</li>
-        <li>Right arm: {{currentUser.health.rightArm}}</li>
-        <li>Left leg: {{currentUser.health.leftLeg}}</li>
-        <li>Right leg: {{currentUser.health.rightLeg}}</li>
-    </ul>
-
-    <b>Equipment</b>
-    <ul>
-        <li>Head: {{currentUser.equipment.head}}</li>
-        <li>Body: {{currentUser.equipment.body}}</li>
-        <li>Hands: {{currentUser.equipment.hands}}</li>
-        <li>Feet: {{currentUser.equipment.feet}}</li>
-    </ul>
-
     <div class="float">
-        <div class="left">
+        <div class="left list">
+            <b>Health</b>
+            <ul>
+                <li>Hunger: {{currentUser.health.hunger}}</li>
+                <li>Thirst: {{currentUser.health.thirst}}</li>
+            </ul>
+            <ul>
+                <li>Mind: {{currentUser.health.mind}}</li>
+                <li>Head: {{currentUser.health.head}}</li>
+                <li>Torso: {{currentUser.health.torso}}</li>
+                <li>Left arm: {{currentUser.health.leftArm}}</li>
+                <li>Right arm: {{currentUser.health.rightArm}}</li>
+                <li>Left leg: {{currentUser.health.leftLeg}}</li>
+                <li>Right leg: {{currentUser.health.rightLeg}}</li>
+            </ul>
+        </div>
+        <div class="left list">
+            <b>Equipment</b>
+            <ul>
+                <li>Head: {{currentUser.equipment.head}}</li>
+                <li>Body: {{currentUser.equipment.body}}</li>
+                <li>Hands: {{currentUser.equipment.hands}}</li>
+                <li>Feet: {{currentUser.equipment.feet}}</li>
+            </ul>
+        </div>
+        <b>Total skills: {{totalSkills}}</b>
+        <div class="left list">
             <b>Physical Skills</b>
             <ul>
                 {{#each physicalSkills}}
@@ -148,7 +177,15 @@
                 {{/each}}
             </ul>
         </div>
-        <div class="left">
+        <div class="left list">
+            <b>Mental Skills</b>
+            <ul>
+                {{#each mentalSkills}}
+                    <li>{{label}}: {{value}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="left list">
             <b>Weapon Skills</b>
             <ul>
                 {{#each weaponSkills}}
@@ -156,7 +193,7 @@
                 {{/each}}
             </ul>
         </div>
-        <div class="left">
+        <div class="left list">
             <b>Spell Skills</b>
             <ul>
                 {{#each spellSkills}}
@@ -164,7 +201,7 @@
                 {{/each}}
             </ul>
         </div>
-        <div class="left">
+        <div class="left list">
             <b>Crafting Skills</b>
             <ul>
                 {{#each craftingSkills}}
@@ -173,6 +210,22 @@
             </ul>
         </div>
     </div>
+</template>
+
+<template name="uiBooks">
+    <h4>Books</h4>
+
+    {{#if reading}}
+        <p>Reading: {{reading.book}} {{reading.progress}}/10</p>
+        <p>Time left: {{timeLeft}}</p>
+    {{/if}}
+
+    {{#each books}}
+        <div class="book">
+            {{id}} <button class="read" book="{{id}}">Read</button>
+        </div>
+    {{/each}}
+    <p>Have read: {{currentUser.books.read}}</p>
 </template>
 
 <template name="uiInventory">
@@ -189,4 +242,24 @@
 
 <template name="uiDialog">
     <h4>Dialog</h4>
+</template>
+
+<template name="map">
+    <h4>Map</h4>
+    <p>Location: {{location}}</p>
+
+    <table class="map">
+    {{#each rows}}
+        <tr class="map-row">
+        {{#each .}}
+            <td class="loc {{biome}}" loc="{{loc}}"></td>
+        {{/each}}
+        </tr>
+    {{/each}}
+    </table>
+</template>
+
+<template name="combat">
+    <h4>Combat</h4>
+
 </template>

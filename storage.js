@@ -6,7 +6,7 @@ Storage.get = function () {
 };
 
 Storage.getCategory = function (category) {
-    var expanded = _.map(Town.get().storage, function (i) { return Item.get(i.id); });
+    var expanded = _.map(Meteor.user().storage, function (i) { return Item.get(i.id); });
     return _.filter(expanded, function (i) { return i.category === category });
 };
 
