@@ -121,13 +121,13 @@ Template.uiWalking.events({
         var action = e.currentTarget.getAttribute("action");
 
         if (action === "west") {
-            Meteor.call("GoWest");
+            Meteor.call("CharacterGo", "west");
         } else if (action === "east") {
-            Meteor.call("GoEast");
+            Meteor.call("CharacterGo", "east");
         } else if (action === "south") {
-            Meteor.call("GoSouth");
+            Meteor.call("CharacterGo", "south");
         } else if (action === "north") {
-            Meteor.call("GoNorth");
+            Meteor.call("CharacterGo", "north");
         } else if (action === "east") {
             Meteor.call("GoEast");
         } else if (action === "east") {
