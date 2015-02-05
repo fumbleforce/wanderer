@@ -11,14 +11,20 @@ Meteor.startup(function () {
     Session.set("battleActive", false);
 });
 
-
+Meteor.autosubscribe(function() {
+    BattleCollection.find({ party: { $elemMatch: { _id: Meteor.userId() } } }).observe({
+        added: function(item){
+            Session.set("userStatus", "combat");
+        }
+    });
+});
 
 Battle = {};
 
 Battle.start = function (opts) {
 
     Meteor.call("BattleStart", opts, function (err, res) {
-        Session.set("battleActive", res);
+        Session.set("userStatus", "combat");
     });
 };
 
@@ -60,8 +66,6 @@ Meteor.methods({
             enemy: enemy,
             round: 0,
         });
-
-        Session.set("battleActive", id);
     }
 })
 

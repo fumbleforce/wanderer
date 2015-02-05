@@ -261,5 +261,23 @@
 
 <template name="combat">
     <h4>Combat</h4>
+    {{#with combat}}
+        <small>#{{id}}</small>
 
+        <div class="party">
+        {{#each party}}
+            <div class="party-member">
+                <b>{{name}}</b>
+            </div>
+        {{/each}}
+        </div>
+
+        <div class="enemies">
+        {{#each enemy}}
+            <div class="enemy">
+                <b>{{name}}</b>
+            </div>
+        {{/each}}
+        </div>
+    {{/with}}
 </template>

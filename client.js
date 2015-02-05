@@ -4,11 +4,10 @@ Template.registerHelper("userStatus", function () { return Session.get("userStat
 Template.registerHelper("camping", function () { return Session.get("userStatus") == "camping"; });
 Template.registerHelper("walking", function () { return Session.get("userStatus") == "walking"; });
 Template.registerHelper("town", function () { return Session.get("userStatus") == "town"; });
-Template.registerHelper("inCombat", function () { return Session.get("battleActive"); });
+Template.registerHelper("inCombat", function () { return Session.get("userStatus") == "combat"; });
 
 Meteor.startup(function () {
     Session.set("userStatus", "camping");
-
 });
 
 function handleAction (action) {
@@ -33,12 +32,15 @@ Template.user.events({
             password = t.find('#new-password').value,
             character = t.find('#new-character').value;
 
-        Accounts.createUser(_.extend(defaultUser, {
+        var def = _.extend({}, defaultUser);
+        var usr = _.extend(def, {
             email: email,
             password: password,
             name: character,
             createdDate: new Date()
-        }));
+        });
+        console.log(usr)
+        Accounts.createUser(usr);
     },
 });
 
@@ -219,7 +221,7 @@ Template.map.helpers({
 
 Template.combat.helpers({
     combat: function () {
-
+        return BattleCollection.findOne({ party: { $elemMatch: { _id: Meteor.userId() } } });
     }
 });
 
