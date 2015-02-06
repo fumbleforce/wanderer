@@ -79,38 +79,38 @@
 </template>
 
 <template name="ui">
+    <div class="gui-main">
+        {{#if camping}}
+            {{> uiCamping}}
+        {{/if}}
+
+        {{#if walking}}
+            {{> uiWalking}}
+        {{/if}}
+
+        {{#if town}}
+            {{> uiTown}}
+        {{/if}}
+
+        {{#if battle}}
+            {{> uiBattle}}
+        {{/if}}
+
+        {{#if inCombat}}
+            {{> combat}}
+        {{/if}}
+    </div>
     <div class="float">
-        <div class="left">
-            {{#if camping}}
-                {{> uiCamping}}
-            {{/if}}
-
-            {{#if walking}}
-                {{> uiWalking}}
-            {{/if}}
-
-            {{#if town}}
-                {{> uiTown}}
-            {{/if}}
-
-            {{#if battle}}
-                {{> uiBattle}}
-            {{/if}}
-
-            {{#if inCombat}}
-                {{> combat}}
-            {{/if}}
-        </div>
-        <div class="left">
+        <div class="left gui-window">
             {{> uiCharacter}}
         </div>
-        <div class="left">
+        <div class="left gui-window">
             {{> storage}}
         </div>
-        <div class="left">
+        <div class="left gui-window">
             {{> uiBooks}}
         </div>
-        <div class="left">
+        <div class="left gui-window">
             {{> map}}
         </div>
     </div>
@@ -261,23 +261,68 @@
 
 <template name="combat">
     <h4>Combat</h4>
-    {{#with combat}}
-        <small>#{{id}}</small>
 
+    {{#with combat}}
+    <small>#{{_id}}</small>
+
+    <div class="combat float">
         <div class="party">
-        {{#each party}}
-            <div class="party-member">
-                <b>{{name}}</b>
-            </div>
-        {{/each}}
+            {{#each party}}
+                <div class="party-member">
+                    <b>{{name}}</b>
+                    <div class="bar-container">
+                        <div class="bar red" style="width: {{health.head}}%">
+                            <span>Head</span>
+                        </div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar red" style="width: {{health.torso}}%">
+                            <span>Torso</span>
+                        </div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar red" style="width: {{health.leftArm}}%">
+                             <span>Left Arm</span>
+                        </div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar red" style="width: {{health.rightArm}}%">
+                             <span>Right arm:</span>
+                        </div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar red" style="width: {{health.leftLeg}}%">
+                             <span>Left Leg</span>
+                        </div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar red" style="width: {{health.rightLeg}}%">
+                             <span>Right Leg</span>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+
+        <div class="log">
+            <h4>Combat Log</h4>
         </div>
 
         <div class="enemies">
         {{#each enemy}}
             <div class="enemy">
                 <b>{{name}}</b>
+
+                {{#each toArray health}}
+                <div class="bar-container">
+                    <div class="bar red" style="width: {{value}}%">
+                        <span>{{key}}</span>
+                    </div>
+                </div>
+                {{/each}}
             </div>
         {{/each}}
         </div>
+    </div>
     {{/with}}
 </template>

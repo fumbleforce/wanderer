@@ -11,6 +11,25 @@ body, html
 
 h4
     font-size: 17px
+    margin: 5px 0
+
+.bar-container
+    height: 15px
+    width: 100px
+    margin: 3px
+    background: gray
+
+    .bar
+        height: 15px
+        padding-left: 3px
+
+        span
+            font-size: 10px
+
+    .red
+        background: red
+        color: white
+
 
 .screen
     position:relative
@@ -25,6 +44,23 @@ h4
     left: 40%
     background-image: url(skeltw2.gif)
     z-index: 100
+
+.gui
+    width: 1200px
+    background: ghostwhite
+    margin: 0 auto
+    overflow:hidden
+
+    .gui-main
+        box-sizing : border-box
+        width: 1180px
+
+    .gui-window, .gui-main
+        min-height: 200px
+        min-width: 200px
+        padding: 10px
+        margin: 10px
+        background: white
 
 .ground
     position: absolute
@@ -106,6 +142,11 @@ ul
 .exemplary
     color: purple
 
+
+.combat
+    .party, .log, .enemies
+        width: 33%
+        float:left
 
 .action
     display: block

@@ -6,6 +6,7 @@ Monster = {},
 Monster.monsters = {
 
     boar: {
+        name: "Boar",
         health: {
             head: 10,
             body: 10,
