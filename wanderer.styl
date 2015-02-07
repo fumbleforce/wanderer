@@ -30,6 +30,25 @@ h4
         background: red
         color: white
 
+.loading-screen
+    width: 100%
+    height: 100%
+    background: darkslategray
+    position: relative
+
+    h1
+        width: 100%
+        text-align: center
+        top: 45%
+        position:absolute
+        color: white
+        font-size: 50px
+
+        .loading-icon
+            animation-name: spin;
+            animation-duration: 4000ms;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
 
 .screen
     position:relative
@@ -54,6 +73,7 @@ h4
     .gui-main
         box-sizing : border-box
         width: 1180px
+        min-height: 350px !important
 
     .gui-window, .gui-main
         min-height: 200px
@@ -61,6 +81,9 @@ h4
         padding: 10px
         margin: 10px
         background: white
+
+    .combat-actions
+        margin-top: 20px
 
 .ground
     position: absolute
@@ -146,7 +169,17 @@ ul
 .combat
     .party, .log, .enemies
         width: 33%
+        min-height: 200px
         float:left
+
+    .log
+        max-height: 300px
+
+        overflow-y: auto
+
+
+.walking
+    min-width: 400px
 
 .action
     display: block
@@ -156,18 +189,32 @@ ul
 
     .map-row
         .loc
-            height: 10px
-            width: 10px
+            height: 9px
+            width: 9px
             text-align: center
+            padding: 0
 
             span
-                font-size: 10px
+                font-size: 8px
 
         .forest
-            background: green
+            background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAW0lEQVQYV2NUvq38n4EAYDT8avj/07NPYGXPLj1jkNKTwtDCiM2kx8//M2gb8zPANMMV8UnxwQXRjcJqErrVjJxrOf9jcweyaThNgikCOQNDETYfghXh8jrMNAAp0ytg1VtP7QAAAABJRU5ErkJggg==")
+
+        .forest-path
+
+            background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAbklEQVQYV2NUvq38nwEJhMZ8ZFi9hB9ZiIHR8Kvh/0/PPoEFn116xiClJ4WiAMRhxGZSXzcfg7YxPwNMM1wRnxQfXBDdKKwmgdyEbDUj51rO//ld3GDHwhyNTuM0CWYlyBkYirD5EKwIWQJbOAEAhk9CYAAbkfAAAAAASUVORK5CYII=")
 
         .mountains
             background: gray
 
         .lake
             background: blue
+
+
+
+
+
+@keyframes spin {
+    from {transform:rotate(0deg);}
+    to {transform:rotate(360deg);}
+}

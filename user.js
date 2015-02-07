@@ -37,10 +37,8 @@ defaultUser = {
     physicalSkills: {
         toughness: 0,
         endurance: 0,
-        strenght: 0,
+        strength: 0,
         quickness: 0,
-
-
 
     },
 
@@ -79,7 +77,14 @@ defaultUser = {
 
     },
 
-    spells: {},
+    physicalSpells: [
+        "kick", "punch"
+    ],
+
+
+    magicalSpells: [
+
+    ],
 
     craftingSkills: {
         mason: 0,

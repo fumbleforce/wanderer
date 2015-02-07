@@ -14,7 +14,7 @@ Monster.monsters = {
         danger: 0,
         habitat: ["forest"],
         skills: [
-            { id: "charge", damage: 2, accuracy: 0.8 },
+            "charge",
         ]
     },
 

@@ -119,7 +119,11 @@ Meteor.methods({
             User.update({ $set: { location: locTo } });
         }
 
-        if (Math.random() > 0.7) {
+        var ran = Math.random();
+
+        if (locationTo.hasPath && ran < 0.01) {
+            Meteor.call("BattleRandomEncounter", locTo);
+        } else if (ran < 0.05) {
             Meteor.call("BattleRandomEncounter", locTo);
         }
     },

@@ -5,12 +5,25 @@
 </head>
 
 <body>
-    {{#if currentUser }}
-        {{> screen}}
+    {{#if loggingIn}}
+        {{>loadingScreen}}
     {{else}}
-        {{> user}}
+        {{#if currentUser }}
+            {{> screen}}
+        {{else}}
+            {{> user}}
+        {{/if}}
     {{/if}}
 </body>
+
+<template name="loadingScreen">
+    <div class="loading-screen">
+        <h1>
+            Loading
+            <span class="loading-icon">&#10561;</span>
+        </h1>
+    </div>
+</template>
 
 <template name="screen">
     <div class="screen">
@@ -20,7 +33,7 @@
         <div class="ground"></div>
         <div class="ground-on"></div>
         -->
-        {{ currentUser.name }}
+
         <div class="gui">
             {{> ui}}
         </div>
@@ -85,7 +98,14 @@
         {{/if}}
 
         {{#if walking}}
-            {{> uiWalking}}
+            <div class="float">
+                <div class="left walking">
+                    {{> uiWalking}}
+                </div>
+                <div class="left">
+                    {{> map}}
+                </div>
+            </div>
         {{/if}}
 
         {{#if town}}
@@ -107,11 +127,15 @@
         <div class="left gui-window">
             {{> storage}}
         </div>
+
+        {{#if camping}}
         <div class="left gui-window">
             {{> uiBooks}}
         </div>
+        {{/if}}
+
         <div class="left gui-window">
-            {{> map}}
+
         </div>
     </div>
 </template>
@@ -141,6 +165,7 @@
 
 <template name="uiCharacter">
     <h4>Character</h4>
+    {{ currentUser.name }}
 
     <div class="float">
         <div class="left list">
@@ -252,7 +277,11 @@
     {{#each rows}}
         <tr class="map-row">
         {{#each .}}
+            {{#if hasPath}}
+            <td class="loc {{biome}}-path" loc="{{loc}}"></td>
+            {{else}}
             <td class="loc {{biome}}" loc="{{loc}}"></td>
+            {{/if}}
         {{/each}}
         </tr>
     {{/each}}
@@ -302,14 +331,60 @@
                     </div>
                 </div>
             {{/each}}
+
+
+            {{#if playersTurn}}
+                <div class="combat-actions">
+
+                    {{#if noAction}}
+                    <button class="action combat-category" action="physical">Physical</button>
+                    <button class="action combat-category" action="magical">Magical</button>
+                    <button class="action combat-category" action="items">Items</button>
+                    <button class="action combat-category" action="flee">Flee</button>
+                    {{/if}}
+
+                    {{#if physicalAction}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                        {{#each physicalActions}}
+                            <button class="action combat-action" action="{{id}}">{{label}}</button>
+                        {{/each}}
+                    {{/if}}
+
+                    {{#if magicalAction}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                        {{#each magicalActions}}
+                            <button class="action combat-action" action="{{id}}">{{label}}</button>
+                        {{/each}}
+                    {{/if}}
+
+                    {{#if itemsAction}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                        {{#each itemsActions}}
+                            <button class="action combat-action" action="{{id}}">{{label}}</button>
+                        {{/each}}
+                    {{/if}}
+
+                    {{#if targetAction}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                        {{#each enemy}}
+                            <button class="action target-action" target="{{name}}">{{name}}</button>
+                        {{/each}}
+                    {{/if}}
+
+                </div>
+            {{/if}}
         </div>
 
         <div class="log">
-            <h4>Combat Log</h4>
+            <div class="combat-log">
+                {{#each combatLog}}
+                    <div class="log-entry">{{.}}</div>
+                {{/each}}
+            </div>
         </div>
 
         <div class="enemies">
-        {{#each enemy}}
+            {{#each enemy}}
             <div class="enemy">
                 <b>{{name}}</b>
 
@@ -321,8 +396,10 @@
                 </div>
                 {{/each}}
             </div>
-        {{/each}}
+            {{/each}}
         </div>
     </div>
+
+
     {{/with}}
 </template>
