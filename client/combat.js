@@ -9,10 +9,20 @@ Meteor.startup(function () {
         BattleCollection.find({ party: { $elemMatch: { _id: Meteor.userId() }}}).observe({
             added: function(item){
                 Session.set("userStatus", "combat");
+                Meteor.setTimeout(function () { Meteor.call("BattleAIAction"); }, 1000);
+
             },
             removed: function () {
                 Session.set("userStatus", "walking");
             }
+        });
+        BattleCollection.find({ party: { $elemMatch: { _id: Meteor.userId() }}}).observeChanges({
+            changed: function(id, fields){
+                console.log("Changed", fields)
+                if ("turn" in fields) {
+                    Meteor.setTimeout(function () { Meteor.call("BattleAIAction"); }, 1000);
+                }
+            },
         });
     });
     Session.set("battleActive", false);
@@ -28,7 +38,8 @@ Template.combat.helpers({
     },
 
     playersTurn: function () {
-        return Battle.getActive().turn === "party";
+        var battle = Battle.getActive();
+        return battle.turnList[battle.turn].id === Meteor.userId();
     },
 
     noAction: function () { return Session.get("combatCategory") === "none"; },

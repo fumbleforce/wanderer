@@ -14,17 +14,20 @@ h4
     margin: 5px 0
 
 .bar-container
-    height: 15px
-    width: 100px
+    height: 20px
+    width: 200px
     margin: 3px
     background: gray
+    position:relative
+    color:white
 
     .bar
-        height: 15px
+        height: 20px
         padding-left: 3px
 
-        span
-            font-size: 10px
+    span
+        position: absolute
+        font-size: 12px
 
     .red
         background: red
@@ -186,16 +189,46 @@ ul
         float:left
 
     .log
-        max-height: 300px
 
-        overflow-y: auto
+        .combat-log
+            margin-top: 10px
+            overflow-y: auto
+            max-height: 300px
 
+        .combat-order
+            background: lavender
+            width: 300px
+            padding: 5px
+
+            .turn-entry
+                padding: 3px
+
+            .turn-entry.active
+                background: gray
+                color:white
+
+    .enemies
+        .enemy
+            overflow:hidden
+            text-align: right
+
+            b
+                display:block
+
+            .bar-container
+                float:right
+                .bar
+                    position:absolute
+                    right:0
+                span
+                    right:0
 
 .walking
     min-width: 400px
 
 .action
     display: block
+    width: 200px
 
 .map
     border-spacing: 0;
@@ -209,6 +242,7 @@ ul
 
             span
                 font-size: 8px
+
 
         .forest
             background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAW0lEQVQYV2NUvq38n4EAYDT8avj/07NPYGXPLj1jkNKTwtDCiM2kx8//M2gb8zPANMMV8UnxwQXRjcJqErrVjJxrOf9jcweyaThNgikCOQNDETYfghXh8jrMNAAp0ytg1VtP7QAAAABJRU5ErkJggg==")

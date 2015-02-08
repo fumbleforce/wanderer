@@ -8,7 +8,7 @@ Spell.spells = {
         accuracy: 0.8,
         target: "enemy",
         type: "physical",
-        label: "Punch",
+        name: "Punch",
         scaling: {
             strength: { affects: "damage", val: 0.2 }
         }
@@ -19,7 +19,7 @@ Spell.spells = {
         accuracy: 0.7,
         target: "enemy",
         type: "physical",
-        label: "Kick",
+        name: "Kick",
         scaling: {
             strength: { affects: "damage", val: 0.2 }
         }
@@ -30,7 +30,7 @@ Spell.spells = {
         accuracy: 0.8,
         target: "enemy",
         type: "physical",
-        label: "Charge",
+        name: "Charge",
         effects: [{ id: "daze", chance: 0.3 }]
     },
 
@@ -40,7 +40,7 @@ Spell.spells = {
         accuracy: 0.8,
         target: "enemy",
         type: "magical",
-        label: "Wind Push"
+        name: "Wind Push"
     },
 
 };

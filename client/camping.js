@@ -1,6 +1,7 @@
 
 Template.uiCamping.helpers({
     campingAction: function () { return Session.get("campingAction"); },
+    fireActive: function () { return Session.get("fireActive"); }
 });
 
 Template.uiCamping.events({
@@ -19,7 +20,14 @@ Template.uiCamping.events({
         } else if (action === "read") {
             Meteor.call("CharacterRead");
         } else if (action === "fire") {
-
+            Session.set("fireActive", true);
+            Meteor.call("CampLightFire");
+            Meteor.setTimeout(function () {
+                Session.set("fireActive", false);
+                Session.set("cookingActive", false);
+            }, 30000);
+        } else if (action === "cook") {
+            Session.set("cookingActive", true);
         }
     }
 });

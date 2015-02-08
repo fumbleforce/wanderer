@@ -245,19 +245,6 @@ Item.items = _.map(Item.items, function (i) {
     return i
 });
 
-Item.workers = [
-    {
-        workerId: 0,
-        type: "manual",
-        wage: 5
-    },
-    {
-        workerId: 1,
-        type: "economics",
-        wage: 10,
-    }
-];
-
 
 Item.itemDict = {};
 Item.itemHierarchy = [];
@@ -281,7 +268,7 @@ Item.sortedItems = _.sortBy(Item.items, function(item) {
 });
 
 Item.get = function (id) {
-    if (id === "none") {
+    if (id === "none" || !id) {
         return {
             id: "none",
             el: "nothing"

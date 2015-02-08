@@ -8,15 +8,19 @@ Monster.monsters = {
     boar: {
         name: "Boar",
         health: 10,
+        maxHealth: 10,
         danger: 0,
         habitat: ["forest"],
-        skills: [
+        spells: [
             "charge",
         ],
         loot: [
             { item: "meat", chance: 0.8 },
             { item: "bone", chance: 0.3 },
-        ]
+        ],
+        physicalSkills: {
+            quickness: 0
+        }
     },
 
 

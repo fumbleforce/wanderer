@@ -346,7 +346,7 @@ Locations.locations = {
     "-9|5": { biome: "forest", hasPath: false, accessible: true },
     "-8|5": { biome: "forest", hasPath: false, accessible: true },
     "-7|5": { biome: "forest", hasPath: false, accessible: true },
-    "-6|5": { biome: "forest", hasPath: false, accessible: true },
+    "-6|5": { biome: "forest", hasPath: false, accessible: true, town: true },
     "-5|5": { biome: "forest", hasPath: false, accessible: true },
     "-4|5": { biome: "forest", hasPath: false, accessible: true },
     "-3|5": { biome: "forest", hasPath: false, accessible: true },
