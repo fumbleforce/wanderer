@@ -13,7 +13,12 @@ Handlebars.registerHelper('toArray',function(obj) {
     return result;
 });
 
-
+UI.registerHelper('addIndex', function (all) {
+    return _.map(all, function(val, index) {
+        val.index = index;
+        return val;
+    });
+});
 
 
 

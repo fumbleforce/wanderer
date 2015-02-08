@@ -1,20 +1,20 @@
 
 
 
-Meteor.autosubscribe(function() {
-    BattleCollection.find({ party: { $elemMatch: { _id: Meteor.userId() }}}).observe({
-        added: function(item){
-            Session.set("userStatus", "combat");
-        },
-        removed: function () {
-            Session.set("userStatus", "walking");
-        }
-    });
-});
 
 
 
 Meteor.startup(function () {
+    Meteor.autosubscribe(function() {
+        BattleCollection.find({ party: { $elemMatch: { _id: Meteor.userId() }}}).observe({
+            added: function(item){
+                Session.set("userStatus", "combat");
+            },
+            removed: function () {
+                Session.set("userStatus", "walking");
+            }
+        });
+    });
     Session.set("battleActive", false);
     Session.set("combatCategory", "none");
     Session.set("combatAction", "none");
@@ -71,6 +71,9 @@ Template.combat.events({
                 action: "flee",
                 target: Meteor.userId(),
             });
+        } else if (action === "leave") {
+            Session.set("userStatus", "walking");
+            Meteor.call("BattleEnd", Battle.getActive()._id);
         } else {
             Session.set("combatCategory", action);
         }

@@ -17,20 +17,12 @@ defaultUser = {
 
     activity: {},
 
-    health: {
-        mind: 100,
-        head: 100,
-        torso: 100,
-        leftArm: 100,
-        rightArm: 100,
-        leftLeg: 100,
-        rightLeg: 100,
-        feet: 100,
-        hands: 100,
+    health: 100,
+    sanity: 100,
+    endurance: 100,
 
-        hunger: 0,
-        thirst: 0,
-    },
+    hunger: 0,
+    thirst: 0,
 
     effects: [],
 
@@ -39,7 +31,6 @@ defaultUser = {
         endurance: 0,
         strength: 0,
         quickness: 0,
-
     },
 
     mentalSkills: {

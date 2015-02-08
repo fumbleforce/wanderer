@@ -300,33 +300,18 @@
                 <div class="party-member">
                     <b>{{name}}</b>
                     <div class="bar-container">
-                        <div class="bar red" style="width: {{health.head}}%">
-                            <span>Head</span>
+                        <div class="bar red" style="width: {{health}}%">
+                            <span>Health</span>
                         </div>
                     </div>
                     <div class="bar-container">
-                        <div class="bar red" style="width: {{health.torso}}%">
-                            <span>Torso</span>
+                        <div class="bar blue" style="width: {{sanity}}%">
+                            <span>Sanity</span>
                         </div>
                     </div>
                     <div class="bar-container">
-                        <div class="bar red" style="width: {{health.leftArm}}%">
-                             <span>Left Arm</span>
-                        </div>
-                    </div>
-                    <div class="bar-container">
-                        <div class="bar red" style="width: {{health.rightArm}}%">
-                             <span>Right arm:</span>
-                        </div>
-                    </div>
-                    <div class="bar-container">
-                        <div class="bar red" style="width: {{health.leftLeg}}%">
-                             <span>Left Leg</span>
-                        </div>
-                    </div>
-                    <div class="bar-container">
-                        <div class="bar red" style="width: {{health.rightLeg}}%">
-                             <span>Right Leg</span>
+                        <div class="bar brown" style="width: {{endurance}}%">
+                            <span>Endurance</span>
                         </div>
                     </div>
                 </div>
@@ -337,10 +322,14 @@
                 <div class="combat-actions">
 
                     {{#if noAction}}
-                    <button class="action combat-category" action="physical">Physical</button>
-                    <button class="action combat-category" action="magical">Magical</button>
-                    <button class="action combat-category" action="items">Items</button>
-                    <button class="action combat-category" action="flee">Flee</button>
+                        {{#if won}}
+                            <button class="action combat-category" action="leave">Leave</button>
+                        {{else}}
+                            <button class="action combat-category" action="physical">Physical</button>
+                            <button class="action combat-category" action="magical">Magical</button>
+                            <button class="action combat-category" action="items">Items</button>
+                            <button class="action combat-category" action="flee">Flee</button>
+                        {{/if}}
                     {{/if}}
 
                     {{#if physicalAction}}
@@ -366,8 +355,10 @@
 
                     {{#if targetAction}}
                         <button class="action combat-category" action="none">&#8617;</button>
-                        {{#each enemy}}
-                            <button class="action target-action" target="{{name}}">{{name}}</button>
+                        {{#each addIndex enemy}}
+                            {{#unless dead}}
+                            <button class="action target-action" target="{{index}}">{{name}}</button>
+                            {{/unless}}
                         {{/each}}
                     {{/if}}
 
@@ -378,7 +369,9 @@
         <div class="log">
             <div class="combat-log">
                 {{#each combatLog}}
-                    <div class="log-entry">{{.}}</div>
+                    <div class="log-entry">
+                        {{{.}}}
+                    </div>
                 {{/each}}
             </div>
         </div>
@@ -388,13 +381,15 @@
             <div class="enemy">
                 <b>{{name}}</b>
 
-                {{#each toArray health}}
                 <div class="bar-container">
-                    <div class="bar red" style="width: {{value}}%">
-                        <span>{{key}}</span>
+                    {{#if dead}}
+                    <div class="dead-label">Dead</div>
+                    {{else}}
+                    <div class="bar red" style="width: {{health}}%">
+                        <span>{{health}}</span>
                     </div>
+                    {{/if}}
                 </div>
-                {{/each}}
             </div>
             {{/each}}
         </div>
