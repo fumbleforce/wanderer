@@ -194,6 +194,28 @@ if (Meteor.isClient) {
                 storage.push({ id: id, qty: qty });
             }
             User.update({ $set: { storage: storage } });
+        },
+
+        StorageAddMultiple: function (items) {
+            var storage = Storage.get();
+
+            for (var i = 0; i < items.length; i++) {
+                var id = items[i].id,
+                    qty = items[i].qty,
+                    hasPos = false;
+
+                for (var j = 0; j < storage.length; j++) {
+                    if (storage[j].id === id) {
+                        storage[j].qty += qty;
+                        hasPos = true;
+                        break;
+                    }
+                }
+                if (!hasPos) {
+                    storage.push({ id: id, qty: qty });
+                }
+            }
+            User.update({ $set: { storage: storage } });
         }
 
     });

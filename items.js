@@ -101,6 +101,24 @@ Item.items = [
     },
 
     {
+        id: "meat",
+        category: "food",
+        quality: 1,
+        buyPrice: 3,
+        sellPrice: 6,
+        name: "Piece of meat",
+    },
+
+    {
+        id: "bone",
+        category: "trash",
+        quality: 0,
+        buyPrice: 3,
+        sellPrice: 6,
+        name: "Bone",
+    },
+
+    {
         id: "stone",
         category: "material",
         quality: 1,
@@ -227,19 +245,6 @@ Item.items = _.map(Item.items, function (i) {
     return i
 });
 
-Item.workers = [
-    {
-        workerId: 0,
-        type: "manual",
-        wage: 5
-    },
-    {
-        workerId: 1,
-        type: "economics",
-        wage: 10,
-    }
-];
-
 
 Item.itemDict = {};
 Item.itemHierarchy = [];
@@ -263,7 +268,7 @@ Item.sortedItems = _.sortBy(Item.items, function(item) {
 });
 
 Item.get = function (id) {
-    if (id === "none") {
+    if (id === "none" || !id) {
         return {
             id: "none",
             el: "nothing"
@@ -276,4 +281,16 @@ Item.get = function (id) {
 
 Item.rand = function (quality) {
     return Item.byQuality[quality][Math.floor(Math.random()*(Item.byQuality[quality].length-1))];
+};
+
+Item.resolveLoot = function (loots) {
+    var resolved = [];
+
+    for (var i = 0; i < loots.length; i++) {
+        if (Math.random() < loots[i].chance) {
+            resolved.push({ id: loots[i].item, qty: 1 });
+        }
+    }
+
+    return resolved;
 };

@@ -5,12 +5,25 @@
 </head>
 
 <body>
-    {{#if currentUser }}
-        {{> screen}}
+    {{#if loggingIn}}
+        {{>loadingScreen}}
     {{else}}
-        {{> user}}
+        {{#if currentUser }}
+            {{> screen}}
+        {{else}}
+            {{> user}}
+        {{/if}}
     {{/if}}
 </body>
+
+<template name="loadingScreen">
+    <div class="loading-screen">
+        <h1>
+            Loading
+            <span class="loading-icon">&#10561;</span>
+        </h1>
+    </div>
+</template>
 
 <template name="screen">
     <div class="screen">
@@ -20,7 +33,7 @@
         <div class="ground"></div>
         <div class="ground-on"></div>
         -->
-        {{ currentUser.name }}
+
         <div class="gui">
             {{> ui}}
         </div>
@@ -79,40 +92,52 @@
 </template>
 
 <template name="ui">
+    <div class="gui-main">
+        {{#if camping}}
+            {{> uiCamping}}
+        {{/if}}
+
+        {{#if walking}}
+            <div class="float">
+                <div class="left walking">
+                    {{> uiWalking}}
+                </div>
+                <div class="left">
+                    {{> map}}
+                </div>
+            </div>
+        {{/if}}
+
+        {{#if town}}
+            {{> uiTown}}
+        {{/if}}
+
+        {{#if battle}}
+            {{> uiBattle}}
+        {{/if}}
+
+        {{#if inCombat}}
+            {{> combat}}
+        {{/if}}
+    </div>
     <div class="float">
-        <div class="left">
-            {{#if camping}}
-                {{> uiCamping}}
-            {{/if}}
-
-            {{#if walking}}
-                {{> uiWalking}}
-            {{/if}}
-
-            {{#if town}}
-                {{> uiTown}}
-            {{/if}}
-
-            {{#if battle}}
-                {{> uiBattle}}
-            {{/if}}
-
-            {{#if inCombat}}
-                {{> combat}}
-            {{/if}}
-        </div>
-        <div class="left">
+        <div class="left gui-window">
             {{> uiCharacter}}
         </div>
-        <div class="left">
+        <div class="left gui-window">
             {{> storage}}
         </div>
-        <div class="left">
+
+        <div class="left gui-window">
+            {{> equipment}}
+        </div>
+
+        {{#if camping}}
+        <div class="left gui-window">
             {{> uiBooks}}
         </div>
-        <div class="left">
-            {{> map}}
-        </div>
+        {{/if}}
+
     </div>
 </template>
 
@@ -130,42 +155,50 @@
 
 <template name="uiCamping">
     <h4>Camping</h4>
-    <button class="action" action="eat">Eat</button>
-    <button class="action" action="drink">Drink</button>
-    <button class="action" action="read">Read a book</button>
-    <button class="action" action="fire">Create fire</button>
-    <button class="action" action="dirt">Dig up some dirt</button>
-    <button class="action" action="break">Break camp</button>
+    <div class="float">
+        <div class="left">
+            <button class="action" action="eat">Eat</button>
+            <button class="action" action="drink">Drink</button>
+            <button class="action" action="read">Read a book</button>
+
+            {{#if fireActive}}
+            <button class="action" action="cook">Start cooking</button>
+            {{else}}
+            <button class="action" action="fire">Light a fire</button>
+            {{/if}}
+
+            <button class="action" action="dirt">Dig up some dirt</button>
+            <button class="action" action="break">Break camp</button>
+        </div>
+        <div class="left">
+        {{#if session "cookingActive"}}
+            {{>cooking}}
+        {{/if}}
+        </div>
+        <div class="left">
+            {{#if fireActive}}
+                <div>The camp fire is lit, warming weary travelers.</div>
+            {{/if}}
+        </div>
+    </div>
     <p>{{ campingAction }}</p>
 </template>
 
 <template name="uiCharacter">
     <h4>Character</h4>
+    {{ currentUser.name }}
 
     <div class="float">
         <div class="left list">
             <b>Health</b>
             <ul>
-                <li>Hunger: {{currentUser.health.hunger}}</li>
-                <li>Thirst: {{currentUser.health.thirst}}</li>
+                <li>Hunger: {{currentUser.hunger}}</li>
+                <li>Thirst: {{currentUser.thirst}}</li>
             </ul>
             <ul>
-                <li>Mind: {{currentUser.health.mind}}</li>
-                <li>Head: {{currentUser.health.head}}</li>
-                <li>Torso: {{currentUser.health.torso}}</li>
-                <li>Left arm: {{currentUser.health.leftArm}}</li>
-                <li>Right arm: {{currentUser.health.rightArm}}</li>
-                <li>Left leg: {{currentUser.health.leftLeg}}</li>
-                <li>Right leg: {{currentUser.health.rightLeg}}</li>
-            </ul>
-        </div>
-        <div class="left list">
-            <b>Equipment</b>
-            <ul>
-                <li>Head: {{currentUser.equipment.head}}</li>
-                <li>Body: {{currentUser.equipment.body}}</li>
-                <li>Hands: {{currentUser.equipment.hands}}</li>
-                <li>Feet: {{currentUser.equipment.feet}}</li>
+                <li>Health: {{currentUser.maxHealth}}</li>
+                <li>Sanity: {{currentUser.maxSanity}}</li>
+                <li>Stamina: {{currentUser.maxEndurance}}</li>
             </ul>
         </div>
         <b>Total skills: {{totalSkills}}</b>
@@ -173,7 +206,7 @@
             <b>Physical Skills</b>
             <ul>
                 {{#each physicalSkills}}
-                    <li>{{label}}: {{value}}</li>
+                    <li>{{labelify label}}: {{value}}</li>
                 {{/each}}
             </ul>
         </div>
@@ -181,7 +214,7 @@
             <b>Mental Skills</b>
             <ul>
                 {{#each mentalSkills}}
-                    <li>{{label}}: {{value}}</li>
+                    <li>{{labelify label}}: {{value}}</li>
                 {{/each}}
             </ul>
         </div>
@@ -189,7 +222,7 @@
             <b>Weapon Skills</b>
             <ul>
                 {{#each weaponSkills}}
-                    <li>{{label}}: {{value}}</li>
+                    <li>{{labelify label}}: {{value}}</li>
                 {{/each}}
             </ul>
         </div>
@@ -197,7 +230,7 @@
             <b>Spell Skills</b>
             <ul>
                 {{#each spellSkills}}
-                    <li>{{label}}: {{value}}</li>
+                    <li>{{labelify label}}: {{value}}</li>
                 {{/each}}
             </ul>
         </div>
@@ -205,7 +238,7 @@
             <b>Crafting Skills</b>
             <ul>
                 {{#each craftingSkills}}
-                    <li>{{label}}: {{value}}</li>
+                    <li>{{labelify label}}: {{value}}</li>
                 {{/each}}
             </ul>
         </div>
@@ -236,6 +269,18 @@
     <h4>Battle</h4>
 </template>
 
+
+<template name="equipment">
+    <b>Equipment</b>
+    <ul>
+        <li>Head: {{itemLink currentUser.equipment.head}}</li>
+        <li>Body: {{itemLink currentUser.equipment.body}}</li>
+        <li>Hands: {{itemLink currentUser.equipment.hands}}</li>
+        <li>Feet: {{itemLink currentUser.equipment.feet}}</li>
+    </ul>
+</template>
+
+
 <template name="uiTown">
     <h4>Town</h4>
 </template>
@@ -252,7 +297,9 @@
     {{#each rows}}
         <tr class="map-row">
         {{#each .}}
-            <td class="loc {{biome}}" loc="{{loc}}"></td>
+            <td class="loc {{biome}}{{#if hasPath}}-path{{/if}}" loc="{{loc}}">
+                {{#if town}}#{{/if}}
+            </td>
         {{/each}}
         </tr>
     {{/each}}
@@ -260,24 +307,128 @@
 </template>
 
 <template name="combat">
-    <h4>Combat</h4>
     {{#with combat}}
-        <small>#{{id}}</small>
 
+    <div class="combat float">
         <div class="party">
-        {{#each party}}
-            <div class="party-member">
-                <b>{{name}}</b>
+            {{#each party}}
+                <div class="party-member">
+                    <b>{{name}}</b>
+                    <div class="bar-container">
+                        <div class="bar red" style="width: {{percent arg1=health arg2=maxHealth}}%">
+                            {{health}}hp ({{percent arg1=health arg2=maxHealth}}%)
+                        </div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar blue" style="width: {{percent arg1=sanity arg2=maxSanity}}%">
+                            {{sanity}}sp ({{percent arg1=sanity arg2=maxSanity}}%)
+                        </div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar brown" style="width: {{percent arg1=endurance arg2=maxEndurance}}%">
+                            {{endurance}}ep ({{percent arg1=endurance arg2=maxEndurance}}%)
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+
+
+                <div class="combat-actions">
+                {{#if won}}
+                    <button class="action combat-category" action="leave">Leave</button>
+                {{/if}}
+
+                {{#if playersTurn}}
+                    {{#if noAction}}
+                        {{#unless won}}
+                            <button class="action combat-category" action="physical">Physical</button>
+                            <button class="action combat-category" action="magical">Magical</button>
+                            <button class="action combat-category" action="items">Items</button>
+                            <button class="action combat-category" action="flee">Flee</button>
+                        {{/unless}}
+                    {{/if}}
+
+                    {{#if physicalAction}}
+                        {{#each physicalActions}}
+                            <button class="action combat-action" action="{{id}}">{{name}}</button>
+                        {{/each}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                    {{/if}}
+
+                    {{#if magicalAction}}
+                        {{#each magicalActions}}
+                            <button class="action combat-action" action="{{id}}">{{name}}</button>
+                        {{/each}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                    {{/if}}
+
+                    {{#if itemsAction}}
+                        {{#each itemsActions}}
+                            <button class="action combat-action" action="{{id}}">{{name}}</button>
+                        {{/each}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                    {{/if}}
+
+                    {{#if targetAction}}
+                        {{#each addIndex enemy}}
+                            {{#unless dead}}
+                            <button class="action target-action" target="{{index}}">{{name}}</button>
+                            {{/unless}}
+                        {{/each}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                    {{/if}}
+
+                {{/if}}
+                </div>
+        </div>
+
+        <div class="log">
+            <div class="combat-order">
+                {{#each addIndex turnList}}
+                    {{#if equals arg1=index arg2=combat.turn }}
+                    <div class="turn-entry active">{{name}}</div>
+                    {{else}}
+                    <div class="turn-entry">{{name}}</div>
+                    {{/if}}
+                {{/each}}
             </div>
-        {{/each}}
+
+
+            <div class="combat-log">
+                {{#each combatLog}}
+                    <div class="log-entry">
+                        {{{.}}}
+                    </div>
+                {{/each}}
+            </div>
         </div>
 
         <div class="enemies">
-        {{#each enemy}}
+            {{#each enemy}}
             <div class="enemy">
                 <b>{{name}}</b>
+
+                <div class="bar-container">
+                    {{#if dead}}
+                    <div class="dead-label">Dead</div>
+                    {{else}}
+                    <div class="bar red" style="width: {{percent arg1=health arg2=maxHealth}}%">
+                    </div>
+                    <span>
+                    {{health}}hp ({{percent arg1=health arg2=maxHealth}}%)
+                    </span>
+                    {{/if}}
+                </div>
             </div>
-        {{/each}}
+            {{/each}}
         </div>
+    </div>
+
+
     {{/with}}
+</template>
+
+
+<template name="cooking">
+    <h4>Cooking</h4>
 </template>
