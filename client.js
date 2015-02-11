@@ -70,6 +70,8 @@ Template.uiCamping.events({
 
         }
     }
+});
+
 Template.registerHelper("diff", function (ctx) {
     return ctx["arg1"] - ctx["arg2"];
 });
