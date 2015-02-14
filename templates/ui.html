@@ -1,0 +1,51 @@
+
+<template name="ui">
+    <div class="gui-main">
+        {{#if userStatus "camping"}}
+            {{> uiCamping}}
+        {{/if}}
+
+        {{#if userStatus "walking"}}
+            {{> uiWalking}}
+        {{/if}}
+
+        {{#if userStatus "town"}}
+            {{> uiTown}}
+        {{/if}}
+
+        {{#if userStatus "battle"}}
+            {{> uiBattle}}
+        {{/if}}
+
+        {{#if userStatus "combat"}}
+            {{> combat}}
+        {{/if}}
+
+
+        <!-- Crafting -->
+
+        {{#if userStatus "cooking"}}
+            {{> cooking}}
+        {{/if}}
+
+    </div>
+    <div class="float">
+        <div class="left gui-window">
+            {{> uiCharacter}}
+        </div>
+        <div class="left gui-window">
+            {{> storage}}
+        </div>
+
+        <div class="left gui-window">
+            {{> equipment}}
+        </div>
+
+        {{#if camping}}
+        <div class="left gui-window">
+            {{> uiBooks}}
+        </div>
+        {{/if}}
+
+    </div>
+</template>

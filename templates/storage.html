@@ -1,0 +1,12 @@
+
+<template name="storage">
+    <h4>Inventory</h4>
+    {{#each storageList}}
+        <div class="storage-item" data-context="item" quantity="{{qty}}" itemId="{{id}}">
+            <span>{{{el}}}</span>
+            <span>x{{qty}}</span>
+        </div>
+    {{/each}}
+</template>
+
+

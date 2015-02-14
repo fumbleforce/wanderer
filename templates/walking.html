@@ -1,0 +1,19 @@
+<template name="uiWalking">
+    <h4>Walking</h4>
+
+     <div class="float">
+        <div class="left walking">
+            <p>Location: {{currentUser.location}}</p>
+            <p>{{encounter}}</p>
+            <button class="action" action="west">{{west}}</button>
+            <button class="action" action="east">{{east}}</button>
+            <button class="action" action="north">{{north}}</button>
+            <button class="action" action="south">{{south}}</button>
+            <button class="action" action="read">Read a book</button>
+            <button class="action" action="camp">Make camp</button>
+        </div>
+        <div class="left">
+            {{> map}}
+        </div>
+    </div>
+</template>

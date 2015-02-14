@@ -1,0 +1,62 @@
+
+
+<template name="uiCharacter">
+    <h4>Character</h4>
+    {{ currentUser.name }}
+
+    <div class="float">
+        <div class="left list">
+            <b>Health</b>
+            <ul>
+                <li>Hunger: {{currentUser.hunger}}</li>
+                <li>Thirst: {{currentUser.thirst}}</li>
+            </ul>
+            <ul>
+                <li>Health: {{currentUser.maxHealth}}</li>
+                <li>Sanity: {{currentUser.maxSanity}}</li>
+                <li>Stamina: {{currentUser.maxEndurance}}</li>
+            </ul>
+        </div>
+        <b>Total skills: {{totalSkills}}</b>
+        <div class="left list">
+            <b>Physical Skills</b>
+            <ul>
+                {{#each physicalSkills}}
+                    <li>{{labelify label}}: {{value}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="left list">
+            <b>Mental Skills</b>
+            <ul>
+                {{#each mentalSkills}}
+                    <li>{{labelify label}}: {{value}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="left list">
+            <b>Weapon Skills</b>
+            <ul>
+                {{#each weaponSkills}}
+                    <li>{{labelify label}}: {{value}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="left list">
+            <b>Spell Skills</b>
+            <ul>
+                {{#each spellSkills}}
+                    <li>{{labelify label}}: {{value}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="left list">
+            <b>Crafting Skills</b>
+            <ul>
+                {{#each craftingSkills}}
+                    <li>{{labelify label}}: {{value}}</li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</template>

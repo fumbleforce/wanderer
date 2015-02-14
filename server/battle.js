@@ -87,7 +87,6 @@ Meteor.methods({
             battle = Battle.getActive();
 
         var monster = _.find(battle.enemy, function (m) { return m._id === battle.turnList[battle.turn].id });
-        console.log("Monster", monster);
 
         if (monster == undefined) {
             return;
@@ -111,7 +110,6 @@ Meteor.methods({
         }
 
         var spell = Spell.get(monster.spells[Math.floor(monster.spells.length * Math.random())], monster);
-        console.log("spell", spell)
 
 
         if (spell.target === "enemy") {
@@ -151,8 +149,6 @@ Meteor.methods({
                 deadEnemies++;
             }
         });
-
-        console.log(deadEnemies, "out of", battle.enemy.length, "enemies are dead")
 
         if (deadEnemies === battle.enemy.length) {
             // Won

@@ -1,0 +1,123 @@
+
+
+<template name="combat">
+    {{#with combat}}
+
+    <div class="combat float">
+        <div class="party">
+            {{#each party}}
+                <div class="party-member">
+                    <b>{{name}}</b>
+                    <div class="bar-container">
+                        <div class="bar red" style="width: {{percent arg1=health arg2=maxHealth}}%">
+                            {{health}}hp ({{percent arg1=health arg2=maxHealth}}%)
+                        </div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar blue" style="width: {{percent arg1=sanity arg2=maxSanity}}%">
+                            {{sanity}}sp ({{percent arg1=sanity arg2=maxSanity}}%)
+                        </div>
+                    </div>
+                    <div class="bar-container">
+                        <div class="bar brown" style="width: {{percent arg1=endurance arg2=maxEndurance}}%">
+                            {{endurance}}ep ({{percent arg1=endurance arg2=maxEndurance}}%)
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+
+
+                <div class="combat-actions">
+                {{#if won}}
+                    <button class="action combat-category" action="leave">Leave</button>
+                {{/if}}
+
+                {{#if playersTurn}}
+                    {{#if noAction}}
+                        {{#unless won}}
+                            <button class="action combat-category" action="physical">Physical</button>
+                            <button class="action combat-category" action="magical">Magical</button>
+                            <button class="action combat-category" action="items">Items</button>
+                            <button class="action combat-category" action="flee">Flee</button>
+                        {{/unless}}
+                    {{/if}}
+
+                    {{#if physicalAction}}
+                        {{#each physicalActions}}
+                            <button class="action combat-action" action="{{id}}">{{name}}</button>
+                        {{/each}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                    {{/if}}
+
+                    {{#if magicalAction}}
+                        {{#each magicalActions}}
+                            <button class="action combat-action" action="{{id}}">{{name}}</button>
+                        {{/each}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                    {{/if}}
+
+                    {{#if itemsAction}}
+                        {{#each itemsActions}}
+                            <button class="action combat-action" action="{{id}}">{{name}}</button>
+                        {{/each}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                    {{/if}}
+
+                    {{#if targetAction}}
+                        {{#each addIndex enemy}}
+                            {{#unless dead}}
+                            <button class="action target-action" target="{{index}}">{{name}}</button>
+                            {{/unless}}
+                        {{/each}}
+                        <button class="action combat-category" action="none">&#8617;</button>
+                    {{/if}}
+
+                {{/if}}
+                </div>
+        </div>
+
+        <div class="log">
+            <div class="combat-order">
+                {{#each addIndex turnList}}
+                    {{#if equals arg1=index arg2=combat.turn }}
+                    <div class="turn-entry active">{{name}}</div>
+                    {{else}}
+                    <div class="turn-entry">{{name}}</div>
+                    {{/if}}
+                {{/each}}
+            </div>
+
+
+            <div class="combat-log">
+                {{#each combatLog}}
+                    <div class="log-entry">
+                        {{{.}}}
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <div class="enemies">
+            {{#each enemy}}
+            <div class="enemy">
+                <b>{{name}}</b>
+
+                <div class="bar-container">
+                    {{#if dead}}
+                    <div class="dead-label">Dead</div>
+                    {{else}}
+                    <div class="bar red" style="width: {{percent arg1=health arg2=maxHealth}}%">
+                    </div>
+                    <span>
+                    {{health}}hp ({{percent arg1=health arg2=maxHealth}}%)
+                    </span>
+                    {{/if}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+
+    {{/with}}
+</template>

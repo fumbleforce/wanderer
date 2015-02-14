@@ -9,9 +9,6 @@ Meteor.startup(function () {
     }
 });
 
-Template.user.helpers({
-
-});
 
 Template.user.events({
     "click #log-in": function (e, t) {
@@ -28,13 +25,14 @@ Template.user.events({
 
         var def = _.extend({}, defaultUser);
         var usr = _.extend(def, {
-            email: email,
-            password: password,
             name: character,
-            createdDate: new Date()
         });
         console.log(usr)
-        Accounts.createUser(usr);
+        Accounts.createUser({
+            email: email,
+            password: password,
+            createdDate: new Date()
+        });
+        User.update({ $set: usr });
     },
 });
-

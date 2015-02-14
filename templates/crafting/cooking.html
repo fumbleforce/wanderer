@@ -1,0 +1,32 @@
+<template name="cooking">
+    <div class="cooking">
+        <div class="cooking-actions cooking-panel">
+            <button class="action" action="stir">Stir</button>
+            <button class="action" action="add">Add ingredient</button>
+            <button class="action" action="inc-heat">Increase heat</button>
+        </div>
+        <div class="ingredients cooking-panel">
+            <b>Ingredients</b>
+
+            <div class="ingredient-list">
+                {{#each ingredients}}
+                <div class="ingredient" itemid="{{id}}">
+                    {{{el}}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        <div class="mixer cooking-panel">
+            <b>Mix</b>
+
+        </div>
+        <div class="mixer cooking-panel">
+            <b>Status</b>
+            <p>Temp: {{temp}}</p>
+        </div>
+        <div class="result cooking-panel">
+            <b>Result</b>
+
+        </div>
+    </div>
+</template>

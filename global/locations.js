@@ -1,5 +1,6 @@
 Locations = {};
 
+/*
 Locations.locations = {
 
     "-10|-10": { biome: "forest", hasPath: false, accessible: true },
@@ -475,21 +476,31 @@ Locations.locations = {
     "10|10": { biome: "forest", hasPath: false, accessible: true },
 
 
-
-
-
-
-
 };
 
+//Parse map
+
+
+
+
+
+
 var map = [], loc,
-    ri = 0;
-for (var r = -10; r <= 10; r++) {
+    ri = 0,
+    width = jsonmap.width,
+    height = jsonmap.height;
+
+for (var r = 0; r < height; r++) {
     map.push([]);
-    for (var c = -10; c <= 10; c++) {
-        loc = Locations.locations[c+"|"+r];
-        if (loc != undefined) {
-            loc.loc = c + "|" + r;
+
+    for (var c = 0; c < width; c++) {
+        loc = {
+            biome: Locations.biomes[jsonmap.layers[0].data[c+r*width]-1],
+            loc: c + "|" + r,
+        };
+
+        if (loc.biome === "highmountain" || loc.biome === "water") {
+            loc.accessible = false;
         }
 
         map[ri].push(loc);
@@ -498,16 +509,52 @@ for (var r = -10; r <= 10; r++) {
 };
 
 Locations.asMap = map;
+*/
+
+
+
+Locations.biomes = [
+    "sand",
+    "forest",
+    "grass",
+    "water",
+    "mountain",
+    "snow",
+    "pass",
+    "bridge",
+    "cave",
+    "village",
+    "tallmountain",
+    "city",
+];
+
+Locations.cities = {
+    "63|51": {
+        name: "Caldum"
+    }
+}
 
 Locations.get = function (l) {
-    return Locations.locations[l];
+    var row = +l.split("|")[0];
+    var col = +l.split("|")[1];
+    var width = jsonmap.width,
+        height = jsonmap.height;
+    var loc = {
+        biome: Locations.biomes[jsonmap.layers[0].data[row+col*width]-1],
+        loc: l,
+        accessible: true,
+    };
+    if (loc.biome === "tallmountain" || loc.biome === "water") {
+        loc.accessible = false;
+    }
+    return loc;
 }
 
 
 constructDirection = function (dir) {
     var loc = Meteor.user().location,
         locTo, locToInfo;
-
+    console.log(dir)
     if (dir === "west") {
         locTo = (+loc.split("|")[0] -1) + "|" + (+loc.split("|")[1]);
     } else if (dir === "east") {
@@ -517,10 +564,10 @@ constructDirection = function (dir) {
     } else if (dir === "south") {
         locTo = (+loc.split("|")[0]) + "|" + (+loc.split("|")[1]+1);
     }
-
+    console.log("loc to", locTo)
     var locToInfo = Locations.get(locTo),
         info = "";
-
+    console.log("locinfo", locToInfo)
     if (locToInfo) {
         if (locToInfo.hasPath) {
             info += "Follow the path";

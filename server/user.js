@@ -114,17 +114,20 @@ Meteor.methods({
         var loc = Meteor.user().location,
             locTo = resolveDir(loc, dir);
             locationTo = Locations.get(locTo);
-
+        console.log("going to "+locTo)
+        console.log(locationTo)
         if (locationTo && locationTo.accessible) {
             User.update({ $set: { location: locTo } });
+        } else {
+            return
         }
 
         var ran = Math.random();
 
         if (locationTo.hasPath && ran < 0.01) {
-            Meteor.call("BattleRandomEncounter", locTo);
+            //Meteor.call("BattleRandomEncounter", locTo);
         } else if (ran < 0.05) {
-            Meteor.call("BattleRandomEncounter", locTo);
+            //Meteor.call("BattleRandomEncounter", locTo);
         }
     },
 });

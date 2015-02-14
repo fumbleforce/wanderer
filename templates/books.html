@@ -1,0 +1,16 @@
+
+<template name="uiBooks">
+    <h4>Books</h4>
+
+    {{#if reading}}
+        <p>Reading: {{reading.book}} {{reading.progress}}/10</p>
+        <p>Time left: {{timeLeft}}</p>
+    {{/if}}
+
+    {{#each books}}
+        <div class="book">
+            {{id}} <button class="read" book="{{id}}">Read</button>
+        </div>
+    {{/each}}
+    <p>Have read: {{currentUser.books.read}}</p>
+</template>

@@ -1,0 +1,90 @@
+
+.biome-bg
+    position:absolute
+    height:100%
+    width:100%
+
+.forest-bg
+    background-image: url(deepforest.jpg)
+
+.map-img
+    width: 1000px
+    height: 526px
+    background-image: url("map2.png")
+    background-size: cover
+    position:relative
+
+    .player
+        position:absolute
+        background: red
+        height: 32px
+        width: 32px
+        border-radius: 10px
+        top:0
+        left:0
+        animation-name: blinker;
+        animation-duration: 1s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+
+.map
+    border-spacing: 0;
+
+    .map-row
+        .loc
+            height: 32px
+            width: 32px
+            text-align: center
+            padding: 0
+            background-image: url("texturedTileset1.png")
+            background-repeat: no-repeat;
+
+            span
+                font-size: 8px
+
+
+
+        .sand
+            background-position: 0px 0px;
+
+        .forest
+            background-position: -32px 0px;
+
+        .grass
+            background-position: -64px 0px;
+
+        .water
+            background-position: -96px 0px;
+
+        .mountain
+            background-position: 0px -32px;
+
+        .snow
+            background-position: -32px -32px;
+
+        .pass
+            background-position: -64px -32px;
+
+        .bridge
+            background-position: -96px -32px;
+
+        .cave
+            background-position: 0px -64px;
+
+        .village
+            background-position: -32px -64px;
+
+        .tallmountain
+            background-position: -64px -64px;
+
+        .city
+            background-position: -96px -64px;
+
+
+
+
+@keyframes blinker {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+}
