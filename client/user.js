@@ -23,16 +23,11 @@ Template.user.events({
             password = t.find('#new-password').value,
             character = t.find('#new-character').value;
 
-        var def = _.extend({}, defaultUser);
-        var usr = _.extend(def, {
-            name: character,
-        });
-        console.log(usr)
+        
         Accounts.createUser({
             email: email,
             password: password,
-            createdDate: new Date()
+            name: character
         });
-        User.update({ $set: usr });
     },
 });
