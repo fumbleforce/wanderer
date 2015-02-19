@@ -532,7 +532,20 @@ Locations.cities = {
     "63|51": {
         name: "Caldum"
     }
-}
+};
+
+Locations.villages = {
+    "57|38": {
+        name: "Wildberry"
+
+        facilities: [
+            {
+                id:"generalStore",
+                owner: "galadonGreaves",
+            }
+        ]
+    },
+};
 
 Locations.get = function (l) {
     var row = +l.split("|")[0];

@@ -11,7 +11,7 @@ User.exists = function () {
 
 
 defaultUser = {
-    location: "0|0",
+    location: "50|50",
 
     coins: 10,
 

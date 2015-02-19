@@ -12,12 +12,7 @@ Template.map.helpers({
         var height = 32 * scale;
         var y = Meteor.user().location.split("|")[1] * tile;
         var x = Meteor.user().location.split("|")[0] * tile;
-        $(".map-img .player").css({
-            left: x+"px",
-            top: y+"px",
-            width: width+"px",
-            height: height+"px"
-        });
+
         Meteor.setTimeout(function () {
             $(".map-img .player").css({
                 left: x+"px",
@@ -25,7 +20,7 @@ Template.map.helpers({
                 width: width+"px",
                 height: height+"px"
             });
-        }, 1000);
+        }, 100);
 
         return Meteor.user().location;
     }
