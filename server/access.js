@@ -24,4 +24,4 @@ Meteor.methods({
     UserCreate: function (opts) {
         Meteor.user.insert(opts);
     }
-})
+});

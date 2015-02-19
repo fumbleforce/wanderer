@@ -12,8 +12,16 @@
                 <button class="action left east" action="east">{{east}}</button>
                 <button class="action left south" action="south">{{south}}</button>
             </div>
-            <button class="action" action="read">Read a book</button>
-            <button class="action" action="camp">Make camp</button>
+
+            {{#if biome "city"}}
+            <button class="action" action="city">Enter city</button>
+            {{else}}
+                {{#if biome "village"}}
+                <button class="action" action="village">Enter village</button>
+                {{else}}
+                <button class="action" action="camp">Make camp</button>
+                {{/if}}
+            {{/if}}
         </div>
         <div class="left">
             {{> map}}

@@ -536,7 +536,7 @@ Locations.cities = {
 
 Locations.villages = {
     "57|38": {
-        name: "Wildberry"
+        name: "Wildberry",
 
         facilities: [
             {
@@ -567,7 +567,7 @@ Locations.get = function (l) {
 constructDirection = function (dir) {
     var loc = Meteor.user().location,
         locTo, locToInfo;
-    console.log(dir)
+    //console.log(dir)
     if (dir === "west") {
         locTo = (+loc.split("|")[0] -1) + "|" + (+loc.split("|")[1]);
     } else if (dir === "east") {
@@ -577,19 +577,24 @@ constructDirection = function (dir) {
     } else if (dir === "south") {
         locTo = (+loc.split("|")[0]) + "|" + (+loc.split("|")[1]+1);
     }
-    console.log("loc to", locTo)
+    //console.log("loc to", locTo)
     var locToInfo = Locations.get(locTo),
         info = "";
-    console.log("locinfo", locToInfo)
+    //console.log("locinfo", locToInfo)
     if (locToInfo) {
         if (locToInfo.hasPath) {
             info += "Follow the path";
         } else {
             info += "Walk ";
         }
-
-        info += " into the " + locToInfo.biome;
-        info += " "+dir+"ward";
+        if (locToInfo.biome === "city") {
+            info += " into the city of " + Locations.cities[locTo].name;
+        } else if (locToInfo.biome === "village") {
+            info += " into the village of " +  Locations.villages[locTo].name;
+        } else {
+            info += " into the " + locToInfo.biome;
+        }
+        //info += " "+dir+"ward";
 
     }
 

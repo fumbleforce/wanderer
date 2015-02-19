@@ -1,5 +1,7 @@
 
-
+Template.registerHelper("biome", function (biome) {
+    return Locations.get(Meteor.user().location).biome === biome;
+});
 
 Template.uiWalking.helpers({
     campingAction: function () { return Session.get("campingAction"); },
@@ -32,8 +34,10 @@ Template.uiWalking.events({
             Meteor.call("CharacterGo", "north");
         } else if (action === "camp") {
             Session.set("userStatus", "camping");
-        } else if (action === "east") {
-            Meteor.call("GoEast");
+        } else if (action === "city") {
+            Session.set("userStatus", "city");
+        } else if (action === "village") {
+            Session.set("userStatus", "village");
         }
     }
 });
