@@ -131,3 +131,10 @@ Meteor.methods({
         }
     },
 });
+
+
+Accounts.onCreateUser(function(options, user) {
+    var usr = _.extend(user, defaultUser);
+    usr.name = options.name;
+    return usr;
+});
