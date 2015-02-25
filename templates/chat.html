@@ -1,0 +1,32 @@
+<template name="chat">
+    <h4>Chat</h4>
+    <div class="chat">
+        <!--<div class="room-id"></div>-->
+        <div class="messages">
+            <ul>
+                {{#each messages}}
+                    <li>
+                        <span style="font-size:8px">
+                            [{{ timestamp }}]
+                        </span>
+                        {{#if isAdmin client}}
+                        <label class="admin">
+                            {{ client }}:
+                        </label>
+                        {{else}}
+                        <label>
+                            {{ client }}:
+                        </label>
+                        {{/if}}
+                        <span>
+                            {{ message }}
+                        </span>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="writer">
+            <input type="text" name="write-message" />
+        </div>
+    </div>
+</template>

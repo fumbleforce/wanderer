@@ -1,0 +1,58 @@
+.chat
+    width:216px;
+    height:322px;
+    background: white;
+
+
+    .room-id {
+        position:fixed;
+        top: 0;
+        right: 0;
+        background: green;
+        width: 30px;
+        height: 24px;
+    }
+
+    .messages {
+        height:286px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+        
+    .messages ul {
+        list-style: none;
+        padding:0px;
+        margin:0;
+    }
+
+    .messages ul li {
+        padding:1px;
+        font-size: 12px;
+        word-wrap: break-word;
+    }
+
+    .messages ul li label {
+        font-weight: bold;
+    }
+
+    .writer {
+        height:36px;
+        position:relative;
+    }
+
+    .writer input {
+        left:0;
+        bottom:0;
+        box-sizing: border-box;
+        position:absolute;
+        width:100%;
+        margin:0;
+        padding: 10px;
+        border:0;
+        border-top: 1px dotted gray;
+        background:gainsboro;
+    }
+
+    .admin {
+        color:blue;
+    }

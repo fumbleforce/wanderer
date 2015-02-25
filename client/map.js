@@ -22,7 +22,7 @@ Template.map.helpers({
         var height = 32 * scale;
         var y = imgHeight - +Meteor.user().location.split("|")[1] * tile;
         var x = imgWidth - +Meteor.user().location.split("|")[0] * tile;
-        var posX = x - (imgWidth / 2 + tile/2);
+        var posX = x - (imgWidth / 2 +  tile/2);
         var posY = y - (imgWidth / 2 - tile/2);
         console.log("imgSizeX", imgSizeX, "imgPosition", imgPosition, "imgWidth", imgWidth, "imgHeight", imgHeight, "scale", scale, "posX", posX, "posY", posY, "x", x, "y", y);
 

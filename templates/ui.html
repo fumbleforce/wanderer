@@ -1,6 +1,7 @@
 
 <template name="ui">
     <div class="gui-main">
+
         {{#if userStatus "camping"}}
             {{> uiCamping}}
         {{/if}}
@@ -34,6 +35,12 @@
 
     </div>
     <div class="float">
+        <div class="left gui-window">
+            {{>players}}
+        </div>
+        <div class="left gui-window">
+            {{>chat}}
+        </div>
         <div class="left gui-window">
             {{> uiCharacter}}
         </div>
