@@ -35,9 +35,9 @@ Template.uiWalking.events({
         } else if (action === "camp") {
             Session.set("userStatus", "camping");
         } else if (action === "city") {
-            Session.set("userStatus", "city");
+            Session.set("userStatus", "town");
         } else if (action === "village") {
-            Session.set("userStatus", "village");
+            Session.set("userStatus", "town");
         }
     }
 });

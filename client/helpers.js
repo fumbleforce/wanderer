@@ -22,7 +22,6 @@ Template.registerHelper('addIndex', function (all) {
     });
 });
 
-
 Template.registerHelper("diff", function (ctx) {
     return ctx["arg1"] - ctx["arg2"];
 });
@@ -40,7 +39,6 @@ Template.registerHelper("labelify", function (str) {
     var parts = str.replace(/([a-z])([A-Z])/g, '$1 $2')
     return parts[0].toUpperCase() + parts.slice(1);
 });
-
 
 Template.registerHelper("itemLink", function (id) {
     return Item.get(id).el;

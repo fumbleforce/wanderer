@@ -1,33 +1,69 @@
-Template.city.helpers({
-    city: function () {
-        return Locations.cities[Meteor.user().location];
-    }
+
+Session.set("townStatus", "navigation");
+Session.set("townShopId");
+
+Template.town.helpers({
+    townStatus: function (status) {
+        return Session.get("townStatus") == status;
+    },
+
+    town: function () {
+        return Locations.getTown(Meteor.user().location);
+    },
+
+    shops: function () {
+        return Locations.getTown(Meteor.user().location).shops;
+    },
+
+    shop: function () {
+        return Locations.getTown(Meteor.user().location).shops[Session.get("townShopId")]
+    },
+
+    items: function () {
+        return _.map(Locations.getTown(Meteor.user().location).shops[Session.get("townShopId")].items, function (i) {
+            console.log(i)
+            var item = Item.get(i.id);
+            item.buy = i.buy;
+            item.sell = i.sell;
+            return item;
+        });
+    },
 });
 
-Template.city.events({
+Template.town.events({
     "click .action": function (e, t) {
         var action = e.currentTarget.getAttribute("action");
 
         if (action === "leave") {
             Session.set("userStatus", "walking");
+        } else if (action === "shops") {
+            Session.set("townStatus", "shops");
+        } else if (action === "shop") {
+            Session.set("townStatus", "shop");
+        } else if (action === "navigation") {
+            Session.set("townStatus", "navigation");
         }
-    }
-});
+    },
+    "click .shop": function (e) {
+        var shop = +e.currentTarget.getAttribute("shopid");
+        Session.set("townShopId", shop);
+    },
 
+    "click .buy": function (e) {
+        var $el = $(e.target).closest(".shop-item"),
+            qty = +$el.find(".amount").val(),
+            item = $el.attr("itemid");
+        console.log("qty:", qty);
+        console.log("item", item);
+        Meteor.call("TradeVendorBuy", { id: item, qty: qty, shop: Session.get("townShopId") }, Error.handler);
+    },
 
-
-Template.village.helpers({
-    village: function () {
-        return Locations.villages[Meteor.user().location];
-    }
-});
-
-Template.village.events({
-    "click .action": function (e, t) {
-        var action = e.currentTarget.getAttribute("action");
-
-        if (action === "leave") {
-            Session.set("userStatus", "walking");
-        }
+    "click .sell": function (e) {
+        var $el = $(e.target).closest(".shop-item"),
+            qty = +$el.find(".amount").val(),
+            item = $el.attr("itemid");
+        console.log("qty:", qty);
+        console.log("item", item);
+        Meteor.call("TradeVendorSell", { id: item, qty: qty, shop: Session.get("townShopId") }, Error.handler);
     }
 });

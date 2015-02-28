@@ -158,6 +158,116 @@ Item.items = [
     },
 
     {
+        id: "oil",
+        name: "Oil",
+        category:"utility",
+        quality: 3,
+        buyPrice: 50,
+        sellPrice: 150,
+        desc: "oil for lamps, or lubrication of gears and equipment."
+    },
+
+    {
+        id: "flint",
+        name: "Flint",
+        category:"utility",
+        quality: 3,
+        buyPrice: 50,
+        sellPrice: 150,
+        desc: "Used for lighting a fire."
+    },
+
+    {
+        id: "nails",
+        name: "Nails",
+        category:"utility",
+        quality: 3,
+        buyPrice: 50,
+        sellPrice: 150,
+        desc: "Used to construct wooden objects."
+    },
+
+    {
+        id: "hardBread",
+        name: "Hard Bread",
+        category:"food",
+        quality: 3,
+        buyPrice: 50,
+        sellPrice: 150,
+        desc: "Long lasting food."
+    },
+
+    {
+        id: "wateredWine",
+        name: "Watered wine",
+        category:"utility",
+        quality: 3,
+        buyPrice: 50,
+        sellPrice: 150,
+        desc: "Wine watered down."
+    },
+
+    {
+        id: "ironShortsword",
+        name: "Iron Shortsword",
+        category:"utility",
+        quality: 3,
+        buyPrice: 50,
+        sellPrice: 150,
+        desc: ""
+    },
+
+    {
+        id: "ironTwoHandAxe",
+        name: "Iron Two-hand Axe",
+        category:"utility",
+        quality: 3,
+        buyPrice: 50,
+        sellPrice: 150,
+        desc: ""
+    },
+
+    {
+        id: "ironHammer",
+        name: "Iron Hammer",
+        category:"utility",
+        quality: 3,
+        buyPrice: 50,
+        sellPrice: 150,
+        desc: "Used for crafting various items"
+    },
+
+    {
+        id: "pewterMug",
+        name: "Pewter Mug",
+        category:"utility",
+        quality: 3,
+        buyPrice: 50,
+        sellPrice: 150,
+        desc: "A simple mug for drinking"
+    },
+
+    {
+        id: "tinKettle",
+        name: "Tin Kettle",
+        category:"utility",
+        quality: 3,
+        buyPrice: 50,
+        sellPrice: 150,
+        desc: "A kettle for heating water"
+    },
+
+    {
+        id: "ironPot",
+        name: "Iron Pot",
+        category:"utility",
+        quality: 3,
+        buyPrice: 50,
+        sellPrice: 150,
+        desc: "Pot for preparing food"
+    },
+
+    {
         id: "basicarmor",
         category: "armor",
         name: "Basic Armor",

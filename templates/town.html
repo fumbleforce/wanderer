@@ -1,43 +1,51 @@
 
 
-<template name="city">
-    <h4>City</h4>
-    <div class="float">
-        <div class="left city">
-            <p>{{city.name}}</p>
+<template name="town">
+    <h4>{{town.type}}</h4>
+    <div class="float town">
+        <div class="left">
+            <p>{{town.name}}</p>
 
             <div class="float">
 
-                <button class="action north" action="north">Visit inn</button>
-                <button class="action west" action="west">Walk the streets</button>
-                <button class="action east" action="east">Find a shop</button>
-                <button class="action south" action="south">Request audience with Duke</button>
-                <button class="action south" action="leave">Leave</button>
+                {{#if townStatus "navigation"}}
+                    <button class="action north" action="inn">Visit inn</button>
+                    <button class="action west" action="walk">Walk the streets</button>
+                    {{#if shops}}
+                        <button class="action east" action="shops">Find a shop</button>
+                    {{/if}}
+                    <button class="action south" action="south">Request audience with Duke</button>
+                    <button class="action south" action="leave">Leave</button>
+                {{/if}}
+
+                {{#if townStatus "shops"}}
+                    {{#each addIndex shops}}
+                        <button class="action shop" shopid="{{index}}" action="shop">{{labelify id}}</button>
+                    {{/each}}
+                    <button class="action" action="navigation">&#8617;</button>
+                {{/if}}
+
+                {{#if townStatus "shop"}}
+                    <div>{{ shop.owner }}</div>
+                    <div>{{ shop.welcome }}</div>
+                    <button class="action" action="navigation">&#8617;</button>
+                {{/if}}
             </div>
 
         </div>
+        {{#if townStatus "shop"}}
         <div class="left">
+            {{#each items}}
+                <div class="shop-item" itemid="{{id}}">
+                    <div>{{{ el }}}</div>
+                    <input class="amount" placeholder="Amount">
+
+                    <button class="buy">Buy ({{sell}})</button>
+                    <button class="sell">Sell ({{buy}})</button>
+                </div>
+            {{/each}}
         </div>
+        {{/if}}
     </div>
 </template>
 
-<template name="village">
-    <h4>Village</h4>
-    <div class="float">
-        <div class="left city">
-            <p>{{village.name}}</p>
-
-            <div class="float">
-
-                <button class="action north" action="north">Visit inn</button>
-                <button class="action west" action="west">Walk the streets</button>
-                <button class="action east" action="east">Find a shop</button>
-                <button class="action south" action="south">Request audience with Duke</button>
-                <button class="action south" action="leave">Leave</button>
-            </div>
-
-        </div>
-        <div class="left">
-        </div>
-    </div>
-</template>

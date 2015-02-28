@@ -2,13 +2,14 @@
 
 <template name="uiCharacter">
     <h4>Character</h4>
-    {{ currentUser.name }}
+    <p>{{ currentUser.name }}</p>
+    <p>Coins {{ currentUser.coins }}</p>
 
-    <div class="float">
+    <div class="float character">
         <div class="left list">
             <b>Health</b>
             <ul>
-                <li>Hunger: {{currentUser.hunger}}</li>
+                <li>Hunger: <span class="right">{{currentUser.hunger}}</span></li>
                 <li>Thirst: {{currentUser.thirst}}</li>
             </ul>
             <ul>
@@ -22,7 +23,7 @@
             <b>Physical Skills</b>
             <ul>
                 {{#each physicalSkills}}
-                    <li>{{labelify label}}: {{value}}</li>
+                    <li>{{labelify label}}: <span class="right">{{value}}</span></li>
                 {{/each}}
             </ul>
         </div>
@@ -30,7 +31,7 @@
             <b>Mental Skills</b>
             <ul>
                 {{#each mentalSkills}}
-                    <li>{{labelify label}}: {{value}}</li>
+                    <li>{{labelify label}}: <span class="right">{{value}}</span></li>
                 {{/each}}
             </ul>
         </div>
@@ -38,7 +39,7 @@
             <b>Weapon Skills</b>
             <ul>
                 {{#each weaponSkills}}
-                    <li>{{labelify label}}: {{value}}</li>
+                    <li>{{labelify label}}: <span class="right">{{value}}</span></li>
                 {{/each}}
             </ul>
         </div>
@@ -46,7 +47,7 @@
             <b>Spell Skills</b>
             <ul>
                 {{#each spellSkills}}
-                    <li>{{labelify label}}: {{value}}</li>
+                    <li>{{labelify label}}: <span class="right">{{value}}</span></li>
                 {{/each}}
             </ul>
         </div>
@@ -54,7 +55,7 @@
             <b>Crafting Skills</b>
             <ul>
                 {{#each craftingSkills}}
-                    <li>{{labelify label}}: {{value}}</li>
+                    <li>{{labelify label}}: <span class="right">{{value}}</span></li>
                 {{/each}}
             </ul>
         </div>
