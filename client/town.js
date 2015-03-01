@@ -34,14 +34,14 @@ Template.town.events({
     "click .action": function (e, t) {
         var action = e.currentTarget.getAttribute("action");
 
-        if (action === "leave") {
-            Session.set("userStatus", "walking");
-        } else if (action === "shops") {
-            Session.set("townStatus", "shops");
-        } else if (action === "shop") {
-            Session.set("townStatus", "shop");
-        } else if (action === "navigation") {
-            Session.set("townStatus", "navigation");
+        switch (action) {
+            case "leave": Session.set("userStatus", "walking"); break;
+            case "navigation": Session.set("townStatus", "navigation"); break;
+            case "shops": Session.set("townStatus", "shops"); break;
+            case "shop": Session.set("townStatus", "shop"); break;
+            case "inn": Session.set("townStatus", "inn"); break;
+            case "leave": Session.set("townStatus", "walking"); break;
+
         }
     },
     "click .shop": function (e) {

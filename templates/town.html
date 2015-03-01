@@ -30,6 +30,16 @@
                     <div>{{ shop.welcome }}</div>
                     <button class="action" action="navigation">&#8617;</button>
                 {{/if}}
+
+                {{#if townStatus "inn"}}
+                    <div>{{ inn.owner }}</div>
+                    <div>{{ inn.welcome }}</div>
+                    <button class="action" action="room">Rent a room for the night</button>
+                    <button class="action" action="buyDrink">Buy a drink</button>
+                    <button class="action" action="rumor">Ask for rumors</button>
+                    <button class="action" action="jobs">Find jobs</button>
+                    <button class="action" action="navigation">&#8617;</button>
+                {{/if}}
             </div>
 
         </div>
