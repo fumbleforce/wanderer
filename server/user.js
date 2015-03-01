@@ -40,20 +40,6 @@ Meteor.startup(function () {
     });
 })
 
-function resolveDir(loc, dir) {
-    var locTo;
-    if (dir === "west") {
-        locTo = (+loc.split("|")[0] -1) + "|" + (+loc.split("|")[1]);
-    } else if (dir === "east") {
-        locTo = (+loc.split("|")[0] +1) + "|" + (+loc.split("|")[1]);
-    } else if (dir === "north") {
-        locTo = (+loc.split("|")[0] ) + "|" + (+loc.split("|")[1]-1);
-    } else if (dir === "south") {
-        locTo = (+loc.split("|")[0]) + "|" + (+loc.split("|")[1]+1);
-    }
-    return locTo;
-}
-
 Meteor.methods({
     CharacterEat: function () {
         if (Meteor.user().health.hunger > 0) {
@@ -107,27 +93,6 @@ Meteor.methods({
             Meteor.setTimeout(function () {
                 User.update({ $inc: { "activity.reading.progress": 1 } });
             });
-        }
-    },
-
-    CharacterGo: function (dir) {
-        var loc = Meteor.user().location,
-            locTo = resolveDir(loc, dir);
-            locationTo = Locations.get(locTo);
-        console.log("going to "+locTo)
-        console.log(locationTo)
-        if (locationTo && locationTo.accessible) {
-            User.update({ $set: { location: locTo } });
-        } else {
-            return
-        }
-
-        var ran = Math.random();
-
-        if (locationTo.hasPath && ran < 0.01) {
-            //Meteor.call("BattleRandomEncounter", locTo);
-        } else if (ran < 0.05) {
-            //Meteor.call("BattleRandomEncounter", locTo);
         }
     },
 });

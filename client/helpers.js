@@ -35,10 +35,7 @@ Template.registerHelper("equals", function (ctx) {
     return ctx.hash["arg1"] === ctx.hash["arg2"];
 });
 
-Template.registerHelper("labelify", function (str) {
-    var parts = str.replace(/([a-z])([A-Z])/g, '$1 $2')
-    return parts[0].toUpperCase() + parts.slice(1);
-});
+Template.registerHelper("labelify", labelify);
 
 Template.registerHelper("itemLink", function (id) {
     return Item.get(id).el;
