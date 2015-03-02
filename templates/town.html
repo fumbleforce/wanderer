@@ -44,16 +44,18 @@
 
         </div>
         {{#if townStatus "shop"}}
-        <div class="left">
-            {{#each items}}
-                <div class="shop-item" itemid="{{id}}">
-                    <div>{{{ el }}}</div>
-                    <input class="amount" placeholder="Amount">
+        <div class="left shop">
+            <div class="float">
+                {{#each items}}
+                    <div class="shop-item" itemid="{{id}}">
+                        <div>{{{ el }}}</div>
+                        <input class="amount" placeholder="Amount">
 
-                    <button class="buy">Buy ({{sell}})</button>
-                    <button class="sell">Sell ({{buy}})</button>
-                </div>
-            {{/each}}
+                        <button class="buy">Buy ({{sell}})</button>
+                        <button class="sell">Sell ({{buy}})</button>
+                    </div>
+                {{/each}}
+            </div>
         </div>
         {{/if}}
     </div>

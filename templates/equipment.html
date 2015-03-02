@@ -1,10 +1,21 @@
 
 <template name="equipment">
     <b>Equipment</b>
-    <ul>
-        <li>Head: {{itemLink currentUser.equipment.head}}</li>
-        <li>Body: {{itemLink currentUser.equipment.body}}</li>
-        <li>Hands: {{itemLink currentUser.equipment.hands}}</li>
-        <li>Feet: {{itemLink currentUser.equipment.feet}}</li>
+
+    {{#if equipmentChoosing}}
+        {{#each equipmentChoices}}
+            <div class="equipment" itemid="{{id}}">{{{el}}}</div>
+        {{/each}}
+        <button class="equipment" itemid="">Nothing</button>
+    {{else}}
+    <ul class="equipment-list">
+        <li slot="head">Head: <span class="right">{{{itemLink currentUser.equipment.head}}}</span></li>
+        <li slot="body">Body: <span class="right">{{{itemLink currentUser.equipment.body}}}</span></li>
+        <li slot="hands">Hands: <span class="right">{{{itemLink currentUser.equipment.hands}}}</span></li>
+        <li slot="feet">Feet: <span class="right">{{{itemLink currentUser.equipment.feet}}}</span></li>
+        
+        <li slot="rightHand">Right hand: <span class="right">{{{itemLink currentUser.equipment.rightHand}}}</span></li>
+        <li slot="leftHand">Left hand: <span class="right">{{{itemLink currentUser.equipment.leftHand}}}</span></li>
     </ul>
+    {{/if}}
 </template>

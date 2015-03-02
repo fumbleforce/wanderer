@@ -17,6 +17,7 @@ Meteor.publish(null, function() {
         storage: 1,
         books: 1,
         activity: 1,
+        equipment: 1,
     }});
 });
 

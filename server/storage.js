@@ -1,4 +1,22 @@
 
+function cleanupStorage (storage) {
+    var remNum = 0;
+    for (var p = 0; p < storage.length - remNum; p++) {
+        if (storage[p] == undefined || storage[p] == null) {
+            remNum++;
+            for (var x = p; x < storage.length-1; x++) {
+                console.log(_.map(storage, function (el) { if(el) return el.id; else return undefined}));
+                var temp = storage[x];
+                storage[x] = storage[x+1];
+                storage[x+1] = temp;
+            }
+            console.log(_.map(storage, function (el) { if(el) return el.id; else return undefined}));
+        }
+    }
+    storage.length -= remNum;
+    return storage;
+}
+
 Meteor.methods({
 
     StorageSpend: function (posqty) {
@@ -13,6 +31,27 @@ Meteor.methods({
             }
         }
         User.update({ $set: { storage: s } });
+    },
+
+    StorageRemove: function (opts) {
+        var storage = Meteor.user().storage,
+            id = opts.id,
+            qty = opts.qty;
+
+        for (var pos = 0; pos < storage.length; pos++) {
+            if (storage[pos].id === id) {
+                storage[pos].qty -= qty;
+                if (storage[pos].qty === 0) {
+                    storage[pos] = undefined;
+                } else if (storage[pos].qty < 0) {
+                    throw new Meteor.Error("Not enough items to remove, homework was not done.");
+                }
+            }
+        }
+
+        storage = cleanupStorage(storage);
+        
+        User.update({ $set: { storage: storage } });
     },
 
     StorageSpendCategory: function (opts) {
@@ -36,6 +75,7 @@ Meteor.methods({
                 }
             }
         }
+
         User.update({ $set: { storage: s } });
     },
 
@@ -54,18 +94,7 @@ Meteor.methods({
                 }
             }
         }
-        var remNum = 0;
-        for (var p = 0; p < storage.length; p++) {
-            if (storage[p] == undefined) {
-                remNum++;
-                for (var x = p; x < storage.length-1; x++) {
-                    var temp = storage[x];
-                    storage[x] = storage[x+1];
-                    storage[x+1] = temp;
-                }
-            }
-        }
-        storage.length -= remNum;
+        storage = cleanupStorage(storage);
         User.update({ $set: { storage: storage } });
     },
 

@@ -53,8 +53,9 @@ Template.town.events({
         var $el = $(e.target).closest(".shop-item"),
             qty = +$el.find(".amount").val(),
             item = $el.attr("itemid");
-        console.log("qty:", qty);
-        console.log("item", item);
+
+        if (qty === 0) qty = 1;
+
         Meteor.call("TradeVendorBuy", { id: item, qty: qty, shop: Session.get("townShopId") }, Error.handler);
     },
 
@@ -62,8 +63,9 @@ Template.town.events({
         var $el = $(e.target).closest(".shop-item"),
             qty = +$el.find(".amount").val(),
             item = $el.attr("itemid");
-        console.log("qty:", qty);
-        console.log("item", item);
+
+        if (qty === 0) qty = 1;
+
         Meteor.call("TradeVendorSell", { id: item, qty: qty, shop: Session.get("townShopId") }, Error.handler);
     }
 });
