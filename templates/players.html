@@ -2,11 +2,22 @@
 
 <template name="players">
     <h4>Players</h4>
+
+    {{#if selectedPlayer}}
+    <button class="action" action="chat">Chat</button>
+    <button class="action" action="invite">Invite</button>
+    <button class="action" action="trade">Trade</button>
+
+    <button class="action" action="block">Block</button>
+
+    <button class="action" action="cancel">&#8617;</button>
+    {{else}}
     <div class="players">
     {{#each players}}
-        <div class="player">
+        <div class="player" playerid="{{name}}">
             <span>{{{name}}}</span>
         </div>
     {{/each}}
     </div>
+    {{/if}}
 </template>
