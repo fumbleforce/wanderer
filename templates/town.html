@@ -15,7 +15,10 @@
                         <button class="action east" action="shops">Find a shop</button>
                     {{/if}}
                     <button class="action south" action="south">Request audience with Duke</button>
+
+                    {{#if canAct}}
                     <button class="action south" action="leave">Leave</button>
+                    {{/if}}
                 {{/if}}
 
                 {{#if townStatus "shops"}}

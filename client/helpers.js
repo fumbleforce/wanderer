@@ -44,3 +44,9 @@ Template.registerHelper("itemLink", function (id) {
 Template.registerHelper('session',function(input) {
     return Session.get(input);
 });
+
+Template.registerHelper("canAct", function () {
+    var party = PartyCollection.findOne({ members: Meteor.user().name });
+    if (party == null) return true;
+    return party.leader === Meteor.user().name;
+});

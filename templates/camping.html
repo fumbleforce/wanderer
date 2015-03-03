@@ -1,6 +1,7 @@
 
 <template name="uiCamping">
     <h4>Camping</h4>
+    <p><i>{{location}}</i></p>
     <div class="float">
         <div class="left">
             <button class="action" action="eat">Eat</button>
@@ -14,7 +15,10 @@
             {{/if}}
 
             <button class="action" action="dirt">Dig up some dirt</button>
+
+            {{#if canAct}}
             <button class="action" action="break">Break camp</button>
+            {{/if}}
         </div>
 
         <div class="left">

@@ -1,7 +1,15 @@
 
 Template.uiCamping.helpers({
     campingAction: function () { return Session.get("campingAction"); },
-    fireActive: function () { return Session.get("fireActive"); }
+    fireActive: function () { return Session.get("fireActive"); },
+    location: function () {
+        var loc = Meteor.user().location.split("|");
+        if (loc.length === 1) {
+            return "Somewhere in " + labelify(loc[0]);
+        } else if (loc.length === 2) {
+            return labelify(loc[1]) + " in " + labelify(loc[0]);
+        }
+    },
 });
 
 Template.uiCamping.events({

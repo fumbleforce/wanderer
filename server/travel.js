@@ -9,11 +9,26 @@ Meteor.methods({
 
         if (area === areaTo) throw new Meteor.Error("Already in this area");
 
-        User.update({
-            $set: {
-                location: areaTo
-            }
-        });
+        console.log("Travelling to", areaTo);
+
+        var party = PartyCollection.findOne({ members: Meteor.user().name });
+        if (party == null) {
+            console.log("No party");
+            User.update({
+                $set: {
+                    location: areaTo
+                }
+            });
+        } else {
+            console.log("Party travelling", party.members)
+
+            Meteor.users.update(
+                { name: { $in: party.members } },
+                { $set: { location: areaTo } },
+                { multi: true }
+            );
+        }
+
 
         /* Implement delayed travel later
         // Replace with dynamic travel time!!

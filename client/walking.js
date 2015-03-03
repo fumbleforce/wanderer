@@ -41,6 +41,11 @@ Template.uiWalking.events({
             case "cities": Session.set("walkingStatus", "cities"); break;
             case "villages": Session.set("walkingStatus", "villages"); break;
             case "navigation": Session.set("walkingStatus", "navigation"); break;
+            case "wander": 
+                Meteor.call("Wander", function (err, res) {
+                    
+                });
+                break;
             case "town":
                 Session.set("userStatus", "town");
                 Session.set("walkingStatus", "navigation");

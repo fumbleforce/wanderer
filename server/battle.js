@@ -30,6 +30,7 @@ Meteor.methods({
         var category = opts.category,
             action = opts.action,
             target = opts.target,
+            player = Meteor.user(),
             battle = Battle.getActive();
 
 
@@ -61,9 +62,25 @@ Meteor.methods({
 
             var damage = skill.damage;
 
+            var userInc = {},
+                baseSkill = skill.baseSkill;
+            if (baseSkill in player.physicalSkills) {
+                userInc["physicalSkills."+baseSkill] = 0.1;
+            } else if (baseSkill in player.mentalSkills) {
+                userInc["mentalSkills."+baseSkill] = 0.1;
+            } else if (baseSkill in player.weaponSkills) {
+                userInc["weaponSkills."+baseSkill] = 0.1;
+            } else if (baseSkill in player.magicalSkills) {
+                userInc["magicalSkills."+baseSkill] = 0.1;
+            }
+
             updateInc["enemy."+target+".health"] = -damage;
             updateSet["enemy."+target+".dead"] = battle.enemy[target].health - damage <= 0;
             updatePush["log"] = Battle.me().name + " attacked " + target + " with " + skill.name  + " and dealt " + damage + " damage";
+
+            User.update({
+                $inc: userInc
+            });
 
             BattleCollection.update(battle._id, {
                 $set: updateSet,
@@ -192,10 +209,12 @@ Meteor.methods({
     },
 
     BattleRandomEncounter: function (loc) {
-        var location = Locations.get(loc),
+        var location = Locations.getArea(loc),
             enemy = [], m,
             danger = location.danger || 0,
             enemy_number = Math.floor(Math.random()*3) + 1;
+
+        console.log("Random encounter in", location)
 
         var monsters = Monster.find({ danger: danger, habitat: location.biome });
 
@@ -208,14 +227,40 @@ Meteor.methods({
             enemy.push(m);
         }
 
-        var party = [Meteor.user()];
+        var party = PartyCollection.findOne({ members: Meteor.user().name }).members;
+        if (party == null) {
+            party = [Meteor.user().name];
+        }
+
+        party = _.map(party, function (name) {
+            return Meteor.users.findOne({ name: name });
+        });
 
         var turnDict = {},
             turnList = [];
 
-        _.each(enemy, function (e) { turnList.push({ id: e._id, name: e.name, quickness: e.physicalSkills.quickness }); });
-        _.each(party, function (a) { turnList.push({ id: a._id, name: a.name, quickness: a.physicalSkills.quickness }); });
-        turnList = _.sortBy(turnList, function (o) { return o.quickness + Math.random()/2.0; });
+        //console.log("Enemies:", enemy);
+        //console.log("Party:", party);
+
+        _.each(enemy, function (e) {
+            turnList.push({
+                id: e._id,
+                name: e.name,
+                quickness: e.physicalSkills.quickness || 0
+            });
+        });
+        
+        _.each(party, function (a) {
+            turnList.push({
+                id: a._id,
+                name: a.name,
+                quickness: a.physicalSkills.quickness || 0
+            });
+        });
+        
+        turnList = _.sortBy(turnList, function (o) {
+            return o.quickness + Math.random()/2.0;
+        });
 
         var id = BattleCollection.insert({
             type: "npc",

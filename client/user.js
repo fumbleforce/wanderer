@@ -2,7 +2,12 @@
 
 
 Meteor.startup(function () {
-    Session.set("userStatus", "camping");
+
+    if (Meteor.user().location.split("|").length > 1) {
+        Session.set("userStatus", "town");
+    } else {
+        Session.set("userStatus", "camping");
+    }
 
     if (BattleCollection.find({ party: { $elemMatch: { _id: Meteor.userId() }}}).count()) {
         Session.set("userStatus", "combat");

@@ -6,7 +6,11 @@
     <div class="players">
         {{#if selectedPlayer}}
             <button class="action" action="chat">Chat</button>
+
+            {{#if canInvite}}
             <button class="action" action="invite">Invite</button>
+            {{/if}}
+            
             <button class="action" action="trade">Trade</button>
 
             <button class="action" action="block">Block</button>

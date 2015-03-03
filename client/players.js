@@ -26,14 +26,22 @@ Template.players.helpers({
         return PartyCollection.findOne({
             members: Meteor.user().name
         }).leader === name;
-    }
+    },
+
+    canInvite: function () {
+        if (!Session.get("playerSelected")) return false;
+        if (PartyInvitationCollection.find({ player: Session.get("playerSelected") }).count() > 0) return false;
+        if (PartyCollection.findOne({ members: Session.get("playerSelected") })) return false;
+        return true;
+    },
 });
 
 Template.players.events({
     "click .player": function (e) {
         var playerId = e.currentTarget.getAttribute("playerid");
-
-        Session.set("playerSelected", playerId);
+        if (playerId != Meteor.user().name) {
+            Session.set("playerSelected", playerId);
+        }
     },
 
     "click [action]": function (e) {

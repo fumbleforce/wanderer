@@ -12,16 +12,21 @@
                     {{secsLeft}}
                 {{else}}
 
-                    {{#if walkingStatus "navigation"}}
-                        <button class="action" action="areas">Areas</button>
-                        <button class="action" action="villages">Villages</button>
-                        <button class="action" action="cities">Cities</button>
+                    {{#if canAct}}
+                        {{#if walkingStatus "navigation"}}
+                            <button class="action" action="areas">Areas</button>
+                            <button class="action" action="villages">Villages</button>
+                            <button class="action" action="cities">Cities</button>
 
-                        {{#if inTown}}
-                        <button class="action" action="town">Enter town</button>
-                        {{else}}
-                        <button class="action" action="camp">Make camp</button>
+                            {{#if inTown}}
+                                <button class="action" action="town">Enter town</button>
+                            {{else}}
+                                <button class="action" action="wander">Wander</button>
+                                <button class="action" action="camp">Make camp</button>
+                            {{/if}}
                         {{/if}}
+                    {{else}}
+                    <p>Party leader decides where to go.</p>
                     {{/if}}
 
                     {{#if walkingStatus "areas"}}
