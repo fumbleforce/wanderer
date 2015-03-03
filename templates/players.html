@@ -1,23 +1,56 @@
 
 
 <template name="players">
-    <h4>Players</h4>
+    <h4>People</h4>
 
-    {{#if selectedPlayer}}
-    <button class="action" action="chat">Chat</button>
-    <button class="action" action="invite">Invite</button>
-    <button class="action" action="trade">Trade</button>
-
-    <button class="action" action="block">Block</button>
-
-    <button class="action" action="cancel">&#8617;</button>
-    {{else}}
     <div class="players">
-    {{#each players}}
-        <div class="player" playerid="{{name}}">
-            <span>{{{name}}}</span>
-        </div>
-    {{/each}}
+        {{#if selectedPlayer}}
+            <button class="action" action="chat">Chat</button>
+            <button class="action" action="invite">Invite</button>
+            <button class="action" action="trade">Trade</button>
+
+            <button class="action" action="block">Block</button>
+
+            <button class="action" action="cancel">&#8617;</button>
+        {{else}}
+            {{#if players}}
+                {{#each players}}
+                    <div class="player" playerid="{{name}}">
+                        <span>{{{name}}}</span>
+                    </div>
+                {{/each}}
+            {{else}}
+                <o>No people around</o>
+            {{/if}}
+        {{/if}}
+
+
+        <h4>Invitations</h4>
+        {{#if invitations}}
+            {{#each invitations}}
+                <div class="invitation">
+                    <span>Invited by {{inviter}}</span>
+                    <button class="accept" inviteid="{{_id}}">Accept</button>
+                    <button class="reject" inviteid="{{_id}}">Reject</button>
+                </div>
+            {{/each}}
+        {{else}}
+        <p>No invitations</p>
+        {{/if}}
+
+        <h4>Party</h4>
+        {{#if party}}
+            <div class="party">
+                {{#each party.members}}
+                    {{#if isLeader .}}
+                    <div class="player party-leader" playerid="{{.}}">{{.}}</div>
+                    {{else}}
+                    <div class="player party-member" playerid="{{.}}">{{.}}</div>
+                    {{/if}}
+                {{/each}}
+            </div>
+        {{else}}
+        <p>Not in party</p>
+        {{/if}}
     </div>
-    {{/if}}
 </template>
