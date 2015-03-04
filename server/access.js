@@ -26,3 +26,7 @@ Meteor.methods({
         Meteor.user.insert(opts);
     }
 });
+
+Meteor.publish("trade", function () {
+return TradeCollection.find({ completed: false });
+});

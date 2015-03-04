@@ -1,0 +1,45 @@
+<template name="trade">
+    <div class="trade">
+        <h2>Trade</h2>
+
+        {{#if trade}}
+        <div class="float">
+            <div class="your-offers left">
+                {{#each yourItems}}
+                    <div class="trade-item">
+                        <span>{{{el}}}</span>
+                        <span>x{{qty}}</span>
+                        <button itemid="{{id}}" class="remove-item">x</button>
+                    </div>
+                {{/each}}
+                <button class="add">Add item</button>
+            </div>
+
+            <div class="trader-offers left">
+                {{#each traderItems}}
+                    <div class="trade-item">
+                        <span>{{{el}}}</span>
+                        <span>x{{qty}}</span>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+
+        {{#if session "tradeAddingItems"}}
+        <div class="add-items">
+            {{#each storageItems}}
+                <div class="trade-item">
+                    <span>{{{el}}}</span>
+                    <span>x{{qty}}</span>
+                    <button itemid="{{id}}" class="add-item">+</button>
+                </div>
+            {{/each}}
+            <button class="stop">Stop adding</button>
+        </div>
+        {{/if}}
+
+        <button class="accept">Accept</button>
+        <button class="cancel">Cancel</button>
+        {{/if}}
+    </div>
+</template>

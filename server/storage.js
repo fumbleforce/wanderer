@@ -1,5 +1,5 @@
 
-function cleanupStorage (storage) {
+cleanupStorage = function (storage) {
     var remNum = 0;
     for (var p = 0; p < storage.length - remNum; p++) {
         if (storage[p] == undefined || storage[p] == null) {
@@ -15,7 +15,45 @@ function cleanupStorage (storage) {
     }
     storage.length -= remNum;
     return storage;
-}
+};
+
+StorageAddMultiple = function (storage, items) {
+    for (var i = 0; i < items.length; i++) {
+        var id = items[i].id,
+            qty = items[i].qty,
+            hasPos = false;
+
+        for (var j = 0; j < storage.length; j++) {
+            if (storage[j].id === id) {
+                storage[j].qty += qty;
+                hasPos = true;
+                break;
+            }
+        }
+        if (!hasPos) {
+            console.log(storage)
+            storage.push({ id: id, qty: qty });
+        }
+    }
+    return storage;
+};
+
+StorageRemoveMultiple = function (storage, items) {
+    for (var i = 0; i < items.length; i++) {
+        for (var pos = 0; pos < storage.length; pos++) {
+            if (storage[pos].id === items[i].id) {
+                storage[pos].qty -= items[i].qty;
+                if (storage[pos].qty === 0) {
+                    storage[pos] = undefined;
+                } else if (storage[pos].qty < 0) {
+                    throw new Meteor.Error("Not enough items to remove, homework was not done.");
+                }
+            }
+        }
+    }
+    storage = cleanupStorage(storage);
+    return storage;
+};
 
 Meteor.methods({
 
@@ -81,20 +119,7 @@ Meteor.methods({
 
     StorageSpendMultiple: function (items) {
         var storage = Meteor.user().storage;
-
-        for (var i = 0; i < items.length; i++) {
-            for (var pos = 0; pos < storage.length; pos++) {
-                if (storage[pos].id === items[i].id) {
-                    storage[pos].qty -= items[i].qty;
-                    if (storage[pos].qty === 0) {
-                        storage[pos] = undefined;
-                    } else if (storage[pos].qty < 0) {
-                        throw new Meteor.Error("Not enough items to remove, homework was not done.");
-                    }
-                }
-            }
-        }
-        storage = cleanupStorage(storage);
+        storage = StorageRemoveMultiple(storage, items);
         User.update({ $set: { storage: storage } });
     },
 
@@ -122,23 +147,7 @@ Meteor.methods({
 
     StorageAddMultiple: function (items) {
         var storage = Storage.get();
-
-        for (var i = 0; i < items.length; i++) {
-            var id = items[i].id,
-                qty = items[i].qty,
-                hasPos = false;
-
-            for (var j = 0; j < storage.length; j++) {
-                if (storage[j].id === id) {
-                    storage[j].qty += qty;
-                    hasPos = true;
-                    break;
-                }
-            }
-            if (!hasPos) {
-                storage.push({ id: id, qty: qty });
-            }
-        }
+        storage = StorageAddMultiple(storage, items);
         User.update({ $set: { storage: storage } });
     }
 

@@ -55,7 +55,9 @@ Template.players.events({
                     player: Session.get("playerSelected")
                 });
                 break;
-            case "cancel": Session.set("playerSelected", false); break;
+            case "trade":
+                Meteor.call("TradePlayer", Session.get("playerSelected"));
+                break;
             case "cancel": Session.set("playerSelected", false); break;
         }
     },
