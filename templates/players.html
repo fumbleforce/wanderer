@@ -44,6 +44,7 @@
 
         <h4>Party</h4>
         {{#if party}}
+            <button class="leave">Leave</button>
             <div class="party">
                 {{#each party.members}}
                     {{#if isLeader .}}

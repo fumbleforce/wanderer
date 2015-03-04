@@ -9,6 +9,17 @@ Meteor.startup(function () {
         Session.set("userStatus", "camping");
     }
 
+    Meteor.autosubscribe(function() {
+        PartyCollection.find({ members: Meteor.user().name }).observeChanges({
+            changed: function(id, fields){
+                console.log("Party Changed", fields)
+                if ("status" in fields) {
+                    Session.set("userStatus", fields["status"]);
+                }
+            },
+        });
+    });
+
     if (BattleCollection.find({ party: { $elemMatch: { _id: Meteor.userId() }}}).count()) {
         Session.set("userStatus", "combat");
     }

@@ -9,15 +9,15 @@
             <div class="float">
 
                 {{#if townStatus "navigation"}}
-                    <button class="action north" action="inn">Visit inn</button>
-                    <button class="action west" action="walk">Walk the streets</button>
+                    <button class="action" action="inn">Visit inn</button>
+                    <button class="action" action="walk">Walk the streets</button>
                     {{#if shops}}
-                        <button class="action east" action="shops">Find a shop</button>
+                        <button class="action" action="shops">Find a shop</button>
                     {{/if}}
-                    <button class="action south" action="south">Request audience with Duke</button>
+                    <button class="action" action="south">Request audience with Duke</button>
 
                     {{#if canAct}}
-                    <button class="action south" action="leave">Leave</button>
+                    <button class="action" action="leave">Leave</button>
                     {{/if}}
                 {{/if}}
 

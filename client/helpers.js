@@ -6,7 +6,9 @@ Template.registerHelper("town", function () { return Session.get("userStatus") =
 Template.registerHelper("inCombat", function () { return Session.get("userStatus") == "combat"; });
 
 Template.registerHelper('userStatus',function(s) {
-    return Session.get("userStatus") === s;
+    var party = PartyCollection.findOne({ members: Meteor.user().name });
+    if (party == null) return Session.get("userStatus") === s;
+    return party.status === s;
 });
 
 Template.registerHelper('toArray',function(obj) {
@@ -26,8 +28,12 @@ Template.registerHelper("diff", function (ctx) {
     return ctx["arg1"] - ctx["arg2"];
 });
 
+Template.registerHelper("floor", function (num) {
+    return Math.floor(num);
+});
+
 Template.registerHelper("percent", function (ctx) {
-    return 100* ctx.hash["arg1"] / ctx.hash["arg2"];
+    return Math.floor(100* ctx.hash["arg1"] / ctx.hash["arg2"]);
 });
 
 Template.registerHelper("equals", function (ctx) {

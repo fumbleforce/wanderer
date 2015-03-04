@@ -1,8 +1,23 @@
 
 
 Meteor.methods({
-    PartyInvite: function (playerName) {
+    PartyStatus: function (status) {
+        var party = PartyCollection.findOne({ leader: Meteor.user().name });
+
+        if (party == null) {
+            console.log("Not in a party")
+            throw new Meteor.Error("Not in a party");
+        }
+        console.log("Party status to", status)
+        PartyCollection.update(party._id, {
+            $set: { status: status }
+        })
+    },
+
+    PartyInvite: function (opts) {
         var partyId;
+        var status = opts.status,
+            playerName = opts.player;
         var party = PartyCollection.findOne({ leader: Meteor.user().name });
 
         if (playerName === Meteor.user().name) {
@@ -12,7 +27,8 @@ Meteor.methods({
         if (party == null) {
             partyId = PartyCollection.insert({
                 leader: Meteor.user().name,
-                members: [Meteor.user().name]
+                members: [Meteor.user().name],
+                status: status
             });
         } else {
             partyId = party._id;
@@ -29,7 +45,15 @@ Meteor.methods({
         var invite = PartyInvitationCollection.findOne(inviteId);
 
         if (Meteor.user().name != invite.player) {
-            return new Meteor.Error("This is not your invitation")
+            throw new Meteor.Error("This is not your invitation")
+        }
+
+        var leaderName = PartyCollection.findOne(invite.party).leader,
+            leader = Meteor.users.findOne({ name: leaderName });
+
+        if (Meteor.user().location != leader.location) {
+            PartyInvitationCollection.remove(inviteId);
+            throw new Meteor.Error("Must be in the same location as the leader");
         }
 
         PartyCollection.update(invite.party, {
@@ -43,7 +67,7 @@ Meteor.methods({
         var invite = PartyInvitationCollection.findOne(inviteId);
 
         if (Meteor.user().name != invite.player) {
-            return new Meteor.Error("This is not your invitation")
+            throw new Meteor.Error("This is not your invitation")
         }
 
         PartyInvitationCollection.remove(inviteId);
@@ -56,13 +80,13 @@ Meteor.methods({
             });
 
         if (party == null) {
-            return new Meteor.Error("You are not in a party");
+            throw new Meteor.Error("You are not in a party");
         }
 
         if (party.leader === name) {
             PartyCollection.remove(party._id);
         } else {
-            PartyCollection.update({
+            PartyCollection.update(party._id, {
                 $pull: { members: name }
             });
         }

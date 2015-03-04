@@ -19,6 +19,10 @@ Template.uiWalking.helpers({
         return Meteor.user().location.split("|").length > 1;
     },
 
+    town: function () {
+        return Meteor.user().location.split("|")[1];
+    },
+
     areas: function () {
         return Locations.getAreas();
     },
@@ -41,18 +45,22 @@ Template.uiWalking.events({
             case "cities": Session.set("walkingStatus", "cities"); break;
             case "villages": Session.set("walkingStatus", "villages"); break;
             case "navigation": Session.set("walkingStatus", "navigation"); break;
-            case "wander": 
+            case "wander":
+                Session.set("walkingStatus", "navigation");
                 Meteor.call("Wander", function (err, res) {
                     
                 });
                 break;
             case "town":
+                Meteor.call("TravelTown", e.currentTarget.getAttribute("townid"));
+                Meteor.call("PartyStatus", "town");
                 Session.set("userStatus", "town");
                 Session.set("walkingStatus", "navigation");
                 break;
             case "camp":
                 Session.set("walkingStatus", "navigation");
-                Session.set("userStatus", "camp");
+                Session.set("userStatus", "camping");
+                Meteor.call("PartyStatus", "camping");
                 break;
 
         }
@@ -69,14 +77,16 @@ Template.uiWalking.events({
         var city = e.currentTarget.getAttribute("city");
 
         Meteor.call("TravelTown", city);
+        Meteor.call("PartyStatus", "town");
         Session.set("userStatus", "town");
 
     },
 
     "click [village]": function (e) {
         var village = e.currentTarget.getAttribute("village");
-
+        console.log("Travelling to", village)
         Meteor.call("TravelTown", village);
+        Meteor.call("PartyStatus", "town");
         Session.set("userStatus", "town");
     },
 });

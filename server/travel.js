@@ -7,8 +7,6 @@ Meteor.methods({
             area = loc[0],
             town = loc[1];
 
-        if (area === areaTo) throw new Meteor.Error("Already in this area");
-
         console.log("Travelling to", areaTo);
 
         var party = PartyCollection.findOne({ members: Meteor.user().name });
@@ -52,13 +50,23 @@ Meteor.methods({
             area = loc[0],
             town = loc[1];
 
-        if (town === townTo) throw new Meteor.Error("Already in this town");
+        var party = PartyCollection.findOne({ members: Meteor.user().name });
+        if (party == null) {
+            console.log("No party");
+            User.update({
+                $set: {
+                    location: area + "|" + townTo
+                }
+            });
+        } else {
+            console.log("Party travelling", party.members)
 
-        User.update({
-            $set: {
-                location: area + "|" + townTo
-            }
-        });
+            Meteor.users.update(
+                { name: { $in: party.members } },
+                { $set: { location: area + "|" + townTo } },
+                { multi: true }
+            );
+        }
     },
 });
 

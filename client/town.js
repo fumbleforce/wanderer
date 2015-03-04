@@ -31,16 +31,23 @@ Template.town.helpers({
 });
 
 Template.town.events({
-    "click .action": function (e, t) {
+    "click [action]": function (e, t) {
         var action = e.currentTarget.getAttribute("action");
 
         switch (action) {
-            case "leave": Session.set("userStatus", "walking"); break;
             case "navigation": Session.set("townStatus", "navigation"); break;
             case "shops": Session.set("townStatus", "shops"); break;
             case "shop": Session.set("townStatus", "shop"); break;
             case "inn": Session.set("townStatus", "inn"); break;
-            case "leave": Session.set("townStatus", "walking"); break;
+            case "walk":
+                Meteor.call("TownWalkStreets");
+                break;
+            case "leave":
+                console.log("Leaving city")
+                Meteor.call("PartyStatus", "walking");
+                Session.set("townStatus", "navigation");
+                Session.set("userStatus", "walking");
+                break;
 
         }
     },

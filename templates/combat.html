@@ -6,21 +6,26 @@
     <div class="combat float">
         <div class="party">
             {{#each party}}
-                <div class="party-member">
-                    <b>{{name}}</b>
-                    <div class="bar-container">
-                        <div class="bar red" style="width: {{percent arg1=health arg2=maxHealth}}%">
-                            {{health}}hp ({{percent arg1=health arg2=maxHealth}}%)
-                        </div>
+                <div class="party-member float">
+                    <div class="left entity-info">
+                        <b>{{name}}</b>
                     </div>
-                    <div class="bar-container">
-                        <div class="bar blue" style="width: {{percent arg1=sanity arg2=maxSanity}}%">
-                            {{sanity}}sp ({{percent arg1=sanity arg2=maxSanity}}%)
+
+                    <div class="left bars">
+                        <div class="bar-container">
+                            <div class="bar red" style="width: {{percent arg1=health arg2=maxHealth}}%">
+                                {{floor health}}hp ({{percent arg1=health arg2=maxHealth}}%)
+                            </div>
                         </div>
-                    </div>
-                    <div class="bar-container">
-                        <div class="bar brown" style="width: {{percent arg1=endurance arg2=maxEndurance}}%">
-                            {{endurance}}ep ({{percent arg1=endurance arg2=maxEndurance}}%)
+                        <div class="bar-container">
+                            <div class="bar blue" style="width: {{percent arg1=sanity arg2=maxSanity}}%">
+                                {{floor sanity}}sp ({{percent arg1=sanity arg2=maxSanity}}%)
+                            </div>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar brown" style="width: {{percent arg1=endurance arg2=maxEndurance}}%">
+                                {{floor endurance}}ep ({{percent arg1=endurance arg2=maxEndurance}}%)
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,19 +104,22 @@
 
         <div class="enemies">
             {{#each enemy}}
-            <div class="enemy">
-                <b>{{name}}</b>
-
-                <div class="bar-container">
-                    {{#if dead}}
-                    <div class="dead-label">Dead</div>
-                    {{else}}
-                    <div class="bar red" style="width: {{percent arg1=health arg2=maxHealth}}%">
+            <div class="enemy float">
+                <div class="bars left">
+                    <div class="bar-container">
+                        {{#if dead}}
+                        <div class="dead-label">Dead</div>
+                        {{else}}
+                        <div class="bar red" style="width: {{percent arg1=health arg2=maxHealth}}%">
+                        </div>
+                        <span>
+                        {{floor health}}hp ({{percent arg1=health arg2=maxHealth}}%)
+                        </span>
+                        {{/if}}
                     </div>
-                    <span>
-                    {{health}}hp ({{percent arg1=health arg2=maxHealth}}%)
-                    </span>
-                    {{/if}}
+                </div>
+                <div class="entity-info left">
+                    <b>{{name}}</b>
                 </div>
             </div>
             {{/each}}

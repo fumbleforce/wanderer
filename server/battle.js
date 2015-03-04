@@ -9,6 +9,17 @@ Meteor.methods({
 
     BattleEnd: function (id) {
         BattleCollection.remove(id);
+
+        var status = "walking";
+        if (Meteor.user().location.split("|").length > 1) {
+            status = "walking";
+        }
+
+        PartyCollection.update({ members: Meteor.user().name }, {
+            $set: { status: status }
+        });
+
+
     },
 
     BattleTakeAction: function (opts) {
@@ -76,7 +87,7 @@ Meteor.methods({
 
             updateInc["enemy."+target+".health"] = -damage;
             updateSet["enemy."+target+".dead"] = battle.enemy[target].health - damage <= 0;
-            updatePush["log"] = Battle.me().name + " attacked " + target + " with " + skill.name  + " and dealt " + damage + " damage";
+            updatePush["log"] = Battle.me().name + " attacked " + target + " with " + skill.name  + " and dealt " + Math.floor(damage) + " damage";
 
             User.update({
                 $inc: userInc
@@ -137,7 +148,7 @@ Meteor.methods({
 
             updateInc["party."+target+".health"] = -damage;
             updateSet["party."+target+".dead"] = battle.party[target].health - damage <= 0;
-            updatePush["log"] = monster.name + " attacked " + battle.party[target].name + " with " + spell.name  + " and dealt " + damage + " damage" ;
+            updatePush["log"] = monster.name + " attacked " + battle.party[target].name + " with " + spell.name  + " and dealt " + Math.floor(damage) + " damage" ;
 
             BattleCollection.update(battle._id, {
                 $set: updateSet,
@@ -209,14 +220,29 @@ Meteor.methods({
     },
 
     BattleRandomEncounter: function (loc) {
-        var location = Locations.getArea(loc),
-            enemy = [], m,
+        var location;
+        if (loc.split("|").length > 1) {
+            var town = Locations.getTown(loc);
+            location = {
+                danger: Locations.getArea(loc).danger,
+                biome: town.type
+            }
+        } else {
+            location = Locations.getArea(loc);
+        }
+
+        var enemy = [], m,
             danger = location.danger || 0,
             enemy_number = Math.floor(Math.random()*3) + 1;
 
         console.log("Random encounter in", location)
 
         var monsters = Monster.find({ danger: danger, habitat: location.biome });
+        console.log("Monsters: ", monsters)
+
+        if (monsters.length === 0) {
+            throw new Meteor.Error("No monsters in this area");
+        }
 
         for (var i = 0; i < enemy_number; i++) {
             m = _.extend({}, monsters[Math.floor(monsters.length * Math.random())]);
@@ -227,19 +253,22 @@ Meteor.methods({
             enemy.push(m);
         }
 
-        var party = PartyCollection.findOne({ members: Meteor.user().name }).members;
+        var party = PartyCollection.findOne({ members: Meteor.user().name });
+        var partyMembers = [];
         if (party == null) {
-            party = [Meteor.user().name];
+            partyMembers = [Meteor.user().name];
+        } else {
+            partyMembers = party.members;
         }
 
-        party = _.map(party, function (name) {
+        partyMembers = _.map(partyMembers, function (name) {
             return Meteor.users.findOne({ name: name });
         });
 
         var turnDict = {},
             turnList = [];
 
-        //console.log("Enemies:", enemy);
+        console.log("Enemies:", enemy);
         //console.log("Party:", party);
 
         _.each(enemy, function (e) {
@@ -250,7 +279,7 @@ Meteor.methods({
             });
         });
         
-        _.each(party, function (a) {
+        _.each(partyMembers, function (a) {
             turnList.push({
                 id: a._id,
                 name: a.name,
@@ -264,11 +293,17 @@ Meteor.methods({
 
         var id = BattleCollection.insert({
             type: "npc",
-            party: party,
+            party: partyMembers,
             enemy: enemy,
             turn: 0,
             log: [],
             turnList: turnList,
         });
+
+        if (party != null) {
+            PartyCollection.update(party._id, {
+                $set: { status: "combat" }
+            });
+        }
     }
 });

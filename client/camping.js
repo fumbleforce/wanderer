@@ -21,6 +21,7 @@ Template.uiCamping.events({
             Meteor.call("StorageAdd", { id: "dirt", qty: 1 });
         } else if (action === "break") {
             Session.set("userStatus", "walking");
+            Meteor.call("PartyStatus", "walking");
         } else if (action === "eat") {
             Meteor.call("CharacterEat");
         } else if (action === "drink") {

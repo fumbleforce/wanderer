@@ -49,7 +49,12 @@ Template.players.events({
 
         switch (action) {
             case "cancel": Session.set("playerSelected", false); break;
-            case "invite": Meteor.call("PartyInvite", Session.get("playerSelected")); break;
+            case "invite":
+                Meteor.call("PartyInvite", {
+                    status: Session.get("userStatus"),
+                    player: Session.get("playerSelected")
+                });
+                break;
             case "cancel": Session.set("playerSelected", false); break;
             case "cancel": Session.set("playerSelected", false); break;
         }
@@ -66,4 +71,8 @@ Template.players.events({
 
         Meteor.call("PartyReject", inviteid);
     },
+
+    "click .leave": function () {
+        Meteor.call("PartyLeave");
+    }
 })
