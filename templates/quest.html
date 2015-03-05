@@ -1,0 +1,78 @@
+<template name="quest">
+
+    {{#with quest}}
+    <p>{{text}}</p>
+    <div class="float">
+        {{#each addIndex choices}}
+            <button class="quest-choices" choice="{{index}}">
+                {{ choice }}
+            </button>
+        {{/each}}
+    </div>
+    {{/with}}
+
+</template>
+
+<template name="questLog">
+    <h3>Quest Log</h3>
+    <div class="quest-log">
+        {{#if session "questLogSelected"}}
+            {{#with quest}}
+                <button class="list">&#8617;</button>
+                {{#if completed}}
+                <i>Completed</i>
+                {{/if}}
+                <p>{{text}}</p>
+                
+                {{#if reward}}
+                    <p>
+                        <b>Reward:</b>
+                        {{#each reward}}
+                            <div class="reward">
+                                {{#if equals arg1=type arg2="item"}}
+                                    {{{itemLink id}}} x {{qty}}
+                                {{/if}}
+
+                                {{#if equals arg1=type arg2="skill"}}
+                                    Increase {{{skillLink id}}} by {{qty}}
+                                {{/if}}
+
+                                {{#if equals arg1=type arg2="spell"}}
+                                    Learn {{spellLink id}}
+                                {{/if}}
+                            </div>
+                        {{/each}}
+                    </p>
+                {{/if}}
+
+                {{#if haveRequired}}
+                    <div class="quest-choices">
+                        {{#each addIndex choices}}
+                            <button class="quest-choices" choice="{{index}}">
+                                {{ choice }}
+                            </button>
+                        {{/each}}
+                    </div>
+                {{/if}}
+
+                {{#unless completed}}
+                <button class="abandon">Abandon</button>
+                {{/unless}}
+            {{/with}}
+        {{else}}
+        <div class="quest-list">
+            {{#each quests}}
+                {{#if completed}}
+                    <div class="log-quest completed" quest="{{id}}">
+                        {{labelify id}}
+                    </div>
+                {{else}}
+                    <div class="log-quest" quest="{{id}}">
+                        {{labelify id}}
+                    </div>
+                {{/if}}
+            {{/each}}
+        </div>
+        {{/if}}
+    </div>
+</template>

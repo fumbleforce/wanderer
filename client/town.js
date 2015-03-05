@@ -1,6 +1,7 @@
 
 Session.set("townStatus", "navigation");
 Session.set("townShopId");
+Session.set("activeQuest", false)
 
 Template.town.helpers({
     townStatus: function (status) {
@@ -28,6 +29,20 @@ Template.town.helpers({
             return item;
         });
     },
+
+    people: function () {
+        return NPC.byLocation[Meteor.user().location];
+    },
+
+    quests: function () {
+        return _.filter(Quest.getByNpc(Session.get("selectedNpc")), function (q) {
+            return !(q.id in Meteor.user().quests);
+        });
+    },
+
+    questActive: function () {
+        return Session.get("activeQuest");
+    },
 });
 
 Template.town.events({
@@ -39,11 +54,12 @@ Template.town.events({
             case "shops": Session.set("townStatus", "shops"); break;
             case "shop": Session.set("townStatus", "shop"); break;
             case "inn": Session.set("townStatus", "inn"); break;
+            case "people": Session.set("townStatus", "people"); break;
             case "walk":
                 Meteor.call("TownWalkStreets");
                 break;
             case "leave":
-                console.log("Leaving city")
+                console.log("Leaving city");
                 Meteor.call("PartyStatus", "walking");
                 Session.set("townStatus", "navigation");
                 Session.set("userStatus", "walking");
@@ -51,6 +67,19 @@ Template.town.events({
 
         }
     },
+
+    "click [npc]": function (e) {
+        var npc = e.currentTarget.getAttribute("npc");
+        Session.set("selectedNpc", npc);
+        Session.set("townStatus", "npc")
+    },
+
+    "click [quest]": function (e) {
+        var quest = e.currentTarget.getAttribute("quest");
+        Session.set("activeQuest", quest);
+    },
+
+
     "click .shop": function (e) {
         var shop = +e.currentTarget.getAttribute("shopid");
         Session.set("townShopId", shop);

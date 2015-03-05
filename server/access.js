@@ -18,6 +18,7 @@ Meteor.publish(null, function() {
         books: 1,
         activity: 1,
         equipment: 1,
+        quests: 1,
     }});
 });
 

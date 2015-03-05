@@ -47,6 +47,14 @@ Template.registerHelper("itemLink", function (id) {
     return Item.get(id).el;
 });
 
+Template.registerHelper("spellLink", function (id) {
+    return Spell.get(id).el;
+});
+
+Template.registerHelper("skillLink", function (id) {
+    return "<span class='skillLink'>"+labelify(id)+"</span>";
+});
+
 Template.registerHelper('session',function(input) {
     return Session.get(input);
 });

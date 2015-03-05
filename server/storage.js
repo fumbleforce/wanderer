@@ -18,6 +18,7 @@ cleanupStorage = function (storage) {
 };
 
 StorageAddMultiple = function (storage, items) {
+    console.log("Adding", items)
     for (var i = 0; i < items.length; i++) {
         var id = items[i].id,
             qty = items[i].qty,
@@ -118,6 +119,12 @@ Meteor.methods({
     },
 
     StorageSpendMultiple: function (items) {
+        var storage = Meteor.user().storage;
+        storage = StorageRemoveMultiple(storage, items);
+        User.update({ $set: { storage: storage } });
+    },
+
+    StorageRemoveMultiple: function (items) {
         var storage = Meteor.user().storage;
         storage = StorageRemoveMultiple(storage, items);
         User.update({ $set: { storage: storage } });
