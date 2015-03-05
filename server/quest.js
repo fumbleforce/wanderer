@@ -75,13 +75,13 @@ Meteor.methods({
                     case "skill":
                         var inc = {};
                         if (rew.id in Meteor.user().physicalSkills) {
-                            inc["physicalSkills."+id] = rew.qty;
+                            inc["physicalSkills."+rew.id] = rew.qty;
                         } else if (rew.id in Meteor.user().mentalSkills) {
-                            inc["mentalSkills."+id] = rew.qty;
+                            inc["mentalSkills."+rew.id] = rew.qty;
                         } else if (rew.id in Meteor.user().weaponSkills) {
-                            inc["weaponSkills."+id] = rew.qty;
+                            inc["weaponSkills."+rew.id] = rew.qty;
                         } else if (rew.id in Meteor.user().craftingSkills) {
-                            inc["craftingSkills."+id] = rew.qty;
+                            inc["craftingSkills."+rew.id] = rew.qty;
                         }
                         User.update({ $inc: inc });
                         break;
