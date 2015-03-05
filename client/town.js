@@ -52,7 +52,6 @@ Template.town.events({
         switch (action) {
             case "navigation": Session.set("townStatus", "navigation"); break;
             case "shops": Session.set("townStatus", "shops"); break;
-            case "shop": Session.set("townStatus", "shop"); break;
             case "inn": Session.set("townStatus", "inn"); break;
             case "people": Session.set("townStatus", "people"); break;
             case "walk":
@@ -80,9 +79,10 @@ Template.town.events({
     },
 
 
-    "click .shop": function (e) {
-        var shop = +e.currentTarget.getAttribute("shopid");
+    "click [shop]": function (e) {
+        var shop = +e.currentTarget.getAttribute("shop");
         Session.set("townShopId", shop);
+        Session.set("townStatus", "shop");
     },
 
     "click .buy": function (e) {

@@ -23,7 +23,7 @@
 
                 {{#if townStatus "shops"}}
                     {{#each addIndex shops}}
-                        <button class="action shop-element" shopid="{{index}}" action="shop">{{labelify id}}</button>
+                        <button class="action shop-element" shop="{{index}}">{{labelify id}}</button>
                     {{/each}}
                     <button class="action" action="navigation">&#8617;</button>
                 {{/if}}

@@ -1,7 +1,9 @@
 
 
 
-Meteor.startup(function () {
+Meteor.autorun(function () {
+
+    if (Meteor.user() == undefined) return;
 
     if (Meteor.user().location.split("|").length > 1) {
         Session.set("userStatus", "town");
@@ -39,7 +41,7 @@ Template.user.events({
             password = t.find('#new-password').value,
             character = t.find('#new-character').value;
 
-        
+
         Accounts.createUser({
             email: email,
             password: password,
