@@ -16,6 +16,20 @@ Template.town.helpers({
         return Locations.getTown(Meteor.user().location).shops;
     },
 
+    inn: function () {
+        var town = Locations.getTown(Meteor.user().location);
+
+        if (!town.facilities || !town.facilities.inn) return;
+        var inn = town.facilities.inn;
+        console.log(inn)
+        if (Locations.discovered(Meteor.user().location+"|inn")) {
+            inn.welcomeMsg = inn.welcome[1];
+        } else {
+            inn.welcomeMsg = inn.welcome[0];
+        }
+        return inn;
+    },
+
     shop: function () {
         return Locations.getTown(Meteor.user().location).shops[Session.get("townShopId")]
     },
@@ -52,8 +66,10 @@ Template.town.events({
         switch (action) {
             case "navigation": Session.set("townStatus", "navigation"); break;
             case "shops": Session.set("townStatus", "shops"); break;
-            case "inn": Session.set("townStatus", "inn"); break;
-            case "people": Session.set("townStatus", "people"); break;
+            case "inn":
+                Session.set("townStatus", "inn");
+                Meteor.setTimeout(function () { Locations.discover(Meteor.user().location+"|inn"); }, 30000);
+                break;
             case "walk":
                 Meteor.call("TownWalkStreets");
                 break;
@@ -64,6 +80,16 @@ Template.town.events({
                 Session.set("userStatus", "walking");
                 break;
 
+        }
+    },
+
+    "click [inn]": function (e) {
+        var innAction = e.currentTarget.getAttribute("inn");
+
+        switch (innAction) {
+            case "people": Session.set("townStatus", "innPeople"); break;
+            case "drinks": Session.set("townStatus", "innDrinks"); break;
+            case "people": Session.set("townStatus", "people"); break;
         }
     },
 
@@ -83,6 +109,12 @@ Template.town.events({
         var shop = +e.currentTarget.getAttribute("shop");
         Session.set("townShopId", shop);
         Session.set("townStatus", "shop");
+    },
+
+    "click [drink]": function (e) {
+        var drink = e.currentTarget.getAttribute("drink");
+        Meteor.call("TownInnBuyDrink", drink);
+        Session.set("townStatus", "inn");
     },
 
     "click .buy": function (e) {

@@ -76,9 +76,10 @@ Meteor.methods({
         var storage = Meteor.user().storage,
             id = opts.id,
             qty = opts.qty;
-
+        console.log("Removing", opts)
         for (var pos = 0; pos < storage.length; pos++) {
             if (storage[pos].id === id) {
+                console.log("Removing from", storage[pos])
                 storage[pos].qty -= qty;
                 if (storage[pos].qty === 0) {
                     storage[pos] = undefined;

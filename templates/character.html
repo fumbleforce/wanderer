@@ -3,7 +3,6 @@
 <template name="uiCharacter">
     <h4>Character</h4>
     <p>{{ currentUser.name }}</p>
-    <p>Coins {{ currentUser.coins }}</p>
 
     <div class="float character">
         <div class="left list">
@@ -18,12 +17,22 @@
                 <li>Stamina: {{currentUser.maxEndurance}}</li>
             </ul>
         </div>
-        <b>Total skills: {{totalSkills}}</b>
+        <div class="left list">
+            <b>Spells known</b>
+            <ul>
+            {{#each currentUser.spells}}
+                <li>
+                    {{{spellLink .}}}
+                </li>
+            {{/each}}
+            </ul>
+        </div>
+        <b>Total skills: {{floor totalSkills}}</b>
         <div class="left list">
             <b>Physical Skills</b>
             <ul>
                 {{#each physicalSkills}}
-                    <li>{{labelify label}}: <span class="right">{{value}}</span></li>
+                    <li>{{labelify label}}: <span class="right">{{floor value}}</span></li>
                 {{/each}}
             </ul>
         </div>
@@ -31,7 +40,7 @@
             <b>Mental Skills</b>
             <ul>
                 {{#each mentalSkills}}
-                    <li>{{labelify label}}: <span class="right">{{value}}</span></li>
+                    <li>{{labelify label}}: <span class="right">{{floor value}}</span></li>
                 {{/each}}
             </ul>
         </div>
@@ -39,7 +48,7 @@
             <b>Weapon Skills</b>
             <ul>
                 {{#each weaponSkills}}
-                    <li>{{labelify label}}: <span class="right">{{value}}</span></li>
+                    <li>{{labelify label}}: <span class="right">{{floor value}}</span></li>
                 {{/each}}
             </ul>
         </div>
@@ -47,7 +56,7 @@
             <b>Spell Skills</b>
             <ul>
                 {{#each spellSkills}}
-                    <li>{{labelify label}}: <span class="right">{{value}}</span></li>
+                    <li>{{labelify label}}: <span class="right">{{floor value}}</span></li>
                 {{/each}}
             </ul>
         </div>
@@ -55,7 +64,7 @@
             <b>Crafting Skills</b>
             <ul>
                 {{#each craftingSkills}}
-                    <li>{{labelify label}}: <span class="right">{{value}}</span></li>
+                    <li>{{labelify label}}: <span class="right">{{floor value}}</span></li>
                 {{/each}}
             </ul>
         </div>

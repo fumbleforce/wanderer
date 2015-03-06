@@ -19,6 +19,7 @@ Meteor.publish(null, function() {
         activity: 1,
         equipment: 1,
         quests: 1,
+        discovered: 1,
     }});
 });
 

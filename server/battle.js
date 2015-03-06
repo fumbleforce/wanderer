@@ -81,8 +81,8 @@ Meteor.methods({
                 userInc["mentalSkills."+baseSkill] = 0.1;
             } else if (baseSkill in player.weaponSkills) {
                 userInc["weaponSkills."+baseSkill] = 0.1;
-            } else if (baseSkill in player.magicalSkills) {
-                userInc["magicalSkills."+baseSkill] = 0.1;
+            } else if (baseSkill in player.spellSkills) {
+                userInc["spellSkills."+baseSkill] = 0.1;
             }
 
             updateInc["enemy."+target+".health"] = -damage;

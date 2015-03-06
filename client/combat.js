@@ -1,7 +1,7 @@
 
 
 
-
+requiredEquipmentDep = new Tracker.Dependency();
 
 
 Meteor.startup(function () {
@@ -49,19 +49,25 @@ Template.combat.helpers({
     targetAction: function () { return Session.get("combatCategory") === "target"; },
 
     physicalActions: function () {
+        requiredEquipmentDep.depend();
         console.log(Battle.me().physicalSpells)
-        return _.map(Battle.me().physicalSpells, function (id) { return Spell.get(id, Battle.me()); });
+        return _.filter(Battle.me().spells, function (id) {
+            
+            var spell = Spell.get(id);
+            return spell.statType === "physical" && Spell.hasRequired(spell);
+        });
     },
 
     magicalActions: function () {
-        return _.map(Battle.me().magicalSpells, function (id) { return Spell.get(id, Battle.me()); });
+        requiredEquipmentDep.depend();
+        return _.filter(Battle.me().spells, function (id) {
+            var spell = Spell.get(id);
+            return spell.statType === "magical";
+        });
     },
 
     itemsActions: function () {
-        return [
-            { id: "hpPot1", label: "Health Potion" },
-            { id: "mpPot1", label: "Mana Potion" },
-        ]
+        return Storage.getCategory("consumable");
     },
 
     combatLog: function () {

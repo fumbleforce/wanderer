@@ -24,7 +24,7 @@ Template.equipment.events({
         console.log("id:", id)
         
         Meteor.call("EquipmentSet", { id: id, slot: Session.get("equpmentChoiceSlot") });
-        
+        requiredEquipmentDep.changed();
         Session.set("equpmentChoiceSlot", false);
     },
 

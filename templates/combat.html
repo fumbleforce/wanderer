@@ -49,21 +49,21 @@
 
                     {{#if physicalAction}}
                         {{#each physicalActions}}
-                            <button class="action combat-action" action="{{id}}">{{name}}</button>
+                            <button class="action combat-action" action="{{.}}">{{labelify .}}</button>
                         {{/each}}
                         <button class="action combat-category" action="none">&#8617;</button>
                     {{/if}}
 
                     {{#if magicalAction}}
                         {{#each magicalActions}}
-                            <button class="action combat-action" action="{{id}}">{{name}}</button>
+                            <button class="action combat-action" action="{{.}}">{{labelify .}}</button>
                         {{/each}}
                         <button class="action combat-category" action="none">&#8617;</button>
                     {{/if}}
 
                     {{#if itemsAction}}
                         {{#each itemsActions}}
-                            <button class="action combat-action" action="{{id}}">{{name}}</button>
+                            <button class="action combat-action" action="{{.}}">{{labelify .}}</button>
                         {{/each}}
                         <button class="action combat-category" action="none">&#8617;</button>
                     {{/if}}

@@ -16,28 +16,7 @@ Meteor.startup(function () {
         }
     });
 
-    // Finish books{ $where: "this.mayor.indexOf('"+term+"') != -1" },
-    Meteor.users.find({
-            $where: "this.activity.reading != undefined" ,
-    }).forEach(function (user) {
-        console.log(user.name)
-        Meteor.users.update(user._id, {
-            $inc: { "activity.reading.progress": 1 },
-            $set: { "activity.reading.locked": undefined },
-        });
-        if (user.activity.reading.progress >= 10) {
-            console.log(user.activity.reading)
-            var book = Item.get(user.activity.reading.book);
-            var skillInc = {};
-            skillInc["mentalSkills."+book.skill] = book.skillIncrease;
-            console.log(skillInc)
-            Meteor.users.update(user._id, {
-                $set: { "activity.reading": undefined },
-                $push: { "books.read": book.id },
-                $inc: skillInc,
-            });
-        }
-    });
+    
 })
 
 Meteor.methods({
@@ -53,48 +32,6 @@ Meteor.methods({
         }
     },
 
-    CharacterRead: function () {
-        if (Meteor.user().activity.reading && Meteor.user().activity.reading.locked < new Date()) {
-            var now = new Date();
-            User.update({
-                $set: { "activity.reading.locked": now.setSeconds(now.getSeconds() + Globals.readingTime) },
-            });
-        }
-
-        Meteor.setTimeout(function () {
-            User.update({ $inc: { "activity.reading.progress": 1 } });
-            if (Meteor.user().activity.reading.progress >= 10) {
-                var book = Item.get(Meteor.user().activity.reading.book);
-                var skillInc = {};
-                skillInc["mentalSkills."+book.skill] = book.skillIncrease;
-                User.update({
-                    $set: { "activity.reading": undefined },
-                    $push: { "books.read": book.id },
-                    $inc: skillInc,
-                });
-            }
-        }, 1000 * Globals.readingTime);
-
-    },
-
-    CharacterStartBook: function (book) {
-
-        if (Storage.hasItem(book, 1) && Meteor.user().books.read.indexOf(book) === -1) {
-            console.log("Starting to read", book)
-            var now = new Date();
-            var reading = {
-                book: book,
-                locked: now.setSeconds(now.getSeconds() + Globals.readingTime),
-                progress: 0
-            };
-
-            User.update({ $set: { "activity.reading": reading } });
-
-            Meteor.setTimeout(function () {
-                User.update({ $inc: { "activity.reading.progress": 1 } });
-            });
-        }
-    },
 });
 
 

@@ -37,7 +37,6 @@ Template.registerHelper("percent", function (ctx) {
 });
 
 Template.registerHelper("equals", function (ctx) {
-    console.log(ctx)
     return ctx.hash["arg1"] === ctx.hash["arg2"];
 });
 
@@ -48,7 +47,7 @@ Template.registerHelper("itemLink", function (id) {
 });
 
 Template.registerHelper("spellLink", function (id) {
-    return Spell.get(id).el;
+    return"<span class='spellLink'>"+labelify(id)+"</span>";
 });
 
 Template.registerHelper("skillLink", function (id) {
