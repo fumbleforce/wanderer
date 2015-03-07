@@ -1,13 +1,14 @@
 
 <template name="ui">
     <div class="gui-main">
+        <p>User status: {{session "userStatus"}}</p>
 
         {{#if userStatus "camping"}}
-            {{> uiCamping}}
+            {{> camping}}
         {{/if}}
 
-        {{#if userStatus "walking"}}
-            {{> uiWalking}}
+        {{#if userStatus "navigation"}}
+            {{> navigation}}
         {{/if}}
 
         {{#if userStatus "town"}}
@@ -22,6 +23,9 @@
             {{> combat}}
         {{/if}}
 
+        {{#if userStatus "travelling"}}
+            {{> travel}}
+        {{/if}}
 
         <!-- Crafting -->
 

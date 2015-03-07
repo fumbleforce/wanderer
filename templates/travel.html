@@ -1,0 +1,66 @@
+<template name="travel">
+    <div class="travel">
+        <div class="travel-info left">
+
+            {{#unless wandering}}
+            <div class="bar-container">
+                <div class="bar red" style="width: {{progress}}%">
+                    {{floor progress}}%
+                </div>
+            </div>
+            {{/unless}}
+
+            {{#if wandering}}
+                {{#if onPath}}
+                    <p>Wandering the roads of {{destination}}</p>
+                {{else}}
+                    <p>Wandering off the road in {{destination}}</p>
+                {{/if}}
+            {{else}}
+                {{#if onPath}}
+                    <p>Travelling by road to {{destination}}</p>
+                {{else}}
+                    <p>Travelling off roads to {{destination}}</p>
+                {{/if}}
+            {{/if}}
+
+            {{#unless wandering}}
+                <p>Time left: {{timeLeft}}</p>
+            {{/unless}}
+
+            {{#each lookingFor}}
+            <p>Looking for {{id}}</p>
+            {{/each}}
+
+            {{#if arrived}}
+                <button class="complete">Arrive</button>
+            {{else}}
+                <button class="cancel">Go back</button>
+            {{/if}}
+        </div>
+
+        <div class="travel-discovery">
+
+            <div class="discovery">
+                {{#if discovered "ore"}}
+                    <button discover-type="ore" discover="{{discoveredId 'ore'}}">Mine {{discovered "ore"}}</button>
+                {{/if}}
+            </div>
+            <div class="discovery">
+                {{#if discovered "herb"}}
+                    <button discover-type="herb" discover="{{discoveredId 'herb'}}">Harvest {{discovered "herb"}}</button>
+                {{/if}}
+            </div>
+            <div class="discovery">
+                {{#if discovered "prey"}}
+                    <button discover-type="meat" discover="{{discoveredId 'prey'}}">Hunt {{discovered "prey"}}</button>
+                {{/if}}
+            </div>
+            <div class="discovery">
+                {{#if discovered "material"}}
+                    <button discover-type="material" discover="{{discoveredId 'material'}}">Gather {{discovered "material"}}</button>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</template>

@@ -103,8 +103,6 @@ Meteor.methods({
         }
 
         Meteor.call("BattleCheckStatus");
-
-
     },
 
     BattleAIAction: function () {
@@ -139,7 +137,6 @@ Meteor.methods({
 
         var spell = Spell.get(monster.spells[Math.floor(monster.spells.length * Math.random())], monster);
 
-
         if (spell.target === "enemy") {
             // Do action to enemy
 
@@ -158,8 +155,6 @@ Meteor.methods({
         } else {
             // Do action to ally
         }
-
-
 
         Meteor.call("BattleCheckStatus");
     },
@@ -186,7 +181,11 @@ Meteor.methods({
             }));
 
             console.log("Adding loot", loot);
-            Meteor.call("StorageAddMultiple", loot);
+
+            var leaderStorage = Meteor.users.findOne(battle.party[0]._id).storage;
+            storage = StorageAddMultiple(storage, loot);
+            Meteor.users.update({ name: battle.party[0] }, { $set: { storage: storage }});
+
             console.log("populatinv loot")
             loot = _.map(loot, function (i) {
                 return Item.get(i.id).el;
@@ -194,7 +193,7 @@ Meteor.methods({
             console.log("updating battle, loot is", loot)
             BattleCollection.update(battle._id, {
                 $set: { won: true },
-                $push: { log: "Battle won. Received " + loot }
+                $push: { log: "Battle won. Leader received " + loot }
             });
 
         }
@@ -278,7 +277,7 @@ Meteor.methods({
                 quickness: e.physicalSkills.quickness || 0
             });
         });
-        
+
         _.each(partyMembers, function (a) {
             turnList.push({
                 id: a._id,
@@ -286,7 +285,7 @@ Meteor.methods({
                 quickness: a.physicalSkills.quickness || 0
             });
         });
-        
+
         turnList = _.sortBy(turnList, function (o) {
             return o.quickness + Math.random()/2.0;
         });

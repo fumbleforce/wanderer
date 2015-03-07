@@ -20,6 +20,7 @@ Meteor.publish(null, function() {
         equipment: 1,
         quests: 1,
         discovered: 1,
+        travel: 1,
     }});
 });
 

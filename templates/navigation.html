@@ -1,0 +1,78 @@
+<template name="navigation">
+    <h4>Walking</h4>
+
+     <div class="float">
+        <div class="left navigation">
+            <p>Location: {{location}}</p>
+            <p>{{encounter}}</p>
+
+            <div class="float">
+                {{#if canAct}}
+
+                    <div class="path-choice">
+                        <label for="on-path">
+                            <input id="on-path" type="checkbox">
+                            Follow the roads (+100% time)
+                        </label>
+                    </div>
+
+                    <div class="looking-for">
+                        <label for="look-ore">
+                            <input id="look-ore" type="checkbox" class="look-for">
+                            Look for ore deposits (+50% time)
+                        </label>
+                        <label for="look-herbs">
+                            <input id="look-herbs" type="checkbox" class="look-for">
+                            Look for herbs (+50% time)
+                        </label>
+                        <label for="look-prey">
+                            <input id="look-prey" type="checkbox" class="look-for">
+                            Look for prey (+50% time)
+                        </label>
+                        <label for="look-materials">
+                            <input id="look-materials" type="checkbox" class="look-for">
+                            Look for materials (+50% time)
+                        </label>
+                    </div>
+
+
+                    {{#if walkingStatus "navigation"}}
+                        <button class="action" action="areas">Areas</button>
+                        <button class="action" action="towns">Towns</button>
+
+                        {{#if inTown}}
+                            <button class="action" action="town" townid="{{town}}">Enter town</button>
+                        {{else}}
+                            <button class="action" action="wander">Wander</button>
+                            <button class="action" action="camp">Make camp</button>
+                        {{/if}}
+                    {{/if}}
+                {{else}}
+                <p>Party leader decides where to go.</p>
+                {{/if}}
+
+                {{#if walkingStatus "areas"}}
+
+                    {{#each areas}}
+                        <button class="action" loc="{{id}}">{{labelify id}}</button>
+                    {{/each}}
+                    <button class="action" action="navigation">&#8617;</button>
+                {{/if}}
+
+                {{#if walkingStatus "towns"}}
+                    <div class="path-choice">
+                        <label for="on-path">
+                            <input id="on-path" type="checkbox">
+                            Follow the roads
+                        </label>
+                    </div>
+                    {{#each towns}}
+                        <button class="action" loc="{{id}}">{{labelify id}}</button>
+                    {{/each}}
+                    <button class="action" action="navigation">&#8617;</button>
+                {{/if}}
+
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,5 +1,5 @@
 
-Template.uiCamping.helpers({
+Template.camping.helpers({
     campingAction: function () { return Session.get("campingAction"); },
     fireActive: function () { return Session.get("fireActive"); },
     location: function () {
@@ -12,7 +12,7 @@ Template.uiCamping.helpers({
     },
 });
 
-Template.uiCamping.events({
+Template.camping.events({
     "click .action": function (e, t) {
         var action = e.currentTarget.getAttribute("action");
         Session.set("campingAction", action);
@@ -20,8 +20,8 @@ Template.uiCamping.events({
         if (action === "dirt") {
             Meteor.call("StorageAdd", { id: "dirt", qty: 1 });
         } else if (action === "break") {
-            Session.set("userStatus", "walking");
-            Meteor.call("PartyStatus", "walking");
+            Session.set("userStatus", "navigation");
+            Meteor.call("PartyStatus", "navigation");
         } else if (action === "eat") {
             Meteor.call("CharacterEat");
         } else if (action === "drink") {

@@ -15,13 +15,13 @@
                     {{/if}}
 
                     <button class="action" action="walk">Walk the streets</button>
-                    
+
                     {{#if shops}}
                         <button class="action" action="shops">Find a shop</button>
                     {{/if}}
-
+                    <!--
                     <button class="action" action="south">Request audience with Duke</button>
-
+                    -->
                     {{#if canAct}}
                     <button class="action" action="leave">Leave</button>
                     {{/if}}
@@ -43,6 +43,7 @@
                 {{#if townStatus "inn"}}
                     <div>{{ inn.owner }}</div>
                     <div>{{ inn.welcomeMsg }}</div>
+                    <div>{{ inn.rumor }}</div>
                     <button class="action" inn="room">Rent a room for the night</button>
                     <button class="action" inn="drinks">Buy a drink</button>
                     <button class="action" inn="rumor">Ask for rumors</button>
@@ -69,7 +70,7 @@
                     {{#each quests}}
                         <button class="action" quest="{{id}}">{{labelify id}}</button>
                     {{/each}}
-                    <button class="action" action="people">&#8617;</button>
+                    <button class="action" inn="people">&#8617;</button>
                 {{/if}}
             </div>
 

@@ -1,7 +1,8 @@
 
 Session.set("townStatus", "navigation");
 Session.set("townShopId");
-Session.set("activeQuest", false)
+Session.set("activeQuest", false);
+Session.set("innRumor", "");
 
 Template.town.helpers({
     townStatus: function (status) {
@@ -75,9 +76,9 @@ Template.town.events({
                 break;
             case "leave":
                 console.log("Leaving city");
-                Meteor.call("PartyStatus", "walking");
+                Meteor.call("PartyStatus", "navigation");
                 Session.set("townStatus", "navigation");
-                Session.set("userStatus", "walking");
+                Session.set("userStatus", "navigation");
                 break;
 
         }
@@ -89,7 +90,10 @@ Template.town.events({
         switch (innAction) {
             case "people": Session.set("townStatus", "innPeople"); break;
             case "drinks": Session.set("townStatus", "innDrinks"); break;
-            case "people": Session.set("townStatus", "people"); break;
+            case "rumor":
+                var inn = Locations.getTown(Meteor.user().location).facilities.inn;
+                Session.set("innRumor", inn.rumors[Math.floor(Math.random()*inn.rumors.length)]);
+                break;
         }
     },
 

@@ -24,6 +24,16 @@ Template.quest.events({
                     break;
             }
         }
+    },
+
+    "click [action]": function (e) {
+        var action = e.currentTarget.getAttribute("action");
+
+        switch (action) {
+            case "people":
+                Session.set("townStatus", "people");
+                break;
+        }
     }
 });
 

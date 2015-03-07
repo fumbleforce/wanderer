@@ -13,7 +13,7 @@ Meteor.startup(function () {
 
             },
             removed: function () {
-                Session.set("userStatus", "walking");
+                Session.set("userStatus", "navigation");
             }
         });
         BattleCollection.find({ party: { $elemMatch: { _id: Meteor.userId() }}}).observeChanges({
@@ -52,7 +52,7 @@ Template.combat.helpers({
         requiredEquipmentDep.depend();
         console.log(Battle.me().physicalSpells)
         return _.filter(Battle.me().spells, function (id) {
-            
+
             var spell = Spell.get(id);
             return spell.statType === "physical" && Spell.hasRequired(spell);
         });
@@ -72,8 +72,9 @@ Template.combat.helpers({
 
     combatLog: function () {
         Meteor.setTimeout(function () {
-            $(".combat .log").scrollTop(999999999);
-        }, 500);
+            $(".combat-log").scrollTop(999999999);
+        }, 100);
+        $(".combat-log").scrollTop(999999999);
 
         return Battle.getActive().log;
     },
@@ -89,8 +90,14 @@ Template.combat.events({
                 target: Meteor.userId(),
             });
         } else if (action === "leave") {
-            Session.set("userStatus", "walking");
             Meteor.call("BattleEnd", Battle.getActive()._id);
+            if (Meteor.user().location.split("|").length > 1) {
+                Meteor.call("PartyStatus", "town");
+                Session.set("userStatus", "town");
+            } else {
+                Meteor.call("PartyStatus", "navigation");
+                Session.set("userStatus", "navigation");
+            }
         } else {
             Session.set("combatCategory", action);
         }

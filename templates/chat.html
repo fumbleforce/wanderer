@@ -1,5 +1,15 @@
 <template name="chat">
-    <h4>Chat</h4>
+    <div class="chat-tabs float">
+        {{#each channels}}
+            {{#if visible}}
+                {{#if active}}
+                    <button class="left active" chat="{{id}}">{{labelify id}}</button>
+                {{else}}
+                    <button class="left" chat="{{id}}">{{labelify id}}</button>
+                {{/if}}
+            {{/if}}
+        {{/each}}
+    </div>
     <div class="chat">
         <!--<div class="room-id"></div>-->
         <div class="messages">

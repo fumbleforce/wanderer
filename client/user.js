@@ -1,11 +1,15 @@
 
-
+var ran = false;
 
 Meteor.autorun(function () {
 
-    if (Meteor.user() == undefined) return;
+    if (Meteor.user() == undefined || ran) return;
+    ran = true;
 
-    if (Meteor.user().location.split("|").length > 1) {
+    console.log("travelactive", Meteor.user().travel.active)
+    if (Meteor.user().travel.active) {
+        Session.set("userStatus", "travelling");
+    } else if (Meteor.user().location.split("|").length > 1) {
         Session.set("userStatus", "town");
     } else {
         Session.set("userStatus", "camping");

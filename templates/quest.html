@@ -14,7 +14,7 @@
 </template>
 
 <template name="questLog">
-    <h3>Quest Log</h3>
+    <b>Quest Log</b>
     <div class="quest-log">
         {{#if session "questLogSelected"}}
             {{#with quest}}
@@ -23,7 +23,7 @@
                 <i>Completed</i>
                 {{/if}}
                 <p>{{text}}</p>
-                
+
                 {{#if reward}}
                     <p>
                         <b>Reward:</b>

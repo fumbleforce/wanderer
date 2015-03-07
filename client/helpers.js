@@ -1,13 +1,14 @@
 Template.registerHelper("loggingIn", function () { return Meteor.loggingIn() });
 Template.registerHelper("userStatus", function () { return Session.get("userStatus"); });
 Template.registerHelper("camping", function () { return Session.get("userStatus") == "camping"; });
-Template.registerHelper("walking", function () { return Session.get("userStatus") == "walking"; });
+Template.registerHelper("navigation", function () { return Session.get("userStatus") == "navigation"; });
 Template.registerHelper("town", function () { return Session.get("userStatus") == "town"; });
 Template.registerHelper("inCombat", function () { return Session.get("userStatus") == "combat"; });
 
 Template.registerHelper('userStatus',function(s) {
     var party = PartyCollection.findOne({ members: Meteor.user().name });
     if (party == null) return Session.get("userStatus") === s;
+    console.log("Party status", party.status)
     return party.status === s;
 });
 
