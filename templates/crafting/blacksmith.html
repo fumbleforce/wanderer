@@ -22,9 +22,21 @@
     </p>
 
     <p class="blacksmith-forge">
-
-    Forge
+        <b>Forge</b>
+        {{#each ores}}
+            <div ore="{{id}}">{{{itemLink id}}}x{{qty}}</div>
+        {{/each}}
     </p>
+
+    {{#if activeOre}}
+    <p>
+        <b>Smelt</b><br>
+        {{#with activeOre}}
+            <b>{{labelify id}}</b>
+            <button class="smelt">Smelt</button>
+        {{/with}}
+    </p>
+    {{/if}}
 
     {{#if activeSchematic}}
     <p>
@@ -38,6 +50,8 @@
                 {{/each}}
                 </div>
             </div>
+
+            <button class="craft">Craft</button>
         {{/with}}
     </p>
     {{/if}}

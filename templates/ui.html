@@ -1,7 +1,9 @@
 
 <template name="ui">
 
-<div class="gui float {{bgClasses}}">
+<div class="bg {{bgClasses}}"></div>
+
+<div class="gui float">
     <div class="gui-nav left">
         {{#if userStatus "camping"}}
             {{> camping}}
