@@ -183,8 +183,8 @@ Meteor.methods({
             console.log("Adding loot", loot);
 
             var leaderStorage = Meteor.users.findOne(battle.party[0]._id).storage;
-            storage = StorageAddMultiple(storage, loot);
-            Meteor.users.update({ name: battle.party[0] }, { $set: { storage: storage }});
+            leaderStorage = StorageAddMultiple(leaderStorage, loot);
+            Meteor.users.update({ name: battle.party[0] }, { $set: { storage: leaderStorage }});
 
             console.log("populatinv loot")
             loot = _.map(loot, function (i) {

@@ -37,9 +37,23 @@ Template.combat.helpers({
         return Battle.getActive();
     },
 
-    playersTurn: function () {
-        var battle = Battle.getActive();
-        return battle.turnList[battle.turn].id === Meteor.userId();
+    combatLog: function () {
+        Meteor.setTimeout(function () {
+            $(".combat-log").scrollTop(999999999);
+        }, 100);
+        $(".combat-log").scrollTop(999999999);
+
+        return Battle.getActive().log;
+    },
+});
+
+Template.combat.events({
+
+});
+
+Template.combatNav.helpers({
+    combat: function () {
+        return Battle.getActive();
     },
 
     noAction: function () { return Session.get("combatCategory") === "none"; },
@@ -70,17 +84,13 @@ Template.combat.helpers({
         return Storage.getCategory("consumable");
     },
 
-    combatLog: function () {
-        Meteor.setTimeout(function () {
-            $(".combat-log").scrollTop(999999999);
-        }, 100);
-        $(".combat-log").scrollTop(999999999);
-
-        return Battle.getActive().log;
+    playersTurn: function () {
+        var battle = Battle.getActive();
+        return battle.turnList[battle.turn].id === Meteor.userId();
     },
 });
 
-Template.combat.events({
+Template.combatNav.events({
     "click .combat-category": function (e, t) {
         var action = e.currentTarget.getAttribute("action");
         if (action === "flee") {
@@ -125,5 +135,4 @@ Template.combat.events({
         Session.set("combatTarget", "none");
         Session.set("combatAction", "none");
     },
-});
-
+})

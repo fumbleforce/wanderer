@@ -1,8 +1,8 @@
 
 <template name="ui">
-    <div class="gui-main">
-        <p>User status: {{session "userStatus"}}</p>
 
+<div class="gui float {{bgClasses}}">
+    <div class="gui-nav left">
         {{#if userStatus "camping"}}
             {{> camping}}
         {{/if}}
@@ -12,7 +12,7 @@
         {{/if}}
 
         {{#if userStatus "town"}}
-            {{> town}}
+            {{> townNav}}
         {{/if}}
 
         {{#if userStatus "battle"}}
@@ -20,12 +20,24 @@
         {{/if}}
 
         {{#if userStatus "combat"}}
-            {{> combat}}
+            {{> combatNav}}
         {{/if}}
 
         {{#if userStatus "travelling"}}
             {{> travel}}
         {{/if}}
+    </div>
+
+    <div class="gui-main left ">
+
+        {{#if userStatus "combat"}}
+            {{> combat}}
+        {{/if}}
+
+        {{#if userStatus "town"}}
+            {{> town}}
+        {{/if}}
+
 
         <!-- Crafting -->
 
@@ -33,38 +45,54 @@
             {{> cooking}}
         {{/if}}
 
-    </div>
-    <div class="float">
-        <div class="left gui-window">
-            {{>players}}
-        </div>
-        <div class="left gui-window">
-            {{>chat}}
-        </div>
-        <div class="left gui-window">
-            {{> uiCharacter}}
-        </div>
-        <div class="left gui-window">
-            {{> storage}}
-        </div>
+        {{#if session "characterToggled"}}
+            <div class="left gui-window">
+                {{> uiCharacter}}
+            </div>
+        {{/if}}
 
-        <div class="left gui-window">
-            {{> trade}}
-        </div>
+        {{#if session "playersToggled"}}
+            <div class="left gui-window">
+                {{>players}}
+            </div>
+        {{/if}}
 
-        <div class="left gui-window">
-            {{> equipment}}
-        </div>
+        {{#if session "inventoryToggled"}}
+            <div class="left gui-window">
+                {{> storage}}
+            </div>
+        {{/if}}
 
-        <div class="left gui-window">
-            {{> questLog}}
-        </div>
+        {{#if session "questLogToggled"}}
+            <div class="left gui-window">
+                {{> questLog}}
+            </div>
+        {{/if}}
 
-        {{#if camping}}
-        <div class="left gui-window">
-            {{> uiBooks}}
-        </div>
+        {{#if session "equipmentToggled"}}
+            <div class="left gui-window">
+                {{> equipment}}
+            </div>
+        {{/if}}
+
+        {{#if session "tradeToggled"}}
+            <div class="left gui-window">
+                {{> trade}}
+            </div>
+        {{/if}}
+
+        {{#if session "booksToggled"}}
+            <div class="left gui-window">
+                {{> uiBooks}}
+            </div>
         {{/if}}
 
     </div>
+    <div class="left gui-chat">
+        {{>chat}}
+    </div>
+
+
+    {{> menu}}
+</div>
 </template>

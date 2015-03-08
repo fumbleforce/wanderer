@@ -1,102 +1,125 @@
-
-
-<template name="town">
+<template name="townNav">
+    <p>{{town.name}}</p>
     <h4>{{town.type}}</h4>
-    <div class="float town">
-        <div class="left">
-            <p>{{town.name}}</p>
+    <div class="float">
 
-            <div class="float">
+        {{#if townStatus "navigation"}}
 
-                {{#if townStatus "navigation"}}
+            {{#if town.facilities.inn}}
+                <button class="action" action="inn">Visit inn</button>
+            {{/if}}
 
-                    {{#if town.facilities.inn}}
-                        <button class="action" action="inn">Visit inn</button>
-                    {{/if}}
+            <button class="action" action="walk">Walk the streets</button>
 
-                    <button class="action" action="walk">Walk the streets</button>
+            {{#if shops}}
+                <button class="action" action="shops">Find a shop</button>
+            {{/if}}
 
-                    {{#if shops}}
-                        <button class="action" action="shops">Find a shop</button>
-                    {{/if}}
-                    <!--
-                    <button class="action" action="south">Request audience with Duke</button>
-                    -->
-                    {{#if canAct}}
-                    <button class="action" action="leave">Leave</button>
-                    {{/if}}
-                {{/if}}
+            {{#if facilities}}
+                <button class="action" action="facilities">Find a facility</button>
+            {{/if}}
+            <!--
+            <button class="action" action="south">Request audience with Duke</button>
+            -->
+            {{#if canAct}}
+            <button class="action" action="leave">Leave</button>
+            {{/if}}
+        {{/if}}
 
-                {{#if townStatus "shops"}}
-                    {{#each addIndex shops}}
-                        <button class="action shop-element" shop="{{index}}">{{labelify id}}</button>
-                    {{/each}}
-                    <button class="action" action="navigation">&#8617;</button>
-                {{/if}}
-
-                {{#if townStatus "shop"}}
-                    <div>{{ shop.owner }}</div>
-                    <div>{{ shop.welcome }}</div>
-                    <button class="action" action="navigation">&#8617;</button>
-                {{/if}}
-
-                {{#if townStatus "inn"}}
-                    <div>{{ inn.owner }}</div>
-                    <div>{{ inn.welcomeMsg }}</div>
-                    <div>{{ inn.rumor }}</div>
-                    <button class="action" inn="room">Rent a room for the night</button>
-                    <button class="action" inn="drinks">Buy a drink</button>
-                    <button class="action" inn="rumor">Ask for rumors</button>
-                    <button class="action" inn="jobs">Find jobs</button>
-                    <button class="action" inn="people">Find people</button>
-                    <button class="action" action="navigation">&#8617;</button>
-                {{/if}}
-
-                {{#if townStatus "innPeople"}}
-                    {{#each people}}
-                        <button class="action" npc="{{id}}">{{labelify id}}</button>
-                    {{/each}}
-                    <button class="action" action="inn">&#8617;</button>
-                {{/if}}
-
-                {{#if townStatus "innDrinks"}}
-                    {{#each town.facilities.inn.drinks}}
-                        <button class="action" drink="{{id}}">{{labelify id}} ({{buy}})</button>
-                    {{/each}}
-                    <button class="action" action="inn">&#8617;</button>
-                {{/if}}
-
-                {{#if townStatus "npc"}}
-                    {{#each quests}}
-                        <button class="action" quest="{{id}}">{{labelify id}}</button>
-                    {{/each}}
-                    <button class="action" inn="people">&#8617;</button>
-                {{/if}}
-            </div>
-
-        </div>
+        {{#if townStatus "shops"}}
+            {{#each addIndex shops}}
+                <button class="action shop-element" shop="{{index}}">{{labelify id}}</button>
+            {{/each}}
+            <button class="action" action="navigation">&#8617;</button>
+        {{/if}}
 
         {{#if townStatus "shop"}}
-        <div class="left shop">
-            <div class="float">
-                {{#each items}}
-                    <div class="shop-item" itemid="{{id}}">
-                        <div>{{{ el }}}</div>
-                        <input class="amount" placeholder="Amount">
+            <div>{{ shop.owner }}</div>
+            <div>{{ shop.welcome }}</div>
+            <button class="action" action="navigation">&#8617;</button>
+        {{/if}}
 
-                        <button class="buy">Buy ({{sell}})</button>
-                        <button class="sell">Sell ({{buy}})</button>
-                    </div>
-                {{/each}}
+        {{#if townStatus "facilities"}}
+            {{#each facilities}}
+                <button class="action " facility="{{id}}">{{labelify id}}</button>
+            {{/each}}
+            <button class="action" action="navigation">&#8617;</button>
+        {{/if}}
+
+        {{#if townStatus "facility"}}
+            <button class="action" facility="" action="navigation">&#8617;</button>
+        {{/if}}
+
+        {{#if townStatus "inn"}}
+            <div>{{ inn.owner }}</div>
+            <div>{{ inn.welcomeMsg }}</div>
+            <div>{{ inn.rumor }}</div>
+            <button class="action" inn="room">Rent a room for the night</button>
+            <button class="action" inn="drinks">Buy a drink</button>
+            <button class="action" inn="rumor">Ask for rumors</button>
+            <button class="action" inn="jobs">Find jobs</button>
+            <button class="action" inn="people">Find people</button>
+            <button class="action" action="navigation">&#8617;</button>
+        {{/if}}
+
+        {{#if townStatus "innPeople"}}
+            {{#each people}}
+                <button class="action" npc="{{id}}">{{labelify id}}</button>
+            {{/each}}
+            <button class="action" action="inn">&#8617;</button>
+        {{/if}}
+
+        {{#if townStatus "innDrinks"}}
+            {{#each town.facilities.inn.drinks}}
+                <button class="action" drink="{{id}}">{{labelify id}} ({{buy}})</button>
+            {{/each}}
+            <button class="action" action="inn">&#8617;</button>
+        {{/if}}
+
+        {{#if townStatus "npc"}}
+            {{#each quests}}
+                <button class="action" quest="{{id}}">{{labelify id}}</button>
+            {{/each}}
+            <button class="action" inn="people">&#8617;</button>
+        {{/if}}
+    </div>
+
+</template>
+
+<template name="town">
+
+    <div class="town">
+        <div class="float">
+            {{#if townStatus "shop"}}
+            <div class="left shop">
+                <div class="float">
+                    {{#each items}}
+                        <div class="shop-item" itemid="{{id}}">
+                            <div>{{{ el }}}</div>
+                            <input class="amount" placeholder="Amount">
+
+                            <button class="buy">Buy ({{sell}})</button>
+                            <button class="sell">Sell ({{buy}})</button>
+                        </div>
+                    {{/each}}
+                </div>
             </div>
-        </div>
-        {{/if}}
+            {{/if}}
 
-        {{#if questActive}}
-        <div class="left quest">
-            {{>quest}}
+            {{#if questActive}}
+            <div class="left quest">
+                {{>quest}}
+            </div>
+            {{/if}}
+
+            {{#if townStatus "facility"}}
+
+                {{#if townFacility "blacksmith"}}
+                    {{> blacksmith}}
+                {{/if}}
+
+            {{/if}}
         </div>
-        {{/if}}
     </div>
 </template>
 

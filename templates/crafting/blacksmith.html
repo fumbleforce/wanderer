@@ -1,0 +1,45 @@
+<template name="blacksmith">
+
+    <div>
+        <b>Blacksmith</b>
+    </div>
+
+    {{#with blacksmith}}
+    <div><i>{{ owner }}</i></div>
+    <h4>{{welcome}}</h4>
+
+    <p class="blacksmith-materials">
+        {{#each materials}}
+            {{{itemLink id}}}x{{qty}}
+        {{/each}}
+    </p>
+
+    <p class="blacksmith-schematics">
+        <b>Schematics</b><br>
+        {{#each schematics}}
+            <div schematic="{{id}}">{{{itemLink id}}}</div>
+        {{/each}}
+    </p>
+
+    <p class="blacksmith-forge">
+
+    Forge
+    </p>
+
+    {{#if activeSchematic}}
+    <p>
+        <b>Craft</b><br>
+        {{#with activeSchematic}}
+            <b>{{labelify id}}</b>
+            <div>Requires:
+                <div>
+                {{#each requires}}
+                    {{{itemLink id}}}x{{qty}}
+                {{/each}}
+                </div>
+            </div>
+        {{/with}}
+    </p>
+    {{/if}}
+    {{/with}}
+</template>

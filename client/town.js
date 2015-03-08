@@ -4,21 +4,32 @@ Session.set("townShopId");
 Session.set("activeQuest", false);
 Session.set("innRumor", "");
 
-Template.town.helpers({
+var town;
+
+Meteor.autorun(function () {
+    // Set town
+    if (!Meteor.user()) return;
+
+    town = Locations.getTown(Meteor.user().location);
+});
+
+Template.townNav.helpers({
     townStatus: function (status) {
         return Session.get("townStatus") == status;
     },
 
     town: function () {
-        return Locations.getTown(Meteor.user().location);
+        if (!town) return;
+        return town;
     },
 
     shops: function () {
-        return Locations.getTown(Meteor.user().location).shops;
+        if (!town) return;
+        return town.shops;
     },
 
     inn: function () {
-        var town = Locations.getTown(Meteor.user().location);
+        if (!town) return;
 
         if (!town.facilities || !town.facilities.inn) return;
         var inn = town.facilities.inn;
@@ -35,13 +46,9 @@ Template.town.helpers({
         return Locations.getTown(Meteor.user().location).shops[Session.get("townShopId")]
     },
 
-    items: function () {
-        return _.map(Locations.getTown(Meteor.user().location).shops[Session.get("townShopId")].items, function (i) {
-            console.log(i)
-            var item = Item.get(i.id);
-            item.buy = i.buy;
-            item.sell = i.sell;
-            return item;
+    facilities: function () {
+        return _.filter(asArray(Locations.getTown(Meteor.user().location).facilities), function (el) {
+            return el.id != "inn";
         });
     },
 
@@ -55,18 +62,19 @@ Template.town.helpers({
         });
     },
 
-    questActive: function () {
-        return Session.get("activeQuest");
-    },
+
 });
 
-Template.town.events({
+Template.townNav.events({
     "click [action]": function (e, t) {
         var action = e.currentTarget.getAttribute("action");
 
         switch (action) {
             case "navigation": Session.set("townStatus", "navigation"); break;
             case "shops": Session.set("townStatus", "shops"); break;
+            case "facilities":
+                Session.set("townStatus", "facilities");
+                break;
             case "inn":
                 Session.set("townStatus", "inn");
                 Meteor.setTimeout(function () { Locations.discover(Meteor.user().location+"|inn"); }, 30000);
@@ -115,12 +123,46 @@ Template.town.events({
         Session.set("townStatus", "shop");
     },
 
+    "click [facility]": function (e) {
+        var facility = e.currentTarget.getAttribute("facility");
+        Session.set("townFacility", facility);
+        Session.set("townStatus", "facility");
+    },
+
     "click [drink]": function (e) {
         var drink = e.currentTarget.getAttribute("drink");
         Meteor.call("TownInnBuyDrink", drink);
         Session.set("townStatus", "inn");
     },
 
+
+});
+
+Template.town.helpers({
+    townStatus: function (status) {
+        return Session.get("townStatus") == status;
+    },
+
+    townFacility: function (facility) {
+        return Session.get("townFacility") == facility;
+    },
+
+    items: function () {
+        return _.map(Locations.getTown(Meteor.user().location).shops[Session.get("townShopId")].items, function (i) {
+            console.log(i)
+            var item = Item.get(i.id);
+            item.buy = i.buy;
+            item.sell = i.sell;
+            return item;
+        });
+    },
+
+    questActive: function () {
+        return Session.get("activeQuest");
+    },
+});
+
+Template.town.events({
     "click .buy": function (e) {
         var $el = $(e.target).closest(".shop-item"),
             qty = +$el.find(".amount").val(),

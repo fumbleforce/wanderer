@@ -12,6 +12,12 @@ Template.registerHelper('userStatus',function(s) {
     return party.status === s;
 });
 
+Template.registerHelper('bgClasses', function () {
+    switch (Session.get("userStatus")) {
+        case "town": return "bg-town";
+    }
+});
+
 Template.registerHelper('toArray',function(obj) {
     result = [];
     for (var k in obj) result.push({key:k, value:obj[k]});

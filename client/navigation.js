@@ -55,10 +55,14 @@ function startTravel (loc) {
 Template.navigation.events({
     "click .action": function (e, t) {
         var action = e.currentTarget.getAttribute("action");
-
+        console.log("Action", action)
         switch (action) {
             case "areas": Session.set("walkingStatus", "areas"); break;
             case "towns": Session.set("walkingStatus", "towns"); break;
+            case "town":
+                // Enter town from nav.
+                Session.set("userStatus", "town");
+                break;
             case "navigation": Session.set("walkingStatus", "navigation"); break;
             case "wander":
                 startTravel();

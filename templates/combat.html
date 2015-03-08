@@ -2,7 +2,6 @@
 
 <template name="combat">
     {{#with combat}}
-
     <div class="combat float">
         <div class="party">
             {{#each party}}
@@ -30,55 +29,6 @@
                     </div>
                 </div>
             {{/each}}
-
-
-                <div class="combat-actions">
-                {{#if won}}
-                    <button class="action combat-category" action="leave">Leave</button>
-                {{/if}}
-
-                {{#if playersTurn}}
-                    {{#if noAction}}
-                        {{#unless won}}
-                            <button class="action combat-category" action="physical">Physical</button>
-                            <button class="action combat-category" action="magical">Magical</button>
-                            <button class="action combat-category" action="items">Items</button>
-                            <button class="action combat-category" action="flee">Flee</button>
-                        {{/unless}}
-                    {{/if}}
-
-                    {{#if physicalAction}}
-                        {{#each physicalActions}}
-                            <button class="action combat-action" action="{{.}}">{{labelify .}}</button>
-                        {{/each}}
-                        <button class="action combat-category" action="none">&#8617;</button>
-                    {{/if}}
-
-                    {{#if magicalAction}}
-                        {{#each magicalActions}}
-                            <button class="action combat-action" action="{{.}}">{{labelify .}}</button>
-                        {{/each}}
-                        <button class="action combat-category" action="none">&#8617;</button>
-                    {{/if}}
-
-                    {{#if itemsAction}}
-                        {{#each itemsActions}}
-                            <button class="action combat-action" action="{{.}}">{{labelify .}}</button>
-                        {{/each}}
-                        <button class="action combat-category" action="none">&#8617;</button>
-                    {{/if}}
-
-                    {{#if targetAction}}
-                        {{#each addIndex enemy}}
-                            {{#unless dead}}
-                            <button class="action target-action" target="{{index}}">{{name}}</button>
-                            {{/unless}}
-                        {{/each}}
-                        <button class="action combat-category" action="none">&#8617;</button>
-                    {{/if}}
-
-                {{/if}}
-                </div>
         </div>
 
         <div class="log">
@@ -91,8 +41,6 @@
                     {{/if}}
                 {{/each}}
             </div>
-
-
             <div class="combat-log">
                 {{#each combatLog}}
                     <div class="log-entry">
@@ -125,7 +73,58 @@
             {{/each}}
         </div>
     </div>
-
-
     {{/with}}
+</template>
+
+<template name="combatNav">
+
+    <div class="combat-actions">
+        {{#if won}}
+            <button class="action combat-category" action="leave">Leave</button>
+        {{/if}}
+
+        {{#if playersTurn}}
+            {{#if noAction}}
+                {{#unless won}}
+                    <button class="action combat-category" action="physical">Physical</button>
+                    <button class="action combat-category" action="magical">Magical</button>
+                    <button class="action combat-category" action="items">Items</button>
+                    <button class="action combat-category" action="flee">Flee</button>
+                {{/unless}}
+            {{/if}}
+
+            {{#if physicalAction}}
+                {{#each physicalActions}}
+                    <button class="action combat-action" action="{{.}}">{{labelify .}}</button>
+                {{/each}}
+                <button class="action combat-category" action="none">&#8617;</button>
+            {{/if}}
+
+            {{#if magicalAction}}
+                {{#each magicalActions}}
+                    <button class="action combat-action" action="{{.}}">{{labelify .}}</button>
+                {{/each}}
+                <button class="action combat-category" action="none">&#8617;</button>
+            {{/if}}
+
+            {{#if itemsAction}}
+                {{#each itemsActions}}
+                    <button class="action combat-action" action="{{.}}">{{labelify .}}</button>
+                {{/each}}
+                <button class="action combat-category" action="none">&#8617;</button>
+            {{/if}}
+
+            {{#if targetAction}}
+                {{#each addIndex combat.enemy}}
+                    {{#unless dead}}
+                    <button class="action target-action" target="{{index}}">{{name}}</button>
+                    {{/unless}}
+                {{/each}}
+                <button class="action combat-category" action="none">&#8617;</button>
+            {{/if}}
+
+        {{/if}}
+    </div>
+
+
 </template>
