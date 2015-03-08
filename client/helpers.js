@@ -15,6 +15,9 @@ Template.registerHelper('userStatus',function(s) {
 Template.registerHelper('bgClasses', function () {
     switch (Session.get("userStatus")) {
         case "town": return "bg-town";
+        case "navigation": return "bg-navigation";
+        case "camping": return "bg-camping";
+        case "travelling": return "bg-travelling";
     }
 });
 
