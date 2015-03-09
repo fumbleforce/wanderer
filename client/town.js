@@ -125,6 +125,10 @@ Template.townNav.events({
 
     "click [facility]": function (e) {
         var facility = e.currentTarget.getAttribute("facility");
+        if (!facility) {
+            Session.set("townFacility", false);
+            return;
+        }
         Session.set("townFacility", facility);
         Session.set("townStatus", "facility");
     },

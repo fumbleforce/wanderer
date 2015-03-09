@@ -1,59 +1,81 @@
 <template name="blacksmith">
+    <div class="blacksmith">
+        <div>
+            <b>Blacksmith</b>
+        </div>
 
-    <div>
-        <b>Blacksmith</b>
-    </div>
+        {{#with blacksmith}}
+        <div><i>{{ owner }}</i></div>
+        <h4>{{welcome}}</h4>
 
-    {{#with blacksmith}}
-    <div><i>{{ owner }}</i></div>
-    <h4>{{welcome}}</h4>
+        <p class="blacksmith-materials">
+            {{#each materials}}
+                {{{itemLink id}}}x{{qty}}
+            {{/each}}
+        </p>
 
-    <p class="blacksmith-materials">
-        {{#each materials}}
-            {{{itemLink id}}}x{{qty}}
-        {{/each}}
-    </p>
+        <p class="blacksmith-schematics">
+            <b>Schematics</b><br>
+            {{#each schematics}}
+                <div schematic="{{id}}">{{{itemLink id}}}</div>
+            {{/each}}
+        </p>
 
-    <p class="blacksmith-schematics">
-        <b>Schematics</b><br>
-        {{#each schematics}}
-            <div schematic="{{id}}">{{{itemLink id}}}</div>
-        {{/each}}
-    </p>
 
-    <p class="blacksmith-forge">
-        <b>Forge</b>
-        {{#each ores}}
-            <div ore="{{id}}">{{{itemLink id}}}x{{qty}}</div>
-        {{/each}}
-    </p>
-
-    {{#if activeOre}}
-    <p>
-        <b>Smelt</b><br>
-        {{#with activeOre}}
-            <b>{{labelify id}}</b>
-            <button class="smelt">Smelt</button>
-        {{/with}}
-    </p>
-    {{/if}}
-
-    {{#if activeSchematic}}
-    <p>
-        <b>Craft</b><br>
-        {{#with activeSchematic}}
-            <b>{{labelify id}}</b>
-            <div>Requires:
-                <div>
-                {{#each requires}}
-                    {{{itemLink id}}}x{{qty}}
-                {{/each}}
+        {{#if activeSchematic}}
+        <p>
+            <b>Craft</b><br>
+            {{#with activeSchematic}}
+                <b>{{labelify id}}</b>
+                <div>Requires:
+                    <div>
+                    {{#each requires}}
+                        {{{itemLink id}}}x{{qty}}
+                    {{/each}}
+                    </div>
                 </div>
-            </div>
 
-            <button class="craft">Craft</button>
+                <button class="craft">Craft</button>
+            {{/with}}
+        </p>
+        {{/if}}
+
+        <hr>
+
+        <div class="blacksmith-forge float">
+            <div class="forge left">
+                <h3>Forge</h3>
+                <div class="fire">{{temp}}</div>
+
+                {{#unless forgeLit}}
+                <button class="ignite">Ignite</button>
+                {{else}}
+                <button class="heat">Heat up</button>
+                {{/unless}}
+
+            </div>
+            <div class="ores left">
+                <h3>Ores</h3>
+                {{#each ores}}
+                    <div ore="{{id}}">{{{itemLink id}}}x{{qty}}</div>
+                {{/each}}
+            </div>
+            <div class="smelt left">
+                <h3>Smelt</h3><br>
+
+                <div class="bar-container">
+                    <div class="bar red" style="width: {{floor smeltProgress}}%">
+                        {{floor smeltProgress}}%
+                    </div>
+                </div>
+                {{#if activeOre}}
+                    <b>{{activeOre}}</b>
+                    <button class="smelt">Smelt</button>
+                {{/if}}
+            </div>
+        </div>
+
+
         {{/with}}
-    </p>
-    {{/if}}
-    {{/with}}
+    </div>
 </template>

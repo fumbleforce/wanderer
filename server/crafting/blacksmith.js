@@ -10,10 +10,13 @@ Meteor.methods({
         Meteor.call("StorageAdd", { id: schematic.crafts, qty: 1 });
     },
 
-    BlacksmithSmelt: function (oreId) {
-        var ore = Item.get(oreId);
-
-        Meteor.call("StorageRemove", { id: ore.id, qty: 2 });
-        Meteor.call("StorageAdd", { id: "ironBar", qty: 1 });
+    BlacksmithSmelt: function (opts) {
+        var smelted = Crafting.smelting[opts.ore];
+        Meteor.call("StorageAdd", { id: smelted, qty: 1 });
     },
+
+    BlacksmithSmeltConsume: function (opts) {
+        var ore = opts.ore;
+        Meteor.call("StorageRemove", { id: ore, qty: 1 });
+    }
 });
