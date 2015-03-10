@@ -6,7 +6,10 @@ requiredEquipmentDep = new Tracker.Dependency();
 
 Meteor.startup(function () {
     Meteor.autosubscribe(function() {
-        BattleCollection.find({ party: { $elemMatch: { _id: Meteor.userId() }}}).observe({
+        BattleCollection.find({
+            party: { $elemMatch: { _id: Meteor.userId() }},
+            left: false,
+        }).observe({
             added: function(item){
                 Session.set("userStatus", "combat");
                 Meteor.setTimeout(function () { Meteor.call("BattleAIAction"); }, 1000);
@@ -16,7 +19,10 @@ Meteor.startup(function () {
                 Session.set("userStatus", "navigation");
             }
         });
-        BattleCollection.find({ party: { $elemMatch: { _id: Meteor.userId() }}}).observeChanges({
+        BattleCollection.find({
+            party: { $elemMatch: { _id: Meteor.userId() }},
+            left: false,
+        }).observeChanges({
             changed: function(id, fields){
                 console.log("Changed", fields)
                 if ("turn" in fields) {

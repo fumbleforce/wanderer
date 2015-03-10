@@ -8,7 +8,7 @@ Meteor.methods({
     },
 
     BattleEnd: function (id) {
-        BattleCollection.remove(id);
+        BattleCollection.update(id, { $set: { left: true }});
 
         var status = "walking";
         if (Meteor.user().location.split("|").length > 1) {
@@ -112,9 +112,14 @@ Meteor.methods({
             target = 0,
             battle = Battle.getActive();
 
-        var monster = _.find(battle.enemy, function (m) { return m._id === battle.turnList[battle.turn].id });
+        var monster = _.find(battle.enemy, function (m) {
+            return m._id === battle.turnList[battle.turn].id
+        });
+
+        console.log("Current turn:", battle.turnList[battle.turn].id)
 
         if (monster == undefined) {
+            console.log("Monster is undefined, returning")
             return;
         }
 
@@ -132,6 +137,7 @@ Meteor.methods({
             BattleCollection.update(battle._id, {
                 $set: updateSet,
             });
+            console.log(monster, "died")
             return;
         }
 
@@ -297,6 +303,9 @@ Meteor.methods({
             turn: 0,
             log: [],
             turnList: turnList,
+            won: false,
+            lost: false,
+            left: false,
         });
 
         if (party != null) {

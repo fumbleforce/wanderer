@@ -44,7 +44,7 @@
 
         <div class="blacksmith-forge float">
             <div class="forge left">
-                <h3>Forge</h3>
+                <h3>Smelter</h3>
                 <div class="fire">{{temp}}</div>
 
                 {{#unless forgeLit}}
@@ -68,8 +68,11 @@
                         {{floor smeltProgress}}%
                     </div>
                 </div>
+                <div id="alloy-pie" class="smelt-alloy" style="width: 200px; height: 100px;">
+                </div>
                 {{#if activeOre}}
                     <b>{{activeOre}}</b>
+
                     <button class="smelt">Smelt</button>
                 {{/if}}
             </div>

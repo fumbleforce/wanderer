@@ -16,7 +16,10 @@ Meteor.autorun(function () {
     }
 
     Meteor.autosubscribe(function() {
-        PartyCollection.find({ members: Meteor.user().name }).observeChanges({
+        PartyCollection.find({
+            members: Meteor.user().name,
+            left: false
+        }).observeChanges({
             changed: function(id, fields){
                 console.log("Party Changed", fields)
                 if ("status" in fields) {

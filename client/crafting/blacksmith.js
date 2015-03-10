@@ -1,12 +1,16 @@
 Session.set("blacksmithSchematic", false);
 
+var redrawDep = new Tracker.Dependency();
 var forge = new ReactiveDict();
+
 forge.set("addingHeat", false);
 forge.set("addingOre", false);
 forge.set("temp", 0);
 forge.set("smeltProgress", 0);
+forge.set("alloy", "{}");
 
 var heatingInterval, smeltingInterval;
+var alloyChart;
 
 function startHeating () {
     Meteor.clearInterval(heatingInterval);
@@ -39,15 +43,28 @@ function startSmelting () {
             Session.set("blacksmithOre", false);
             forge.set("addingOre", false);
         } else if (forge.get("addingOre")) {
-            var off = Math.floor(Math.abs(smeltPoint - temp) / 100);
+            var off = Math.floor(Math.abs(smeltPoint - temp) / 100),
+                smeltAdd = 10-off,
+                ore = Session.get("blacksmithOre"),
+                alloy = JSON.parse(forge.get("alloy"));
+
             if (off < 10) {
-                forge.set("smeltProgress", progress+(10-off));
-                Meteor.call("BlacksmithSmeltConsume", { ore: Session.get("blacksmithOre") });
+                if (!(ore in alloy)) alloy[ore] = 0;
+
+                alloy[ore] += smeltAdd*2;
+                forge.set("alloy", JSON.stringify(alloy));
+                forge.set("smeltProgress", progress+smeltAdd);
+                Meteor.call("BlacksmithSmeltConsume", { ore: ore });
+                buildAlloyPie();
             }
 
             if (forge.get("smeltProgress") >= 100) {
                 forge.set("smeltProgress", 0);
-                Meteor.call("BlacksmithSmelt", { ore: Session.get("blacksmithOre") });
+                forge.set("alloy", "{}");
+                Meteor.call("BlacksmithSmelt", {
+                    ore: Session.get("blacksmithOre"),
+                    alloy: alloy
+                });
             }
         }
 
@@ -57,7 +74,64 @@ function startSmelting () {
     }, 2000);
 }
 
+function buildAlloyPie () {
+    var alloy = JSON.parse(forge.get("alloy"));
+    var alloyColors = {
+        "ironOre": "red",
+        "copperOre": "gold",
+    };
+    var data = _.map(alloy, function (el, key) {
+        return [labelify(key), el];
+    });
+    console.log(data)
 
+    if (alloyChart != undefined) {
+        $('#alloy-pie').highcharts().series[0].update({
+            type: 'pie',
+            name: 'Metal',
+            data: data
+        });
+        return;
+    }
+
+    alloyChart = $('#alloy-pie').highcharts({
+        chart: {
+            chartBackgroundColor: "transparent",
+            backgroundColor: "transparent",
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        
+        title: {
+            text: ''
+        },
+        
+        credits: {
+            enabled: false
+        },
+        
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: false
+            }
+        },
+        
+        series: [{
+            type: 'pie',
+            name: 'Metal',
+            data: data
+        }]
+    });
+}
 
 
 Template.blacksmith.helpers({
@@ -102,10 +176,10 @@ Template.blacksmith.helpers({
         if (!Session.get("blacksmithOre")) return false;
         if (!Storage.hasItem(Session.get("blacksmithOre"), 1)) return false;
         var ore = Item.get(Session.get("blacksmithOre"));
-        console.log(ore)
         var bar = Item.get(Crafting.smelting[ore.id]);
         return labelify(ore.id) + " -> " + labelify(bar.id);
     },
+
 });
 
 Template.blacksmith.events({
