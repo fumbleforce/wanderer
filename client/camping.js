@@ -1,5 +1,7 @@
 
-Template.camping.helpers({
+Session.set("campStatus", false);
+
+Template.campingNav.helpers({
     campingAction: function () { return Session.get("campingAction"); },
     fireActive: function () { return Session.get("fireActive"); },
     location: function () {
@@ -12,28 +14,30 @@ Template.camping.helpers({
     },
 });
 
-Template.camping.events({
+Template.campingNav.events({
     "click .action": function (e, t) {
         var action = e.currentTarget.getAttribute("action");
         Session.set("campingAction", action);
 
-        if (action === "dirt") {
-            Meteor.call("StorageAdd", { id: "dirt", qty: 1 });
-        } else if (action === "break") {
-            Session.set("userStatus", "navigation");
-            Meteor.call("PartyStatus", "navigation");
-        } else if (action === "eat") {
-            Meteor.call("CharacterEat");
-        } else if (action === "drink") {
-            Meteor.call("CharacterDrink");
-        } else if (action === "read") {
-            Meteor.call("CharacterRead");
-        } else if (action === "fire") {
-            Session.set("fireActive", true);
-            Meteor.call("CampLightFire");
-        } else if (action === "cook") {
-            Session.set("userStatus", "cooking");
-            Cooking.start();
+        switch (action) {
+            case "dirt":
+                Meteor.call("StorageAdd", { id: "dirt", qty: 1 });
+                break;
+            case "break":
+                Session.set("userStatus", "navigation");
+                Meteor.call("PartyStatus", "navigation");
+                break;
+            case "fire":
+                Session.set("fireActive", true);
+                break;
+            case "cook":
+                Session.set("campStatus", "cooking")
+                break;
         }
     }
+});
+
+Template.camping.helpers({
+    fireActive: function () { return Session.get("fireActive"); },
+    campStatus: function () { return Session.get("campStatus"); },
 });

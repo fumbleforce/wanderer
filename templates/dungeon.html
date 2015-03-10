@@ -1,0 +1,25 @@
+<template name="dungeonNav">
+
+
+
+    <div class="actions">
+
+        {{#if type "encounter"}}
+        <div class="action" action="fight">Fight</div>
+        {{/if}}
+
+        {{#if completed}}
+        <div class="action" action="move">Move on</div>
+        {{/if}}
+
+        <div class="action" action="flee">Flee</div>
+    </div>
+</template>
+
+
+<template name="dungeon">
+    <h3>{{loc}}</h3>
+    <p>{{text}}</p>
+
+
+</template>

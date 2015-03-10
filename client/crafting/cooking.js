@@ -1,10 +1,9 @@
 
-CookingData = new ReactiveDict;
+var CookingData = new ReactiveDict;
 
-Cooking = {};
+CookingData.set("temp", 0);
 
-Cooking.start = function () {
-    CookingData.set("temp", 100);
+function startCooking () {
 
     var tempInterval = Meteor.setInterval(function () {
         CookingData.set("temp", CookingData.get("temp")-1);
@@ -27,9 +26,17 @@ Template.cooking.helpers({
 });
 
 Template.cooking.events({
-    "click [action='inc-heat']": function () {
-        // Temperature needs to be kept in certain ranges in different phases of cooking
-        CookingData.set("temp", CookingData.get("temp")+10);
+    "click [action]": function () {
+
+        switch (acction) {
+            case "light":
+                CookingData.set("temp", 100);
+                break;
+            case "inc-heat":
+                // Temperature needs to be kept in certain ranges in different phases of cooking
+                CookingData.set("temp", CookingData.get("temp")+10);
+                break;
+        }
     },
     "click [action='stop']": function () {
         Session.set("fireActive", false);

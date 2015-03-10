@@ -6,7 +6,7 @@
 <div class="gui float">
     <div class="gui-nav left">
         {{#if userStatus "camping"}}
-            {{> camping}}
+            {{> campingNav}}
         {{/if}}
 
         {{#momentum plugin='fade'}}
@@ -28,11 +28,15 @@
         {{/if}}
 
         {{#if userStatus "travelling"}}
-            {{> travel}}
+            {{> travelNav}}
         {{/if}}
     </div>
 
     <div class="gui-main left ">
+
+        {{#if userStatus "camping"}}
+            {{> camping}}
+        {{/if}}
 
         {{#if userStatus "combat"}}
             {{> combat}}
@@ -42,12 +46,13 @@
             {{> town}}
         {{/if}}
 
+        {{#if userStatus "travelling"}}
+            {{> travel}}
+        {{/if}}
 
         <!-- Crafting -->
 
-        {{#if userStatus "cooking"}}
-            {{> cooking}}
-        {{/if}}
+
 
         {{#if session "characterToggled"}}
             <div class="left gui-window">

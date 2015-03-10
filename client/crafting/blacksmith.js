@@ -50,8 +50,8 @@ function startSmelting () {
 
             if (off < 10) {
                 if (!(ore in alloy)) alloy[ore] = 0;
-
-                alloy[ore] += smeltAdd*2;
+                smeltAdd *= 2;
+                alloy[ore] += smeltAdd;
                 forge.set("alloy", JSON.stringify(alloy));
                 forge.set("smeltProgress", progress+smeltAdd);
                 Meteor.call("BlacksmithSmeltConsume", { ore: ore });
@@ -101,19 +101,19 @@ function buildAlloyPie () {
             plotBorderWidth: null,
             plotShadow: false
         },
-        
+
         title: {
             text: ''
         },
-        
+
         credits: {
             enabled: false
         },
-        
+
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
-        
+
         plotOptions: {
             pie: {
                 allowPointSelect: true,
@@ -124,7 +124,7 @@ function buildAlloyPie () {
                 showInLegend: false
             }
         },
-        
+
         series: [{
             type: 'pie',
             name: 'Metal',

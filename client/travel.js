@@ -1,25 +1,20 @@
 var countdownDep = new Tracker.Dependency();
 var countdownInterval;
 
-Session.set("travelArrived", true);
+Session.set("travelArrived", false);
 
+var started = new ReactiveVar(false);
 
-Meteor.autorun(function () {
-    if (Meteor.user() == undefined) return;
-
-    var travel = Meteor.user().travel;
-
-    if (travel.active && Math.floor((new Date(travel.arrival) - new Date())/1000) > 0) {
-        Meteor.clearInterval(countdownInterval);
-        countdownInterval = Meteor.setInterval(travelTick, 1000);
-    } else {
-        Session.set("travelArrived", true);
-        Meteor.clearInterval(countdownInterval);
-    }
-});
 
 var travelTick = function () {
     var look = Meteor.user().travel.look;
+    console.log("tick");
+
+    if (Session.get("travelArrived")) {
+        console.log("Arrived, stopping tick")
+        Meteor.clearInterval(countdownInterval);
+        return;
+    }
 
     _.each(look, function (val, key) {
         if (val) discover(key);
@@ -31,12 +26,10 @@ var travelTick = function () {
 function discover (type) {
     var look = Meteor.user().travel.look;
 
-    if (type === "prey") {
-        type = "meat";
-    }
-
-    if (!look[type])
+    if (!look[type]) {
+        console.log("Not looking for", type)
         return Session.set("discovered"+type, undefined);
+    }
 
     console.log("discoveryDur"+type, Session.get("discoveryDur"+type))
 
@@ -61,7 +54,7 @@ function discover (type) {
     }
 };
 
-Template.travel.helpers({
+Template.travelNav.helpers({
     destination: function () {
         var travel = Meteor.user().travel;
         if (!travel.locTo) return;
@@ -121,34 +114,35 @@ Template.travel.helpers({
         return look;
     },
 
-    discovered: function (type) {
-        countdownDep.depend();
-        if (type === "prey") {
-            type = "meat";
-        }
-        var discovered = Session.get("discovered"+type);
-        if (discovered == undefined) return;
-        return labelify(discovered);
-    },
-
-    discoveredId: function (type) {
-        countdownDep.depend();
-        if (type === "prey") {
-            type = "meat";
-        }
-        var discovered = Session.get("discovered"+type);
-        if (discovered == undefined) return;
-        return discovered;
+    started: function () {
+        return started.get();
     }
+
 });
 
-Template.travel.events({
+Template.travelNav.events({
+    "click .start": function () {
+
+        var travel = Meteor.user().travel;
+        console.log("Time left", Math.floor((new Date(travel.arrival) - new Date())/1000), Math.floor((new Date(travel.arrival) - new Date())/1000) > 0);
+        if (!Session.get("travelArrived") && travel.active && Math.floor((new Date(travel.arrival) - new Date())/1000) > 0) {
+            Meteor.clearInterval(countdownInterval);
+            countdownInterval = Meteor.setInterval(travelTick, 1000);
+            console.log("Started tick")
+            started.set(true);
+        } else {
+            console.log("Arrived")
+            Session.set("travelArrived", true);
+            Meteor.clearInterval(countdownInterval);
+        }
+    },
+
     "click .complete": function () {
         var travel = Meteor.user().travel;
         Meteor.call("TravelComplete");
 
         Meteor.clearInterval(countdownInterval);
-
+        started.set(false);
         if (travel.locTo.split("|").length > 1) {
             Meteor.call("PartyStatus", "town");
             Session.set("userStatus", "town");
@@ -161,7 +155,7 @@ Template.travel.events({
     "click .cancel": function () {
         Meteor.call("TravelCancel")
         Meteor.clearInterval(countdownInterval);
-
+        started.set(false);
         if (Meteor.user().location.split("|").length > 1) {
             Meteor.call("PartyStatus", "town");
             Session.set("userStatus", "town");
@@ -171,10 +165,32 @@ Template.travel.events({
         }
     },
 
+});
+
+Template.travel.helpers({
+
+    discovered: function (type) {
+        countdownDep.depend();
+        var discovered = Session.get("discovered"+type);
+        if (discovered == undefined) return;
+        return labelify(discovered);
+    },
+
+    discoveredId: function (type) {
+        countdownDep.depend();
+        var discovered = Session.get("discovered"+type);
+        if (discovered == undefined) return;
+        return discovered;
+    }
+});
+
+Template.travel.events({
+
     "click [discover]": function (e) {
         var itemid = e.currentTarget.getAttribute("discover"),
             type = e.currentTarget.getAttribute("discover-type");
         console.log("Adding", itemid)
+        console.log("discovered"+type)
         Session.set("discovered"+type, undefined);
         Meteor.call("StorageAdd", { id: itemid, qty: 1 });
     }

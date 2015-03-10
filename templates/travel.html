@@ -1,6 +1,6 @@
-<template name="travel">
-    <div class="travel">
-        <div class="travel-info left">
+<template name="travelNav">
+    <div class="travelNav">
+        <div class="travel-info">
 
             {{#unless wandering}}
             <div class="bar-container">
@@ -35,10 +35,20 @@
             {{#if arrived}}
                 <button class="complete">Arrive</button>
             {{else}}
+                {{#unless started}}
+                    <button class="start">Start</button>
+                {{/unless}}
+
                 <button class="cancel">Go back</button>
+
             {{/if}}
         </div>
+    </div>
 
+</template>
+
+<template name="travel">
+    <div class="travel">
         <div class="travel-discovery">
 
             <div class="discovery">
@@ -53,7 +63,7 @@
             </div>
             <div class="discovery">
                 {{#if discovered "prey"}}
-                    <button discover-type="meat" discover="{{discoveredId 'prey'}}">Hunt {{discovered "prey"}}</button>
+                    <button discover-type="prey" discover="{{discoveredId 'prey'}}">Hunt {{discovered "prey"}}</button>
                 {{/if}}
             </div>
             <div class="discovery">

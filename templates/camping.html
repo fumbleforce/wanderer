@@ -1,34 +1,33 @@
 
-<template name="camping">
+<template name="campingNav">
     <h4>Camping</h4>
     <p><i>{{location}}</i></p>
     <div class="float">
-        <div class="left">
-            <button class="action" action="eat">Eat</button>
-            <button class="action" action="drink">Drink</button>
-            <button class="action" action="read">Read a book</button>
+        <button class="action" action="eat">Eat</button>
+        <button class="action" action="drink">Drink</button>
+        <button class="action" action="read">Read a book</button>
 
-            {{#if fireActive}}
-            <button class="action" action="cook">Start cooking</button>
-            {{else}}
-            <button class="action" action="fire">Light a fire</button>
-            {{/if}}
+        {{#if fireActive}}
+        <button class="action" action="cook">Start cooking</button>
+        {{else}}
+        <button class="action" action="fire">Light a fire</button>
+        {{/if}}
 
-            <button class="action" action="dirt">Dig up some dirt</button>
+        <button class="action" action="dirt">Dig up some dirt</button>
 
-            {{#if canAct}}
-            <button class="action" action="break">Break camp</button>
-            {{/if}}
-        </div>
-
-        <div class="left">
-
-            {{#if fireActive}}
-            <div>The camp fire is lit, warming weary travelers.</div>
-            {{/if}}
-
-
-        </div>
+        {{#if canAct}}
+        <button class="action" action="break">Break camp</button>
+        {{/if}}
     </div>
-    <p>{{ campingAction }}</p>
+</template>
+
+<template name="camping">
+
+    {{#if fireActive}}
+    <div>The camp fire is lit, warming weary travelers.</div>
+    {{/if}}
+
+    {{#if campStatus "cooking"}}
+        {{> cooking}}
+    {{/if}}
 </template>
