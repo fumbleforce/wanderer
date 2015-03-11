@@ -1,32 +1,73 @@
-var dungeonStatus = new ReactiveDict();
-dungeonStatus.set("level", 0);
 
-var dungeon;
+var dungeon, dungeonInstance;
+var instanceUpdateDep = new Tracker.Dependency();
 
 Meteor.autorun(function () {
     if (Session.get("userStatus") != "dungeon") return;
+    if (Meteor.user() == undefined) return;
 
     dungeon = Locations.getDungeon(Meteor.user().location);
+
+    var party = Party.get(),
+        owner;
+    if (party == null) {
+        owner = Meteor.userId();
+    } else {
+        owner = party._id;
+    }
+    
+    dungeonInstance = DungeonInstanceCollection.findOne({ owner: owner });
+    console.log("Refreshed instance from DB")
+    if (dungeonInstance == null) {
+        Meteor.call("DungeonEnter");
+        dungeonInstance = DungeonInstanceCollection.findOne({ owner: owner });
+    }
+    instanceUpdateDep.changed();
 })
 
 Template.dungeonNav.helpers({
-    level: function () { return dungeonStatus.get("level"); },
+    level: function () {
+        instanceUpdateDep.depend();
+        return dungeonInstance.status.level;
+    },
 
-
+    hasNext: function () {
+        instanceUpdateDep.depend();
+        if (dungeon == undefined || dungeonInstance == undefined) return;
+        var level = dungeon.levels[dungeonInstance.status.level];
+        console.log("leevel", level)
+        return level.next != undefined;
+    },
 
     type: function (t) {
-        if (dungeon == undefined) return;
-        var level = dungeon.levels[dungeonStatus.get("level")];
+        instanceUpdateDep.depend();
+        if (dungeon == undefined || dungeonInstance == undefined) return;
+        var level = dungeon.levels[dungeonInstance.status.level];
         return level.type === t;
     },
 
     completed: function () {
+        instanceUpdateDep.depend();
         // Completed room and can move on
-        if (dungeon == undefined) return;
-        var level = dungeon.levels[dungeonStatus.get("level")];
-        if (level.type === "story") return true;
-        return dungeonStatus.get("completed");
+        if (dungeon == undefined || dungeonInstance == undefined) return;
+        var level = dungeon.levels[dungeonInstance.status.level];
+        if (level.type === "encounter") {
+            return dungeonInstance.status["completed"+dungeonInstance.status.level];
+        }
+
+        return true;
     },
+
+    choices: function () {
+        instanceUpdateDep.depend();
+        // Completed room and can move on
+        if (dungeon == undefined || dungeonInstance == undefined) return;
+        var level = dungeon.levels[dungeonInstance.status.level];
+        if (level.type === "choice") {
+            return level.choices;
+        }
+        return [];
+    }
 });
 
 Template.dungeonNav.events({
@@ -35,28 +76,73 @@ Template.dungeonNav.events({
 
         switch (action) {
             case "move":
-                dungeonStatus.set("level", dungeonStatus.gey("level"));
+                Meteor.call("DungeonStatus", { "level": dungeonInstance.status.level+1 });
+                break;
+            case "fight":
+                Meteor.call("BattleDungeonEncounter");
+                break;
+            case "loot":
+                Meteor.call("DungeonLoot");
+                break;
+            case "back":
+                var prev = dungeon.levels[dungeonInstance.status.level].prev;
+                if (prev == null) {
+                    Meteor.call("DungeonStatus", { "level": 0 });
+                    Status.set("navigation");
+                } else {
+                    Meteor.call("DungeonStatus", { "level": prev });
+                }
                 break;
             case "flee":
-                dungeonStatus.set("level", 0);
-                Session.set("userStatus", "navigation");
+                Meteor.call("DungeonStatus", { "level": 0 });
+                Status.set("navigation");
                 break;
         }
-    }
+    },
+
+    "click [choice]": function (e) {
+        var choice = e.currentTarget.getAttribute("choice");
+        choice = _.find(dungeon.levels[dungeonInstance.status.level].choices, function (el) {
+            return el.id === choice;
+        });
+        switch (choice.type) {
+            case "level":
+                Meteor.call("DungeonStatus", { "level": choice.level });
+                break;
+        }
+    },
 });
 
 
 
 Template.dungeon.helpers({
+    type: function (t) {
+        instanceUpdateDep.depend();
+        if (dungeon == undefined || dungeonInstance == undefined) return;
+        var level = dungeon.levels[dungeonInstance.status.level];
+        return level.type === t;
+    },
+
     loc: function () {
-        if (dungeon == undefined) return;
-        return labelify(dungeon.levels[dungeonStatus.get("level")].id);
+        instanceUpdateDep.depend();
+        if (dungeon == undefined || dungeonInstance == undefined) return;
+        return labelify(dungeon.levels[dungeonInstance.status.level].id);
     },
 
     text: function () {
-        if (dungeon == undefined) return;
-        return dungeon.levels[dungeonStatus.get("level")].text;
+        instanceUpdateDep.depend();
+        if (dungeon == undefined || dungeonInstance == undefined) return;
+        return dungeon.levels[dungeonInstance.status.level].text;
     },
+
+    treasures: function () {
+        instanceUpdateDep.depend();
+        if (dungeon == undefined || dungeonInstance == undefined) return;
+        if (dungeonInstance.status["looted"+dungeonInstance.status.level]) {
+            return [{ id:"Already looted", notItem: true}];
+        }
+        return dungeon.levels[dungeonInstance.status.level].treasure;
+    }
 });
 
 Template.dungeon.events({

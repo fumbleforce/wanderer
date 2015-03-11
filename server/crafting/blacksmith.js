@@ -42,7 +42,12 @@ Meteor.methods({
         if (smeltedBar) {
             Meteor.call("StorageAdd", { id: smelted, qty: 1 });
         } else {
-            Meteor.call("StorageAdd", { id: "lumpOfMetal", qty: 1 });
+            //Meteor.call("StorageAdd", { id: "lumpOfMetal", qty: 1 });
+            var metals = [];
+            _.each(opts.alloy, function (val, key) {
+                metals.push({ id: key, qty: Math.floor(val/20) });
+            });
+            Meteor.call("StorageAddMultiple", metals);
         }
 
     },

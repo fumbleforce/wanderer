@@ -37,9 +37,7 @@ Template.chat.helpers({
             return Message.find({ room: Meteor.user().location });
         } else if (Session.get("chatChannel") === "party") {
             return Message.find({
-                room: PartyCollection.findOne({
-                    members: Meteor.user().name
-                })._id
+                room: Party.get()._id
             });
         }
 
@@ -56,9 +54,7 @@ Template.chat.helpers({
     },
 
     channels: function () {
-        var party = PartyCollection.findOne({
-            members: Meteor.user().name
-        });
+        var party = Party.get();
 
         _.each(channels, function (c, i) {
             if (c.id === "party") {
@@ -89,9 +85,7 @@ Template.chat.events({
                 room = "";
 
             if (channel === "party") {
-                room = PartyCollection.findOne({
-                    members: Meteor.user().name
-                })._id;
+                room = Party.get()._id;
             } else if (channel === "local") {
                 room = Meteor.user().location;
             }

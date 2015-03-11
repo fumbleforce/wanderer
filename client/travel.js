@@ -54,6 +54,21 @@ function discover (type) {
     }
 };
 
+startTravelTick = function () {
+    var travel = Meteor.user().travel;
+    console.log("Time left", Math.floor((new Date(travel.arrival) - new Date())/1000), Math.floor((new Date(travel.arrival) - new Date())/1000) > 0);
+    if (!Session.get("travelArrived") && travel.active && Math.floor((new Date(travel.arrival) - new Date())/1000) > 0) {
+        Meteor.clearInterval(countdownInterval);
+        countdownInterval = Meteor.setInterval(travelTick, 1000);
+        console.log("Started tick")
+        started.set(true);
+    } else {
+        console.log("Arrived")
+        Session.set("travelArrived", true);
+        Meteor.clearInterval(countdownInterval);
+    }
+}
+
 Template.travelNav.helpers({
     destination: function () {
         var travel = Meteor.user().travel;
@@ -123,18 +138,7 @@ Template.travelNav.helpers({
 Template.travelNav.events({
     "click .start": function () {
 
-        var travel = Meteor.user().travel;
-        console.log("Time left", Math.floor((new Date(travel.arrival) - new Date())/1000), Math.floor((new Date(travel.arrival) - new Date())/1000) > 0);
-        if (!Session.get("travelArrived") && travel.active && Math.floor((new Date(travel.arrival) - new Date())/1000) > 0) {
-            Meteor.clearInterval(countdownInterval);
-            countdownInterval = Meteor.setInterval(travelTick, 1000);
-            console.log("Started tick")
-            started.set(true);
-        } else {
-            console.log("Arrived")
-            Session.set("travelArrived", true);
-            Meteor.clearInterval(countdownInterval);
-        }
+        startTravelTick();
     },
 
     "click .complete": function () {
@@ -143,26 +147,14 @@ Template.travelNav.events({
 
         Meteor.clearInterval(countdownInterval);
         started.set(false);
-        if (travel.locTo.split("|").length > 1) {
-            Meteor.call("PartyStatus", "town");
-            Session.set("userStatus", "town");
-        } else {
-            Meteor.call("PartyStatus", "navigation");
-            Session.set("userStatus", "navigation")
-        }
+        Status.set(Locations.getStatus());
     },
 
     "click .cancel": function () {
         Meteor.call("TravelCancel")
         Meteor.clearInterval(countdownInterval);
         started.set(false);
-        if (Meteor.user().location.split("|").length > 1) {
-            Meteor.call("PartyStatus", "town");
-            Session.set("userStatus", "town");
-        } else {
-            Meteor.call("PartyStatus", "navigation");
-            Session.set("userStatus", "navigation")
-        }
+        Status.set(Locations.getStatus());
     },
 
 });

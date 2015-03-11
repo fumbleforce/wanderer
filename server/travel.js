@@ -11,20 +11,22 @@ Meteor.methods({
             area = loc[0],
             town = loc[1],
             travelTime = 0,
-            areaTo, townTo;
+            areaTo, localTo;
 
         if (locTo in Locations.towns) {
             locTo = Locations.getTown(locTo).area + "|" + locTo;
+        } else if (locTo in Locations.dungeons) {
+            locTo = Locations.getDungeon(locTo).area + "|" + locTo;
         }
 
         if (locTo != undefined) {
             areaTo = locTo.split("|")[0],
-            townTo = locTo.split("|")[1];
+            localTo = locTo.split("|")[1];
         } else {
             locTo = Meteor.user().location;
         }
 
-        if (townTo != undefined) {
+        if (localTo != undefined) {
             // Travelling to a town
             travelTime = 30;
         } else if (areaTo != undefined) {
@@ -33,6 +35,8 @@ Meteor.methods({
         } else {
             travelTime = 9999999;
         }
+
+        console.log("Loc to:", locTo)
 
         var baseTime = travelTime;
 

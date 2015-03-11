@@ -106,13 +106,12 @@ Template.combatNav.events({
                 target: Meteor.userId(),
             });
         } else if (action === "leave") {
+
             Meteor.call("BattleEnd", Battle.getActive()._id);
             if (Meteor.user().location.split("|").length > 1) {
-                Meteor.call("PartyStatus", "town");
-                Session.set("userStatus", "town");
+                Status.set("town");
             } else {
-                Meteor.call("PartyStatus", "navigation");
-                Session.set("userStatus", "navigation");
+                Status.set("navigation");
             }
         } else {
             Session.set("combatCategory", action);

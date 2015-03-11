@@ -6,19 +6,14 @@ Template.registerHelper("town", function () { return Session.get("userStatus") =
 Template.registerHelper("inCombat", function () { return Session.get("userStatus") == "combat"; });
 
 Template.registerHelper('userStatus',function(s) {
-    var party = PartyCollection.findOne({ members: Meteor.user().name });
+    var party = Party.get();
     if (party == null) return Session.get("userStatus") === s;
     console.log("Party status", party.status)
     return party.status === s;
 });
 
 Template.registerHelper('bgClasses', function () {
-    switch (Session.get("userStatus")) {
-        case "town": return "bg-town";
-        case "navigation": return "bg-navigation";
-        case "camping": return "bg-camping";
-        case "travelling": return "bg-travelling";
-    }
+    return "bg-" + Session.get("userStatus");
 });
 
 Template.registerHelper('toArray',function(obj) {
@@ -69,7 +64,7 @@ Template.registerHelper('session',function(input) {
 });
 
 Template.registerHelper("canAct", function () {
-    var party = PartyCollection.findOne({ members: Meteor.user().name });
+    var party = Party.get();
     if (party == null) return true;
     return party.leader === Meteor.user().name;
 });

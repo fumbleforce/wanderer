@@ -24,8 +24,7 @@ Template.campingNav.events({
                 Meteor.call("StorageAdd", { id: "dirt", qty: 1 });
                 break;
             case "break":
-                Session.set("userStatus", "navigation");
-                Meteor.call("PartyStatus", "navigation");
+                Status.set("navigation");
                 break;
             case "fire":
                 Session.set("fireActive", true);

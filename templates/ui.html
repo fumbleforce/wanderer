@@ -5,31 +5,47 @@
 
 <div class="gui float">
     <div class="gui-nav left">
+        {{#momentum plugin='slide-height'}}
         {{#if userStatus "camping"}}
             {{> campingNav}}
         {{/if}}
+        {{/momentum}}
 
-        {{#momentum plugin='fade'}}
+        {{#momentum plugin='slide-height'}}
         {{#if userStatus "navigation"}}
             {{> navigation}}
         {{/if}}
         {{/momentum}}
 
+        {{#momentum plugin='slide-height'}}
         {{#if userStatus "town"}}
             {{> townNav}}
         {{/if}}
+        {{/momentum}}
 
+        {{#momentum plugin='slide-height'}}
         {{#if userStatus "battle"}}
             {{> uiBattle}}
         {{/if}}
+        {{/momentum}}
 
+        {{#momentum plugin='slide-height'}}
         {{#if userStatus "combat"}}
             {{> combatNav}}
         {{/if}}
+        {{/momentum}}
 
+        {{#momentum plugin='slide-height'}}
         {{#if userStatus "travelling"}}
             {{> travelNav}}
         {{/if}}
+        {{/momentum}}
+
+        {{#momentum plugin='slide-height'}}
+        {{#if userStatus "dungeon"}}
+            {{> dungeonNav}}
+        {{/if}}
+        {{/momentum}}
     </div>
 
     <div class="gui-main left ">
@@ -48,6 +64,10 @@
 
         {{#if userStatus "travelling"}}
             {{> travel}}
+        {{/if}}
+
+        {{#if userStatus "dungeon"}}
+            {{> dungeon}}
         {{/if}}
 
         <!-- Crafting -->

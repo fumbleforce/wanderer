@@ -7,18 +7,12 @@ Meteor.autorun(function () {
     ran = true;
 
     console.log("travelactive", Meteor.user().travel.active)
-    if (Meteor.user().travel.active) {
-        Session.set("userStatus", "travelling");
-    } else if (Meteor.user().location.split("|").length > 1) {
-        Session.set("userStatus", "town");
-    } else {
-        Session.set("userStatus", "camping");
-    }
+    
+    Session.set("userStatus", Locations.getStatus());
 
     Meteor.autosubscribe(function() {
         PartyCollection.find({
             members: Meteor.user().name,
-            left: false
         }).observeChanges({
             changed: function(id, fields){
                 console.log("Party Changed", fields)
@@ -29,7 +23,10 @@ Meteor.autorun(function () {
         });
     });
 
-    if (BattleCollection.find({ party: { $elemMatch: { _id: Meteor.userId() }}}).count()) {
+    if (BattleCollection.find({
+            party: { $elemMatch: { _id: Meteor.userId() } },
+            left: false,
+        }).count()) {
         Session.set("userStatus", "combat");
     }
 });

@@ -84,8 +84,7 @@ Template.townNav.events({
                 break;
             case "leave":
                 console.log("Leaving city");
-                Meteor.call("PartyStatus", "navigation");
-                Session.set("townStatus", "navigation");
+                Status.set("navigation");
                 Session.set("userStatus", "navigation");
                 break;
 

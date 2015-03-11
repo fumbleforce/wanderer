@@ -18,7 +18,11 @@ Template.navigation.helpers({
     walkingStatus: function (status) { return Session.get("walkingStatus") === status; },
 
     inTown: function () {
-        return Meteor.user().location.split("|").length > 1;
+        return Meteor.user().location.split("|")[1] in Locations.towns;
+    },
+
+    inDungeon: function () {
+        return Meteor.user().location.split("|")[1] in Locations.dungeons;
     },
 
     town: function () {
@@ -32,11 +36,19 @@ Template.navigation.helpers({
     },
 
     towns: function () {
-        return Locations.getTowns(Meteor.user().location.split("|")[0]);
+        return _.filter(Locations.getTowns(), function (t) {
+            return t.id != Meteor.user().location.split("|")[1];
+        });
+    },
+
+    dungeons: function () {
+        return _.filter(Locations.getDungeons(), function (d) {
+            return d.id != Meteor.user().location.split("|")[1];
+        });
     },
 });
 
-function startTravel (loc) {
+function startWandering (loc) {
     var followPath = $("#on-path").is(":checked");
 
     var look = {
@@ -48,8 +60,9 @@ function startTravel (loc) {
 
     console.log("followPath", followPath)
     Meteor.call("TravelStart", { loc: loc, onPath: followPath, look: look });
-    Meteor.call("PartyStatus", "travelling");
-    Session.set("userStatus", "travelling");
+    Status.set("travelling");
+    console.log("Starting travel tick from nav")
+    Meteor.setTimeout(startTravelTick, 2000);
 }
 
 Template.navigation.events({
@@ -59,25 +72,29 @@ Template.navigation.events({
         switch (action) {
             case "areas": Session.set("walkingStatus", "areas"); break;
             case "towns": Session.set("walkingStatus", "towns"); break;
+            case "dungeons": Session.set("walkingStatus", "dungeons"); break;
+            case "navigation": Session.set("walkingStatus", "navigation"); break;
             case "town":
                 // Enter town from nav.
                 Session.set("userStatus", "town");
                 break;
-            case "navigation": Session.set("walkingStatus", "navigation"); break;
+            case "dungeon":
+                // Enter dungeon from nav.
+                Session.set("userStatus", "dungeon");
+                break;
             case "wander":
-                startTravel();
+                startWandering();
                 break;
             case "camp":
                 Session.set("walkingStatus", "navigation");
-                Session.set("userStatus", "camping");
-                Meteor.call("PartyStatus", "camping");
+                Status.set("camping");
                 break;
         }
     },
 
     "click [loc]": function (e) {
         var loc = e.currentTarget.getAttribute("loc");
-        startTravel(loc);
+        startWandering(loc);
         Session.set("walkingStatus", "navigation");
     },
 });

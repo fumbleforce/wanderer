@@ -5,14 +5,36 @@
     <div class="actions">
 
         {{#if type "encounter"}}
-        <div class="action" action="fight">Fight</div>
+            {{#if completed}}
+                {{#if hasNext}}
+                    <button class="action" action="move">Move on</button>
+                {{/if}}
+            {{else}}
+                <button class="action" action="fight">Fight</button>
+            {{/if}}
         {{/if}}
 
-        {{#if completed}}
-        <div class="action" action="move">Move on</div>
+        {{#if type "choice"}}
+            {{#each choices}}
+                <button class="action" choice="{{id}}">{{labelify id}}</button>
+            {{/each}}
         {{/if}}
 
-        <div class="action" action="flee">Flee</div>
+        {{#if type "treasure"}}
+            <button class="action" action="loot">Loot</button>
+            {{#if hasNext}}
+                <button class="action" action="move">Move on</button>
+            {{/if}}
+        {{/if}}
+
+        {{#if type "story"}}
+            {{#if hasNext}}
+                <button class="action" action="move">Move on</button>
+            {{/if}}
+        {{/if}}
+
+        <button class="action" action="back">Go back</button>
+        <button class="action" action="flee">Flee</button>
     </div>
 </template>
 
@@ -21,5 +43,13 @@
     <h3>{{loc}}</h3>
     <p>{{text}}</p>
 
-
+    {{#if type "treasure"}}
+        {{#each treasures}}
+            {{#if notItem}}
+                {{id}}
+            {{else}}
+                {{{itemLink id}}}x {{qty}}
+            {{/if}}
+        {{/each}}
+    {{/if}}
 </template>

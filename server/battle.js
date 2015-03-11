@@ -10,16 +10,11 @@ Meteor.methods({
     BattleEnd: function (id) {
         BattleCollection.update(id, { $set: { left: true }});
 
-        var status = "walking";
-        if (Meteor.user().location.split("|").length > 1) {
-            status = "walking";
-        }
+        var status = Locations.getStatus();
 
         PartyCollection.update({ members: Meteor.user().name }, {
             $set: { status: status }
         });
-
-
     },
 
     BattleTakeAction: function (opts) {
@@ -42,22 +37,7 @@ Meteor.methods({
             action = opts.action,
             target = opts.target,
             player = Meteor.user(),
-            battle = Battle.getActive();
-
-
-        if (action === "flee") {
-            //[NEED CHANGE] Static 60% chance to flee, to be changed
-            if (Math.random() > 0.6) {
-                BattleCollection.update(battle._id, {
-                    $push: { log: Meteor.user().name + " tried to flee, but failed." }
-                });
-            } else {
-                Meteor.call("BattleEnd", battle._id);
-            }
-            return;
-        }
-
-        var skill = Spell.get(action, Battle.me()),
+            battle = Battle.getActive(),
             updateSet = {},
             updateInc = {},
             updatePush = {};
@@ -67,6 +47,22 @@ Meteor.methods({
         } else {
             updateSet["turn"] = battle.turn +1;
         }
+
+        if (action === "flee") {
+            //[NEED CHANGE] Static 60% chance to flee, to be changed
+            if (Math.random() > 0.6) {
+                BattleCollection.update(battle._id, {
+                    $set: updateSet,
+                    $push: { log: Meteor.user().name + " tried to flee, but failed." }
+                });
+            } else {
+                Meteor.call("BattleEnd", battle._id);
+            }
+            return;
+        }
+
+        var skill = Spell.get(action, Battle.me());
+
 
         if (skill.target === "enemy") {
             // Do action to enemy
@@ -220,6 +216,91 @@ Meteor.methods({
             BattleCollection.update(battle._id, {
                 $set: { lost: true },
                 $push: { log: "Battle lost." }
+            });
+        }
+    },
+
+    BattleDungeonEncounter: function (level) {
+        var location = Meteor.user().location,
+            dungeon = Locations.getDungeon(location);
+
+        var enemy = [], m;
+
+        console.log("Dungeon encounter in", location)
+
+        var monsters = dungeon.levels[level].monsters;
+
+        console.log("Monsters: ", monsters)
+
+        if (monsters.length === 0) {
+            throw new Meteor.Error("No monsters in this area");
+        }
+
+        _.each(monsters, function (monster, i) {
+            m = _.extend({}, Monster.get(monster.id));
+            if (m.name == undefined) {
+                m.name = labelify(m.id);
+                m.name += " " + (i+1);
+            }
+
+            // random id
+            m._id = ""+i;
+            enemy.push(m);
+        });
+
+        var party = PartyCollection.findOne({ members: Meteor.user().name }),
+            partyMembers = [];
+
+        if (party == null) {
+            partyMembers = [Meteor.user()];
+        } else {
+            partyMembers = _.map(party.members, function (name) {
+                return Meteor.users.findOne({ name: name });
+            });
+        }
+
+
+        var turnDict = {},
+            turnList = [];
+
+        //console.log("Enemies:", enemy);
+        //console.log("Party:", party);
+
+        _.each(enemy, function (e) {
+            turnList.push({
+                id: e._id,
+                name: e.name,
+                quickness: e.physicalSkills.quickness || 0
+            });
+        });
+
+        _.each(partyMembers, function (a) {
+            turnList.push({
+                id: a._id,
+                name: a.name,
+                quickness: a.physicalSkills.quickness || 0
+            });
+        });
+
+        turnList = _.sortBy(turnList, function (o) {
+            return o.quickness + Math.random()/2.0;
+        });
+
+        var id = BattleCollection.insert({
+            type: "npc",
+            party: partyMembers,
+            enemy: enemy,
+            turn: 0,
+            log: [],
+            turnList: turnList,
+            won: false,
+            lost: false,
+            left: false,
+        });
+
+        if (party != null) {
+            PartyCollection.update(party._id, {
+                $set: { status: "combat" }
             });
         }
     },

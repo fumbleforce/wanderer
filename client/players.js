@@ -17,21 +17,17 @@ Template.players.helpers({
     },
 
     party: function () {
-        return PartyCollection.findOne({
-            members: Meteor.user().name
-        });
+        return Party.get();
     },
 
     isLeader: function (name) {
-        return PartyCollection.findOne({
-            members: Meteor.user().name
-        }).leader === name;
+        return Party.get().leader === name;
     },
 
     canInvite: function () {
         if (!Session.get("playerSelected")) return false;
         if (PartyInvitationCollection.find({ player: Session.get("playerSelected") }).count() > 0) return false;
-        if (PartyCollection.findOne({ members: Session.get("playerSelected") })) return false;
+        if (Party.get({ members: Session.get("playerSelected") })) return false;
         return true;
     },
 });

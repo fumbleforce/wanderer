@@ -39,12 +39,17 @@
                     {{#if walkingStatus "navigation"}}
                         <button class="action" action="areas">Areas</button>
                         <button class="action" action="towns">Towns</button>
+                        <button class="action" action="dungeons">Dungeons</button>
 
                         {{#if inTown}}
                             <button class="action" action="town" townid="{{town}}">Enter town</button>
                         {{else}}
-                            <button class="action" action="wander">Wander</button>
-                            <button class="action" action="camp">Make camp</button>
+                            {{#if inDungeon}}
+                                <button class="action" action="dungeon">Enter dungeon</button>
+                            {{else}}
+                                <button class="action" action="wander">Wander</button>
+                                <button class="action" action="camp">Make camp</button>
+                            {{/if}}
                         {{/if}}
                     {{/if}}
                 {{else}}
@@ -52,8 +57,14 @@
                 {{/if}}
 
                 {{#if walkingStatus "areas"}}
-
                     {{#each areas}}
+                        <button class="action" loc="{{id}}">{{labelify id}}</button>
+                    {{/each}}
+                    <button class="action" action="navigation">&#8617;</button>
+                {{/if}}
+
+                {{#if walkingStatus "dungeons"}}
+                    {{#each dungeons}}
                         <button class="action" loc="{{id}}">{{labelify id}}</button>
                     {{/each}}
                     <button class="action" action="navigation">&#8617;</button>
