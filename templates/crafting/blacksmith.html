@@ -14,13 +14,31 @@
             {{/each}}
         </p>
 
-        <p class="blacksmith-schematics">
-            <b>Schematics</b><br>
-            {{#each schematics}}
-                <div schematic="{{id}}">{{{itemLink id}}}</div>
-            {{/each}}
-        </p>
+        <p class="blacksmith-forge">
+            <b>Weapon type</b><br>
+            <div class="weapon-types">
+                <button weptype="1hsword">1h Sword</button>
+                <button weptype="2hsword">2h Sword</button>
+                <button weptype="1haxe">1h Axe</button>
+                <button weptype="2haxe">2h Axe</button>
+            </div>
 
+            <div class="anvil">
+                <div class="crafting-tools">
+                    <button class="hammer">Hammer</button>
+                    <button class="heat">Heat up</button>
+                    <button class="cool">Cool</button>
+                </div>
+
+                <div class="crafting-stats float">
+                    <div class="left stat">Sharpness: {{forge "sharpness"}}</div>
+                    <div class="left stat">Hardness: {{forge "hardness"}}</div>
+                    <div class="left stat">Quality: {{forge "quality"}}</div>
+                </div>
+
+                <div class="crafted" style="{{ craftedStyle }}"></div>
+            </div>
+        </p>
 
         {{#if activeSchematic}}
         <p>
@@ -42,8 +60,8 @@
 
         <hr>
 
-        <div class="blacksmith-forge float">
-            <div class="forge left">
+        <div class="blacksmith-smelter float">
+            <div class="smelter left">
                 <h3>Smelter</h3>
                 <div class="fire">{{temp}}</div>
 

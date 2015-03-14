@@ -2,6 +2,15 @@
 var dungeon, dungeonInstance;
 var instanceUpdateDep = new Tracker.Dependency();
 
+/*
+Keeps the dungeon and dungeonInstance variables up
+to date. If no dungeonInstance has been created, call
+DungeonEnter to create a new one.
+
+The dungeonInstance keeps track of all dynamic data
+regarding dungeon progress, while dungeon  handles all static
+data.
+*/
 Meteor.autorun(function () {
     if (Session.get("userStatus") != "dungeon") return;
     if (Meteor.user() == undefined) return;
@@ -15,7 +24,7 @@ Meteor.autorun(function () {
     } else {
         owner = party._id;
     }
-    
+
     dungeonInstance = DungeonInstanceCollection.findOne({ owner: owner });
     console.log("Refreshed instance from DB")
     if (dungeonInstance == null) {
