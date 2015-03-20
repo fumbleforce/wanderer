@@ -1,4 +1,3 @@
-Session.set("isNotSystem", false);
 Session.set("msgCount", 0);
 Session.set("chatChannel", "local");
 
@@ -12,37 +11,53 @@ var updateTimeDep = new Tracker.Dependency();
 
 var channels = [
     { id: "local", active: false, visible: true },
+    { id: "global", active: false, visible: true },
     { id: "party", active: false, visible: false },
 ];
 
 Template.chat.helpers({
+    /* Name of the current room */
     roomname: function () {
         return Session.get("roomname");
     },
 
-    isNotSystem: function () {
-        console.log("isnotsyustem",Session.get("isNotSystem"))
-        return Session.get("isNotSystem");
-    },
+    /* Messages
+    
+    Return the messages for the current room.
+    
+    {
+        String client: Username of sender
+        String message: The message 
+    }
+    */
     messages: function () {
         updateTimeDep.depend();
         var count = Message.find({ room: Meteor.user().location }).count();
+        
         if (count != Session.get("msgCount")) {
             Session.set("msgCount", count);
             $(".room-id").css("background", "orange");
         }
+        
         $(".messages").scrollTop(99999);
 
-        if (Session.get("chatChannel") === "local") {
-            return Message.find({ room: Meteor.user().location });
-        } else if (Session.get("chatChannel") === "party") {
-            return Message.find({
-                room: Party.get()._id
-            });
+        switch (Session.get("chatChannel")) {
+            case "local":
+                return Message.find({ room: Meteor.user().location });
+            case "party":
+                return Message.find({
+                    room: Party.get()._id
+                });
+            case "global":
+                return Message.find({ room: "global" });
         }
 
     },
 
+    /* Scroll bottom
+
+    Scrolls the chat to bottom on update.
+    */
     scrollBot: function () {
         if (Session.get("messagesRendered")) {
             console.log("scrolling")
@@ -53,6 +68,11 @@ Template.chat.helpers({
         return Session.get("messagesAdded");
     },
 
+    /* Channels
+    
+    Return a list of channel labels that
+    are sued for buttons.
+    */
     channels: function () {
         var party = Party.get();
 
@@ -74,10 +94,12 @@ Template.chat.helpers({
 });
 
 Template.chat.events({
-    "mouseenter .chat-container": function () {
-        console.log("clicked")
-        $(".room-id").css("background", "green");
-    },
+
+    /* Submit message
+    
+    Takes the current message in the input
+    and inserts it when user clicks Enter key.
+    */
     "keyup .writer input": function (e, tmp) {
         if (e.keyCode === 13) {
 
@@ -100,6 +122,10 @@ Template.chat.events({
         }
     },
 
+    /* Channel toggle
+    
+    Handles the switching of chat channels.
+    */
     "click [chat]": function (e) {
         var chat = e.currentTarget.getAttribute("chat");
         Session.set("chatChannel", chat);
@@ -116,6 +142,7 @@ Template.chat.events({
 
 
 Meteor.startup(function () {
+    /* Update the "time ago" label for each message */
     Meteor.setInterval(function () {
         updateTimeDep.changed();
     }, 60000);

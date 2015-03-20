@@ -3,6 +3,14 @@ function getSelector () {
 }
 
 Meteor.methods({
+    /* Enter dungeon
+    
+    Called when entering a dungeon.
+    Creates a dungeonInstance that handles
+    dynamic data in the dungeon run.
+
+    Enters as a party if in a party.
+    */
     DungeonEnter: function () {
         var party = Party.get(),
             loc = Meteor.user().location,
@@ -30,6 +38,12 @@ Meteor.methods({
         });
     },
 
+    /* Set status of dungeon
+    
+    A very unsafe way of setting the state of the dungeon
+    instance. The client itself decides the level, progress,
+    and what is completed.
+    */
     DungeonStatus: function (opts) {
         var party = Party.get(),
             loc = Meteor.user().location,
@@ -43,6 +57,7 @@ Meteor.methods({
 
         if (party == null) owner = Meteor.userId();
         else owner = party._id;
+        
         console.log("owner", owner, "dungeon", dungeonId)
         console.log("Setting status ", opts)
 
@@ -57,6 +72,10 @@ Meteor.methods({
         );
     },
 
+    /* Loot
+    
+    Loots a loot room.
+    */
     DungeonLoot: function () {
         var party = Party.get(),
             loc = Meteor.user().location,
