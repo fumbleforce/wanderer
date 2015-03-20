@@ -8,6 +8,11 @@ forge.set("addingOre", false);
 forge.set("temp", 0);
 forge.set("smeltProgress", 0);
 forge.set("alloy", "{}");
+forge.set("craftedWidth", 0);
+forge.set("craftedHeight", 0);
+forge.set("sharpness", 0);
+forge.set("hardness", 0);
+forge.set("quality", 0);
 
 var heatingInterval, smeltingInterval;
 var alloyChart;
@@ -151,6 +156,10 @@ Template.blacksmith.helpers({
         return Storage.getCategory("blacksmithSchematic");
     },
 
+    forge: function (field) {
+        return forge.get(field);
+    },
+
     forgeLit: function () {
         return forge.get("temp") > 0;
     },
@@ -180,9 +189,46 @@ Template.blacksmith.helpers({
         return labelify(ore.id) + " -> " + labelify(bar.id);
     },
 
+    /* craftedStyle
+
+    Returns the dimensions of the item being crafted.
+    */
+    craftedStyle: function () {
+        return "width:"+forge.get("craftedWidth")+"px; height:"+forge.get("craftedHeight")+"px;";
+    }
+
 });
 
 Template.blacksmith.events({
+
+    /* wepType
+
+    Select the type of blade to be created
+    */
+    "click [weptype]": function (e) {
+        var weptype = e.currentTarget.getAttribute("weptype");
+
+        forge.set("craftedWidth", 50);
+        forge.set("craftedHeight", 25);
+
+        forge.set("wepType", weptype);
+    },
+
+    "click .hammer": function (e) {
+        var height = forge.get("craftedHeight"),
+            width = forge.get("craftedWidth"),
+            sharpness = forge.get("sharpness"),
+            hardness = forge.get("hardness"),
+            quality = forge.get("quality");
+
+        forge.set("craftedWidth", width*1.02);
+        forge.set("craftedHeight", height*0.98);
+
+        forge.set("sharpness", sharpness+0.01);
+        forge.set("hardness", hardness+0.5);
+        forge.set("quality", (sharpness+0.01)*(hardness+0.5));
+    },
+
     "click [schematic]": function (e) {
         var schematic = e.currentTarget.getAttribute("schematic");
         Session.set("blacksmithSchematic", schematic);
