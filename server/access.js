@@ -31,5 +31,5 @@ Meteor.methods({
 });
 
 Meteor.publish("trade", function () {
-return TradeCollection.find({ completed: false });
+    return TradeCollection.find({ completed: false });
 });
