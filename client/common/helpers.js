@@ -31,7 +31,8 @@ Template.registerHelper("equals", function (ctx) {
 Template.registerHelper("labelify", labelify);
 
 Template.registerHelper("itemLink", function (id) {
-    return Item.get(id).el;
+    var i = Item.get(id);
+    return "<span class='itemlink "+Item.quality[i.quality]+"' title='"+i.desc+"' data-toggle='tooltip'>"+labelify(id)+"</span>";
 });
 
 Template.registerHelper("spellLink", function (id) {
