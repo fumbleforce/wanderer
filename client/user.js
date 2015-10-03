@@ -52,4 +52,12 @@ Template.user.events({
             name: character
         });
     },
+    
+    "click .demo-user": (e, t) => {
+        Accounts.createUser({
+            email: `${Util.randomString(3)}@${Util.randomString(3)}.${Util.randomString(2)}` ,
+            password: Util.randomString(12),
+            name: Util.randomString(5)
+        });
+    }
 });
