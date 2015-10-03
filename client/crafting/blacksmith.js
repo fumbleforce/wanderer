@@ -86,7 +86,7 @@ function buildAlloyPie () {
         "copperOre": "gold",
     };
     var data = _.map(alloy, function (el, key) {
-        return [labelify(key), el];
+        return [Util.labelify(key), el];
     });
     console.log(data)
 
@@ -186,7 +186,7 @@ Template.blacksmith.helpers({
         if (!Storage.hasItem(Session.get("blacksmithOre"), 1)) return false;
         var ore = Item.get(Session.get("blacksmithOre"));
         var bar = Item.get(Crafting.smelting[ore.id]);
-        return labelify(ore.id) + " -> " + labelify(bar.id);
+        return Util.labelify(ore.id) + " -> " + Util.labelify(bar.id);
     },
 
     /* craftedStyle

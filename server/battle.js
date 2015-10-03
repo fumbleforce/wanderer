@@ -239,7 +239,7 @@ Meteor.methods({
         _.each(monsters, function (monster, i) {
             m = _.extend({}, Monster.get(monster.id));
             if (m.name == undefined) {
-                m.name = labelify(m.id);
+                m.name = Util.labelify(m.id);
                 m.name += " " + (i+1);
             }
 

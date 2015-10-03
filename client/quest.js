@@ -1,3 +1,7 @@
+Template.quest.onCreated(function () {
+    this.questLogSelected = new ReactiveVar(false);
+});
+
 Session.set("questLogSelected", false);
 
 Template.quest.helpers({
@@ -39,15 +43,17 @@ Template.quest.events({
 
 Template.questLog.helpers({
     quest: function () {
-        var quest = Meteor.user().quests[Session.get("questLogSelected")],
-            questData = Quest.get(Session.get("questLogSelected"));
+        var questLogSelected = Template.instance().questLogSelected.get();
+        
+        var quest = Meteor.user().quests[questLogSelected],
+            questData = Quest.get(questLogSelected);
 
 
         return _.extend(quest, questData.states[quest.state]);
     },
 
     haveRequired: function () {
-        return Quest.hasRequired(Session.get("questLogSelected"));
+        return Quest.hasRequired(Template.instance().questLogSelected.get());
     },
 
     quests: function () {
@@ -60,35 +66,34 @@ Template.questLog.helpers({
 });
 
 Template.questLog.events({
-    "click [quest]": function (e) {
+    "click [quest]": function (e, instance) {
         var questId = e.currentTarget.getAttribute("quest");
-
-        Session.set("questLogSelected", questId);
+        instance.questLogSelected.set(questId);
     },
 
-    "click .list": function () {
-        Session.set("questLogSelected", false);
+    "click .list": function (e, instance) {
+        instance.questLogSelected.set(false);
     },
 
-    "click .abandon": function () {
-        Meteor.call("QuestAbandon", Session.get("questLogSelected"));
-        Session.set("questLogSelected", false);
+    "click .abandon": function (e, instance) {
+        Meteor.call("QuestAbandon",  instance.questLogSelected.get());
+        instance.questLogSelected.set(false);
     },
 
-    "click [choice]": function (e) {
+    "click [choice]": function (e, instance) {
         var choiceId = e.currentTarget.getAttribute("choice"),
-            quest = Meteor.user().quests[Session.get("questLogSelected")],
-            questData = Quest.get(Session.get("questLogSelected"));
+            quest = Meteor.user().quests[instance.questLogSelected.get()],
+            questData = Quest.get(instance.questLogSelected.get());
 
         var choice = questData.states[quest.state].choices[choiceId];
 
         if (choice.effect != undefined) {
             switch (choice.effect) {
                 case "cancel":
-                    Session.set("questLogSelected", false);
+                    instance.questLogSelected.set(false);
                     break;
                 case "completeQuest":
-                    Meteor.call("QuestComplete", Session.get("questLogSelected"));
+                    Meteor.call("QuestComplete", instance.questLogSelected.get());
                     break;
             }
         }

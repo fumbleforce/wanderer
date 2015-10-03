@@ -25,7 +25,7 @@
             {{/if}}
 
             {{#unless wandering}}
-                <p>Time left: {{timeLeft}}</p>
+            <p>Time left: {{timeLeft}}</p>
             {{/unless}}
 
             {{#each lookingFor}}
@@ -33,10 +33,10 @@
             {{/each}}
 
             {{#if arrived}}
-                <button class="complete">Arrive</button>
+            <button class="complete">Arrive</button>
             {{else}}
                 {{#unless started}}
-                    <button class="start">Start</button>
+                <button class="start">Start</button>
                 {{/unless}}
 
                 <button class="cancel">Go back</button>

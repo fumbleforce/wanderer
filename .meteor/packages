@@ -4,7 +4,6 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-platform
 autopublish
 insecure
 cryptoquick:stylus-multi
@@ -14,3 +13,20 @@ reactive-dict
 percolate:momentum
 reactive-var
 maazalik:highcharts
+mquandalle:jade
+wanderer:common
+standard-minifiers
+meteor-base
+mobile-experience
+mongo
+blaze-html-templates
+session
+tracker
+logging
+reload
+random
+ejson
+spacebars
+check
+ecmascript
+johnantoni:meteor-normalize

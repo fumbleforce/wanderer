@@ -1,5 +1,8 @@
 /* CSS declarations go here */
 
+*
+    box-sizing: border-box
+
 body, html
     position:relative
     height:100%
@@ -48,40 +51,48 @@ h4
     height: 100%
     position: fixed
 
-.gui
+.gui-container
     //width: 1200px
     background: silver
     margin: 0 auto
     overflow:hidden
     width:100%
     magin-bottom: 30px
+    
+    .half
+        width: 50%
 
     .gui-main, .gui-nav, .gui-window, .menu, .gui-chat
         color: white;
         background-color: rgba(50,50,50,0.8);
-        border-radius: 3px;
+        border-radius: 0;
         position: relative
 
     .gui-chat
-        width: 23%
-        margin:0.5%
+        padding:0.5%
+        width:50%
+        float:left
+        height:100%
 
     .gui-nav
-        width: 22%
+        width: 100%
         padding: 5px
-        margin: 0.5%
-        height: 88%
+        margin: 0
+        height: 5%
+        overflow: hidden
 
         button
-            width: 95%
+            width: auto
+            float:left
+            
 
     .gui-main
-        box-sizing : border-box
         //width: 1180px
+        float: left
         padding: 10px
-        height: 90%
+        height: 100%
         width: 50%
-        margin: 0.5% 0
+        margin: 0
         overflow-y: auto
 
     .gui-window

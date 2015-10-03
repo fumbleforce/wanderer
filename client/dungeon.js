@@ -135,7 +135,7 @@ Template.dungeon.helpers({
     loc: function () {
         instanceUpdateDep.depend();
         if (dungeon == undefined || dungeonInstance == undefined) return;
-        return labelify(dungeon.levels[dungeonInstance.status.level].id);
+        return Util.labelify(dungeon.levels[dungeonInstance.status.level].id);
     },
 
     text: function () {

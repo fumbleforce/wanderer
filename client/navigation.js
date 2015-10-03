@@ -7,9 +7,9 @@ Template.navigation.helpers({
     location: function () {
         var loc = Meteor.user().location.split("|");
         if (loc.length === 1) {
-            return "Somewhere in " + labelify(loc[0]);
+            return "Somewhere in " + Util.labelify(loc[0]);
         } else if (loc.length === 2) {
-            return labelify(loc[1]) + " in " + labelify(loc[0]);
+            return Util.labelify(loc[1]) + " in " + Util.labelify(loc[0]);
         }
     },
 

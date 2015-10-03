@@ -1,8 +1,15 @@
 Template.registerHelper("loggingIn", function () { return Meteor.loggingIn() });
+
+Template.registerHelper("session", function (key) { return Session.get(key); });
+
 Template.registerHelper("userStatus", function () { return Session.get("userStatus"); });
+
 Template.registerHelper("camping", function () { return Session.get("userStatus") == "camping"; });
+
 Template.registerHelper("navigation", function () { return Session.get("userStatus") == "navigation"; });
+
 Template.registerHelper("town", function () { return Session.get("userStatus") == "town"; });
+
 Template.registerHelper("inCombat", function () { return Session.get("userStatus") == "combat"; });
 
 Template.registerHelper('userStatus',function(s) {

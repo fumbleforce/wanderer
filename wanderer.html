@@ -9,7 +9,9 @@
         {{>loadingScreen}}
     {{else}}
         {{#if currentUser }}
-            {{> screen}}
+            <div class="screen">
+                {{> ui}}
+            </div>
         {{else}}
             {{> user}}
         {{/if}}

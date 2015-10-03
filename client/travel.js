@@ -121,9 +121,9 @@ Template.travelNav.helpers({
         var travel = Meteor.user().travel;
         if (!travel.locTo) return;
         if (travel.locTo.split("|").length > 1) {
-            return labelify(travel.locTo.split("|")[1]) + " in " + labelify(travel.locTo.split("|")[0]);
+            return Util.labelify(travel.locTo.split("|")[1]) + " in " + Util.labelify(travel.locTo.split("|")[0]);
         }
-        return labelify(travel.locTo)
+        return Util.labelify(travel.locTo)
     },
 
     /* timeLeft
@@ -264,7 +264,7 @@ Template.travel.helpers({
         countdownDep.depend();
         var discovered = Session.get("discovered"+type);
         if (discovered == undefined) return;
-        return labelify(discovered);
+        return Util.labelify(discovered);
     },
 
     /* discoveredId

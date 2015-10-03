@@ -47,7 +47,7 @@ Template.townNav.helpers({
     },
 
     facilities: function () {
-        return _.filter(asArray(Locations.getTown(Meteor.user().location).facilities), function (el) {
+        return _.filter(Util.asArray(Locations.getTown(Meteor.user().location).facilities), function (el) {
             return el.id != "inn";
         });
     },

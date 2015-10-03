@@ -1,0 +1,25 @@
+
+<template name="ui">
+
+    <div class="bg {{bgClasses}}"></div>
+
+    <div class="gui-container">
+        <div class="gui-main">
+            <div class="gui-main-overlay">
+                {{> Template.dynamic template=mainOverlay}}
+            </div>
+        
+            {{> Template.dynamic template=userStatus}}
+        </div>
+        <div class="gui-chat">
+            {{>chat}}
+        </div>
+
+        <div class="gui-nav">
+            <div class="gui-actions">
+                {{> Template.dynamic template=actions}}
+            </div>
+        </div>
+        {{> menu}}
+    </div>
+</template>
