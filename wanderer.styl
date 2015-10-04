@@ -49,51 +49,49 @@ h4
 .bg
     width: 100%
     height: 100%
-    position: fixed
+    position: absolute
+    top:0
+    left:0
 
 .gui-container
     //width: 1200px
-    background: silver
-    margin: 0 auto
+    background: #fff
+    position: relative
     overflow:hidden
     width:100%
-    magin-bottom: 30px
+    height: 80%
     
-    .half
-        width: 50%
-
-    .gui-main, .gui-nav, .gui-window, .menu, .gui-chat
-        color: white;
-        background-color: rgba(50,50,50,0.8);
+    .gui-main, .gui-window, .menu, .gui-chat
+        background-color: #fff;
         border-radius: 0;
         position: relative
 
     .gui-chat
-        padding:0.5%
+        //padding:0.5%
         width:50%
         float:left
         height:100%
 
-    .gui-nav
-        width: 100%
-        padding: 5px
-        margin: 0
-        height: 5%
-        overflow: hidden
-
-        button
-            width: auto
-            float:left
-            
 
     .gui-main
         //width: 1180px
         float: left
-        padding: 10px
         height: 100%
         width: 50%
         margin: 0
         overflow-y: auto
+        position: relative
+        
+        .gui-main-overlay
+            display: none
+            width: 100%
+            height: 100%
+            position: absolute
+            z-index: 3
+            background: #fff
+            
+            &.active
+                display: block
 
     .gui-window
         min-height: 200px
@@ -102,6 +100,21 @@ h4
         margin: 10px
 
 
+.gui-nav
+    width: 100%
+    height: 20%
+    padding: 5px
+    margin: 0
+    overflow: hidden
+    
+    .gui-actions
+        width: 50%
+        float: left
+
+    button
+        width: auto
+        float:left
+        
 
 .ground
     position: absolute

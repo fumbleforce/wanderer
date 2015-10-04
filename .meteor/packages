@@ -31,3 +31,4 @@ check
 ecmascript
 johnantoni:meteor-normalize
 jagi:astronomy
+momentjs:moment

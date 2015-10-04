@@ -1,0 +1,40 @@
+<template name="chat">
+    <div class="chat online" style="height: 100%">
+        <div class="chat-tabs header">
+            <h3 class="title">Chat</h3>
+            {{#each channels}}
+                {{#if visible}}
+                    <button class="left {{activeRoom id}}" chat="{{id}}">{{labelify id}}</button>
+                {{/if}}
+            {{/each}}
+        </div>
+        <div class="messages">
+            <ul>
+                {{#each onlineMessages}}
+                    <li>
+                        <span style="font-size:8px">
+                            [{{ timeAgo }}]
+                        </span>
+                        {{#if isAdmin client}}
+                        <label class="admin">
+                            {{ client }}:
+                        </label>
+                        {{else}}
+                        <label>
+                            {{ client }}:
+                        </label>
+                        {{/if}}
+                        <span>
+                            {{ message }}
+                        </span>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="writer">
+            <div class="inner">
+                <textarea placeholder="Message.." maxlength="4000" name="write-message"></textarea>
+            </div>
+        </div>
+    </div>
+</template>
