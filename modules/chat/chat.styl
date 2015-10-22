@@ -18,43 +18,37 @@
         float:left
         padding-right: 10px
 
-    .header
-        box-sizing: border-box;
-        z-index: 100;
-        position: relative;
-        width: 100%;
-        min-height: 50px;
-        padding: 5px 13px 5px;
-        background-color: rgba(255,255,255,.97);
-        border-bottom: 1px solid rgba(0,0,0,.05);
-        border-top: 1px solid rgba(0,0,0,.05);
-
     .messages
+        /*
         position: relative;
         background: rgba(0,0,0,0.03);
         width: 100%;
         height: 100%;
+        */
         flex-shrink: 1;
         overflow-y: scroll;
         overflow-x: hidden;
-    
+        transform: rotate(180deg);
+        
+        .comment
+            transform: rotate(-180deg);
+            
+        ul
+            list-style: none;
+            padding:0px;
+            margin:0;
+        
 
-    .messages ul
-        list-style: none;
-        padding:0px;
-        margin:0;
-    
+            li
+                padding:1px;
+                font-size: 12px;
+                word-wrap: break-word;
+                transform: rotate(-180deg);
+            
 
-    .messages ul li
-        padding:1px;
-        font-size: 12px;
-        word-wrap: break-word;
-    
-
-    .messages ul li label
-        font-weight: bold;
-    
-
+                label
+                    font-weight: bold;
+            
     .writer
         position: relative;
         box-sizing: border-box;
@@ -63,19 +57,18 @@
         min-height: 70px;
         flex-shrink: 0;
         border-top: 1px solid rgba(0,0,0,.05);
+        padding: 0;
         
         .inner
             box-sizing: border-box;
-            margin-top: 10px;
-            margin-left: 10px;
-            margin-bottom: 10px;
             
             textarea
                 display: block;
                 width: 100%;
+                height:100%
                 outline: none;
                 line-height: 1.38em;
-                padding: 0;
+                margin:0
                 border: 0;
                 resize: none;
                 margin: 0;
@@ -84,21 +77,11 @@
                 min-height: 44px;
                 font-size: 1em;
                 color: black;
-    
+                
 
-    .writer input
-        left:0;
-        bottom:0;
-        box-sizing: border-box;
-        position:absolute;
-        width:100%;
-        margin:0;
-        padding: 10px;
-        border:0;
-        border-top: 1px dotted gray;
-        background:gainsboro;
-    
+                position:absolute
+                padding: 10px
+            
 
     .admin
         color:blue;
-    

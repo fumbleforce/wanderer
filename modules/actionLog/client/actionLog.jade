@@ -1,0 +1,19 @@
+template(name="actionLog")
+    .chat.action-log.ui.segments(style="height: 100%")
+        .ui.top.attached.clearing.menu
+        
+            .header.item Log
+                
+            each channels
+                a.item(class="{{activeChannel .}}" channel="{{.}}")
+                    | {{labelify .}}
+        
+        .ui.secondary.segment.messages
+            ul
+                each logMessages
+                    li
+                        if sender
+                            label
+                                | {{ sender }}:
+                        span
+                            | {{ message }}

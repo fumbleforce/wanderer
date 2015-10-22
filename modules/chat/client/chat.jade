@@ -1,0 +1,30 @@
+template(name="chat")
+    .chat.online.ui.segments(style="height: 100%")
+        .ui.top.attached.clearing.menu
+        
+            .header.item Chat
+                
+            each channels
+                if visible
+                    a.item(class="{{activeRoom id}}" chat="{{id}}")
+                        | {{labelify id}}
+        
+        .ui.secondary.segment.messages
+            .ui.comments(style="max-width:100%")
+                each onlineMessages
+                    .comment
+                        a.avatar
+                            i.user.icon(style="font-size:2em")
+                        .content
+                            a.author
+                                | {{ client }}:
+                            .metadata
+                                span.date
+                                    | {{ timeAgo }}
+                            
+                            .text
+                                | {{ message }}
+                        
+        .ui.tertiary.bottom.attached.segment.writer
+            .inner
+                textarea(placeholder="Message.." maxlength="4000" name="write-message")

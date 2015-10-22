@@ -12,16 +12,7 @@ var channels = [
 Template.chat.onCreated(function () {
     this.room = new ReactiveVar("local");
     
-    OnlineMessage.getCollection().find().observe({
-        added: (item) => {
-            $(".chat.online .messages").scrollTop(99999);
-            setTimeout(() => {
-                $(".chat.online .messages").scrollTop(99999);
-            }, 100);
-        }
-    });
-    
-    Meteor.subscribe("message", this.room.get());
+    this.subscribe("message", this.room.get());
 });
 
 
@@ -53,16 +44,16 @@ Template.chat.helpers({
         
         switch (Template.instance().room.get()) {
             case "local":
-                return OnlineMessage.find({ room: Meteor.user().location });
+                return OnlineMessage.find({ room: Meteor.user().location }, { sort: { createdAt: -1 }});
                 break;
             case "party":
                 return OnlineMessage.find({
                     room: Party.get()._id
-                });
+                }, { sort: { createdAt: -1 }});
                 break;
             case "global":
                 console.log("Online is global");
-                return OnlineMessage.find({ room: Template.instance().room.get() });
+                return OnlineMessage.find({ room: Template.instance().room.get() }, { sort: { createdAt: -1 }});
                 break;
         }
 
@@ -70,28 +61,11 @@ Template.chat.helpers({
     
     localMessages: function () {
         if (!Template.instance().rendered) return;
-        
-        Template.instance().$(".messages").scrollTop(99999);
 
         return LocalMessage.find({  });
     },
 
 
-    /* Scroll bottom
-
-    Scrolls the chat to bottom on update.
-    */
-    scrollBot: function () {
-        if (!Template.instance().rendered) return;
-        
-        if (Session.get("messagesRendered")) {
-            console.log("scrolling")
-            Meteor.setTimeout(function () {
-                $(".messages").scrollTop($(".messages")[0].scrollHeight);
-            }, 100);
-        }
-        return Session.get("messagesAdded");
-    },
 
     /* Channels
     

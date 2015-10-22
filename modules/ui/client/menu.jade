@@ -1,0 +1,22 @@
+template(name="menu")
+    .ui.fluid.menu(style="margin-bottom:1em")
+        a.item(toggle="character")
+            i.user.icon
+            | Character
+        a.item(toggle="inventory")
+            i.travel.icon
+            | Inventory
+        a.item(toggle="questLog")
+            i.bookmark.icon
+            | Quest Log
+        a.item(toggle="equipment")
+            i.protect.icon
+            | Equipment
+        a.item(toggle="players")
+            i.users.icon
+            | People
+        
+        .right.menu
+            a.item.right.logout
+                i.sign.out.icon
+                | Log out

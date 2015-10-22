@@ -1,0 +1,18 @@
+template(name="ui")
+
+    .ui.grid.two.columns(style="margin:0; height: 100%")
+        .column
+            +menu
+            
+            .gui-main-overlay 
+                | {{overlayOn}}
+                +Template.dynamic(template=overlay)
+        
+            +Template.dynamic(template=main)
+        
+            .gui-actions
+                +Template.dynamic(template=actions)
+        .column
+            +actionLog
+            +chat
+        
