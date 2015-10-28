@@ -5,13 +5,11 @@ template(name="ui")
             +menu
             
             .gui-main-overlay 
-                | {{overlayOn}}
                 +Template.dynamic(template=overlay)
         
-            +Template.dynamic(template=main)
+            //-
+                +Template.dynamic(template=main)
         
-            .gui-actions
-                +Template.dynamic(template=actions)
         .column
             +actionLog
             +chat
